@@ -1,5 +1,5 @@
 import Card from '../card/card';
-import CatalogSort from '../catalog/catalog-sort/catalog-sort';
+import CatalogSort from '../catalog-sort/catalog-sort';
 import Pagination from '../pagination/pagination';
 
 function CatalogContent () {

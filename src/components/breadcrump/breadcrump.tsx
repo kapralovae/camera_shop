@@ -10,6 +10,7 @@ function Breadcrump () {
               </svg>
             </a>
           </li>
+
           <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span>
           </li>
         </ul>
