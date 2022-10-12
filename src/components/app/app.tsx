@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Catalog from '../../pages/catalog/catalog';
+import CatalogPage from '../../pages/catalog-page/catalog-page';
 
 function App(): JSX.Element {
   return (
@@ -7,12 +7,12 @@ function App(): JSX.Element {
       <Routes>
         <Route
           path='/'
-          element={<Catalog />}
+          element={<CatalogPage />}
         />
 
         <Route
           path='/catalog'
-          element={<Catalog />}
+          element={<CatalogPage />}
         />
       </Routes>
     </BrowserRouter>
