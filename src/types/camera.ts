@@ -17,7 +17,7 @@ export type Camera = {
   reviewCount: number;
 };
 
-export type Cameras = Camera[];
+export type Cameres = Camera[];
 
 export type Promo = {
   id: number;
@@ -31,3 +31,8 @@ export type Promo = {
 export type AppDispatch = typeof store.dispatch;
 
 export type State = ReturnType<typeof store.getState>;
+
+export type Api = {
+  api: Promise<Cameres | Promo>;
+  apiPromo: Promise<Cameres | Promo>;
+};
