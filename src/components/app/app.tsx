@@ -14,6 +14,11 @@ function App(): JSX.Element {
           path='/catalog'
           element={<CatalogPage />}
         />
+
+        <Route
+          path='/catalog/camera/:id'
+          element={<CatalogPage />}
+        />
       </Routes>
     </BrowserRouter>
   );

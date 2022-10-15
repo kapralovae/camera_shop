@@ -1,6 +1,24 @@
 import { Link } from 'react-router-dom';
 
 function Card () {
+
+  const handleButtonChangeStatusCardClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    if (evt.currentTarget.textContent === 'Купить') {
+      evt.currentTarget.textContent = 'В корзине';
+      const href = evt.currentTarget.textContent;
+      // const content = 'В корзине';
+      evt.currentTarget.replaceWith(`<Link href="${ href }">${ 'В корзине' }</Link>`);
+      evt.currentTarget.classList.remove('btn--purple');
+      evt.currentTarget.classList.add('btn--purple-border');
+      evt.currentTarget.classList.add('product-card__btn--in-cart');
+    } else {
+      evt.currentTarget.textContent = 'Купить';
+      evt.currentTarget.classList.add('btn--purple');
+      evt.currentTarget.classList.remove('btn--purple-border');
+      evt.currentTarget.classList.remove('product-card__btn--in-cart');
+    }
+  };
   return (
     <div className="product-card">
       <div className="product-card__img">
@@ -33,7 +51,7 @@ function Card () {
         </p>
       </div>
       <div className="product-card__buttons">
-        <button className="btn btn--purple product-card__btn" type="button">Купить
+        <button onClick={handleButtonChangeStatusCardClick} className="btn btn--purple product-card__btn" type="button">Купить
         </button>
         <Link className="btn btn--transparent" to="#">Подробнее</Link>
       </div>
