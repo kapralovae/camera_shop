@@ -11,7 +11,12 @@ function App(): JSX.Element {
         />
 
         <Route
-          path='/catalog'
+          path='/catalog/page/:id'
+          element={<CatalogPage />}
+        />
+
+        <Route
+          path='/catalog/camera/:id'
           element={<CatalogPage />}
         />
       </Routes>

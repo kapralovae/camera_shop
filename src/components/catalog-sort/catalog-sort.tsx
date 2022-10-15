@@ -6,7 +6,7 @@ function CatalogSort () {
           <p className="title title--h5">Сортировать:</p>
           <div className="catalog-sort__type">
             <div className="catalog-sort__btn-text">
-              <input type="radio" id="sortPrice" name="sort" checked></input>
+              <input type="radio" id="sortPrice" name="sort" ></input>
               <label htmlFor="sortPrice">по цене</label>
             </div>
             <div className="catalog-sort__btn-text">
@@ -16,7 +16,7 @@ function CatalogSort () {
           </div>
           <div className="catalog-sort__order">
             <div className="catalog-sort__btn catalog-sort__btn--up">
-              <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию" checked></input>
+              <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию" ></input>
               <label htmlFor="up">
                 <svg width="16" height="14" aria-hidden="true">
                   <use xlinkHref="#icon-sort"></use>
