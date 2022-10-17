@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CountStarsSvg } from '../../const';
+import { useAppDisptach } from '../../hooks';
+import { changeCardPopup, changeStatusPopup } from '../../store/camera-data/camera-data';
 import { Camera } from '../../types/camera';
 
 type CartType = {
@@ -7,24 +9,14 @@ type CartType = {
 };
 
 function Card ({item}: CartType) {
+  const dispatch = useAppDisptach();
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, rating, reviewCount, category} = item;
+
 
   const handleButtonChangeStatusCardClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (evt.currentTarget.textContent === 'Купить') {
-      evt.currentTarget.textContent = 'В корзине';
-      const href = evt.currentTarget.textContent;
-      // const content = 'В корзине';
-      evt.currentTarget.replaceWith(`<Link href="${ href }">${ 'В корзине' }</Link>`);
-      evt.currentTarget.classList.remove('btn--purple');
-      evt.currentTarget.classList.add('btn--purple-border');
-      evt.currentTarget.classList.add('product-card__btn--in-cart');
-    } else {
-      evt.currentTarget.textContent = 'Купить';
-      evt.currentTarget.classList.add('btn--purple');
-      evt.currentTarget.classList.remove('btn--purple-border');
-      evt.currentTarget.classList.remove('product-card__btn--in-cart');
-    }
+    dispatch(changeStatusPopup(true));
+    dispatch(changeCardPopup(item));
   };
   return (
     <div className="product-card">
