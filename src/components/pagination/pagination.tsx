@@ -17,6 +17,8 @@ function Pagination () {
   const handleLiNextpageClick = () => {
     dispatch(increaseCatalogPage(catalogPage + 1));
     dispatch(setStartSlice(startSlice + COUNT_CARDS_ON_PAGE));
+    // dispatch(setCountSlice((catalogPage + 1) * COUNT_CARDS_ON_PAGE));
+
     dispatch(setCameresCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiBackpageClick = () => {

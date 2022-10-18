@@ -12,7 +12,6 @@ function Card ({item}: CartType) {
   const dispatch = useAppDisptach();
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, rating, reviewCount, category} = item;
 
-
   const handleButtonChangeStatusCardClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(changeStatusPopup(true));
@@ -22,7 +21,7 @@ function Card ({item}: CartType) {
     <div className="product-card">
       <div className="product-card__img">
         <picture>
-          <source type="image/webp" srcSet={`${previewImgWebp}, ${previewImgWebp2x}`}></source><img src={previewImg} srcSet={previewImg2x} width="280" height="240" alt="Ретрокамера «Das Auge IV»"></img>
+          <source type="image/webp" srcSet={`${previewImgWebp}, ${previewImgWebp2x}`}></source><img src={previewImg} srcSet={previewImg2x} width="280" height="240" alt={`${category} «${name}»`}></img>
         </picture>
       </div>
       <div className="product-card__info">

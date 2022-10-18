@@ -8,5 +8,7 @@ export const getCardPopup = (state: State): Camera => state['dataReducer'].cardP
 
 export const getStartSlice = (state: State): number => state['dataReducer'].startSlice;
 
+export const getCountSlice = (state: State): number => state['dataReducer'].countSlice;
+
 export const getCameresCatalog = (state: State): Camera[] => state['dataReducer'].cameresCatalog;
 
