@@ -2,25 +2,34 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { COUNT_CARDS_ON_PAGE, getNumberPage } from '../../const';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { decreaseCatalogPage, increaseCatalogPage, setCatalogPage } from '../../store/camera-data/camera-data';
-import { getCatalogPage } from '../../store/camera-data/selectors';
+import { decreaseCatalogPage, increaseCatalogPage, setCameresCatalog, setCatalogPage, setStartSlice } from '../../store/camera-data/camera-data';
+import { getCatalogPage, getStartSlice } from '../../store/camera-data/selectors';
 import { getCameres } from '../../store/camera-process/selecrots';
 
 function Pagination () {
   const dispatch = useAppDisptach();
   const catalogPage = useAppSelector(getCatalogPage);
-  const countCard = useAppSelector(getCameres).length;
-  const countPage = Math.ceil(countCard / COUNT_CARDS_ON_PAGE);
+  const allCards = useAppSelector(getCameres);
+  const startSlice = useAppSelector(getStartSlice);
+  const countPage = Math.ceil(allCards.length / COUNT_CARDS_ON_PAGE);
   const pagination = getNumberPage(catalogPage, countPage);
 
   const handleLiNextpageClick = () => {
     dispatch(increaseCatalogPage(catalogPage + 1));
+    dispatch(setStartSlice(startSlice + COUNT_CARDS_ON_PAGE));
+    // dispatch(setCountSlice((catalogPage + 1) * COUNT_CARDS_ON_PAGE));
+
+    dispatch(setCameresCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiBackpageClick = () => {
     dispatch(decreaseCatalogPage(catalogPage - 1));
+    dispatch(setStartSlice(startSlice - COUNT_CARDS_ON_PAGE));
+    dispatch(setCameresCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, (catalogPage - 1) * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     dispatch(setCatalogPage(Number(evt.currentTarget.text)));
+    dispatch(setStartSlice( Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * (COUNT_CARDS_ON_PAGE - 1)));
+    dispatch(setCameresCatalog(allCards.slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
   };
 
   return (

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Api, AppDispatch, Cameres, Promo, State } from '../types/camera';
+import { setCameresCatalog } from './camera-data/camera-data';
 
 export const fetchCameresAction = createAsyncThunk<Cameres, undefined, {
   dispatch: AppDispatch;
@@ -9,6 +10,7 @@ export const fetchCameresAction = createAsyncThunk<Cameres, undefined, {
   'fetchCameres',
   async (_arg, {dispatch, extra: {api}}) => {
     const data = await api as unknown as Promise<Cameres>;
+    dispatch(setCameresCatalog((await data).slice(0, 9)));
     return data;
   },
 );

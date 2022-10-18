@@ -5,6 +5,7 @@ import { fetchCameresAction, fetchPromoAction } from '../api-actions';
 type CameresProsecc = {
   cameres: Cameres;
   promo: Promo;
+  isDataLoad: boolean;
 };
 
 const initialState : CameresProsecc = {
@@ -17,6 +18,7 @@ const initialState : CameresProsecc = {
     previewImgWebp: 'img/content/promo.webp',
     previewImgWebp2x: 'img/content/promo@2x.webp'
   },
+  isDataLoad: false,
 };
 
 export const cameraProcess = createSlice({
@@ -27,9 +29,17 @@ export const cameraProcess = createSlice({
     builder
       .addCase(fetchPromoAction.fulfilled, (state, actions) => {
         state.promo = actions.payload;
+        state.isDataLoad = false;
+      })
+      .addCase(fetchPromoAction.pending, (state, actions) => {
+        state.isDataLoad = true;
       })
       .addCase(fetchCameresAction.fulfilled, (state, action) => {
         state.cameres = action.payload;
+        state.isDataLoad = false;
+      })
+      .addCase(fetchCameresAction.pending, (state, action) => {
+        state.isDataLoad = true;
       });
   },
 });
