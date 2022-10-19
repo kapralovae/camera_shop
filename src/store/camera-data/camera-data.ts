@@ -7,7 +7,7 @@ type CameraData = {
   cardPopup: Camera;
   startSlice: number;
   countSlice: number;
-  cameresCatalog: Camera[];
+  camerasCatalog: Camera[];
 };
 
 const initialState: CameraData = {
@@ -31,7 +31,7 @@ const initialState: CameraData = {
   },
   startSlice: 0,
   countSlice: 9,
-  cameresCatalog: [],
+  camerasCatalog: [],
 };
 
 export const cameraData = createSlice({
@@ -59,11 +59,11 @@ export const cameraData = createSlice({
     setCountSlice: (state, action) => {
       state.countSlice = action.payload as number;
     },
-    setCameresCatalog: (state, action) => {
-      state.cameresCatalog = action.payload as Camera[];
+    setCamerasCatalog: (state, action) => {
+      state.camerasCatalog = action.payload as Camera[];
     },
 
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCameresCatalog} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog} = cameraData.actions;

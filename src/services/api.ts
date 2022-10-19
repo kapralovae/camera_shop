@@ -1,13 +1,15 @@
-import { Cameres, Promo } from '../types/camera';
+import { Camera, Cameras, Promo } from '../types/camera';
 
-export const api = async (url = 'https://camera-shop.accelerator.pages.academy/cameras/', typeParam = 'Cameres') => {
+export const api = async (url: string, typeParam: string) => {
   const data = await fetch(url);
-  let cameres;
-  if (typeParam === 'Cameres') {
-    cameres = await data.json() as Cameres;
-  } else {
-    cameres = await data.json() as Promo;
+  if (typeParam === 'Cameras') {
+    return await data.json() as unknown as Cameras;
   }
-
-  return cameres;
+  if (typeParam === 'Camera') {
+    return await data.json() as unknown as Camera;
+  }
+  if (typeParam === 'Promo') {
+    return await data.json() as unknown as Promo;
+  }
 };
+

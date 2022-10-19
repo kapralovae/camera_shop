@@ -1,16 +1,30 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Api, AppDispatch, Cameres, Promo, State } from '../types/camera';
-import { setCameresCatalog } from './camera-data/camera-data';
+import { Api, AppDispatch, Camera, Cameras, Promo, State } from '../types/camera';
+import { setCamerasCatalog } from './camera-data/camera-data';
 
-export const fetchCameresAction = createAsyncThunk<Cameres, undefined, {
+export const fetchCamerasAction = createAsyncThunk<Cameras, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: Api;
 }>(
-  'fetchCameres',
+  'fetchCameras',
   async (_arg, {dispatch, extra: {api}}) => {
-    const data = await api as unknown as Promise<Cameres>;
-    dispatch(setCameresCatalog((await data).slice(0, 9)));
+    const data = await api('https://camera-shop.accelerator.pages.academy/cameras', 'Cameras') as unknown as Promise<Cameras>;
+
+    dispatch(setCamerasCatalog(data));
+    return data;
+  },
+);
+
+export const fetchCameraAction = createAsyncThunk<Camera, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Api;
+}>(
+  'fetchCamera',
+  async (id, {dispatch, extra: {api}}) => {
+    const data = await api(`https://camera-shop.accelerator.pages.academy/cameras/${id}`, 'Camera') as unknown as Camera;
+    console.log(data);
     return data;
   },
 );
@@ -21,8 +35,8 @@ export const fetchPromoAction = createAsyncThunk<Promo, undefined, {
   extra: Api;
 }>(
   'fetchPromo',
-  async (_arg, {dispatch, extra: {apiPromo}}) => {
-    const data = await apiPromo as Promo;
+  async (_arg, {dispatch, extra: {api}}) => {
+    const data = api('https://camera-shop.accelerator.pages.academy/promo', 'Camera') as unknown as Promise<Promo>;
     return data;
   },
 );

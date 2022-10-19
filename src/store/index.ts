@@ -8,7 +8,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       thunk: {
         extraArgument: {
-          api: api(),
+          api: api,
           apiPromo: api('https://camera-shop.accelerator.pages.academy/promo', 'Promo'),
         },
       },

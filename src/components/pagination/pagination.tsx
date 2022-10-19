@@ -1,15 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { COUNT_CARDS_ON_PAGE, getNumberPage } from '../../const';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { decreaseCatalogPage, increaseCatalogPage, setCameresCatalog, setCatalogPage, setStartSlice } from '../../store/camera-data/camera-data';
+import { decreaseCatalogPage, increaseCatalogPage, setCamerasCatalog, setCatalogPage, setStartSlice } from '../../store/camera-data/camera-data';
 import { getCatalogPage, getStartSlice } from '../../store/camera-data/selectors';
-import { getCameres } from '../../store/camera-process/selecrots';
+import { getCameras } from '../../store/camera-process/selecrots';
 
 function Pagination () {
   const dispatch = useAppDisptach();
+  const {id} = useParams();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(setCatalogPage(Number(id)));
+    }
+  }, [dispatch, id]);
   const catalogPage = useAppSelector(getCatalogPage);
-  const allCards = useAppSelector(getCameres);
+  const allCards = useAppSelector(getCameras);
   const startSlice = useAppSelector(getStartSlice);
   const countPage = Math.ceil(allCards.length / COUNT_CARDS_ON_PAGE);
   const pagination = getNumberPage(catalogPage, countPage);
@@ -19,17 +26,17 @@ function Pagination () {
     dispatch(setStartSlice(startSlice + COUNT_CARDS_ON_PAGE));
     // dispatch(setCountSlice((catalogPage + 1) * COUNT_CARDS_ON_PAGE));
 
-    dispatch(setCameresCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiBackpageClick = () => {
     dispatch(decreaseCatalogPage(catalogPage - 1));
     dispatch(setStartSlice(startSlice - COUNT_CARDS_ON_PAGE));
-    dispatch(setCameresCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, (catalogPage - 1) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, (catalogPage - 1) * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     dispatch(setCatalogPage(Number(evt.currentTarget.text)));
     dispatch(setStartSlice( Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * (COUNT_CARDS_ON_PAGE - 1)));
-    dispatch(setCameresCatalog(allCards.slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog(allCards.slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
   };
 
   return (

@@ -1,11 +1,11 @@
 import { useAppSelector } from '../../hooks';
-import { getCameresCatalog} from '../../store/camera-data/selectors';
+import { getCamerasCatalog} from '../../store/camera-data/selectors';
 import Card from '../card/card';
 import CatalogSort from '../catalog-sort/catalog-sort';
 import Pagination from '../pagination/pagination';
 
 function CatalogContent () {
-  const cardsCatalog = useAppSelector(getCameresCatalog);
+  const cardsCatalog = useAppSelector(getCamerasCatalog);
 
   return (
     <div className="catalog__content">

@@ -1,15 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Cameres, Promo } from '../../types/camera';
-import { fetchCameresAction, fetchPromoAction } from '../api-actions';
+import { Camera, Cameras, Promo } from '../../types/camera';
+import { fetchCameraAction, fetchCamerasAction, fetchPromoAction } from '../api-actions';
 
-type CameresProsecc = {
-  cameres: Cameres;
+type CamerasProsecc = {
+  cameras: Cameras;
+  camera: Camera;
   promo: Promo;
   isDataLoad: boolean;
 };
 
-const initialState : CameresProsecc = {
-  cameres: [],
+const initialState : CamerasProsecc = {
+  cameras: [],
+  camera: {
+    id: 1,
+    name: '',
+    vendorCode: '',
+    type: '',
+    category: '',
+    description: '',
+    level: '',
+    rating: 1,
+    price: 1,
+    previewImg: '',
+    previewImg2x: '',
+    previewImgWebp: '',
+    previewImgWebp2x: '',
+    reviewCount: 1,
+  },
   promo: {
     id: 7,
     name: 'Look 54',
@@ -34,11 +51,18 @@ export const cameraProcess = createSlice({
       .addCase(fetchPromoAction.pending, (state, actions) => {
         state.isDataLoad = true;
       })
-      .addCase(fetchCameresAction.fulfilled, (state, action) => {
-        state.cameres = action.payload;
+      .addCase(fetchCameraAction.fulfilled, (state, action) => {
+        state.camera = action.payload;
         state.isDataLoad = false;
       })
-      .addCase(fetchCameresAction.pending, (state, action) => {
+      .addCase(fetchCameraAction.pending, (state, action) => {
+        state.isDataLoad = true;
+      })
+      .addCase(fetchCamerasAction.fulfilled, (state, action) => {
+        state.cameras = action.payload;
+        state.isDataLoad = false;
+      })
+      .addCase(fetchCamerasAction.pending, (state, action) => {
         state.isDataLoad = true;
       });
   },
