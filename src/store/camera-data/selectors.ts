@@ -12,3 +12,7 @@ export const getCountSlice = (state: State): number => state['dataReducer'].coun
 
 export const getCamerasCatalog = (state: State): Camera[] => state['dataReducer'].camerasCatalog;
 
+export const getCardsInBasket = (state: State): Camera[] => state['dataReducer'].cardsInBasket;
+
+export const getIsBasketSuccess = (state: State): boolean => state['dataReducer'].isBasketSuccess;
+

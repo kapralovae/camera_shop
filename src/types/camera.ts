@@ -33,6 +33,17 @@ export type AppDispatch = typeof store.dispatch;
 export type State = ReturnType<typeof store.getState>;
 
 export type Api = {
-  api: (arg0: string | undefined, arg1: string) => Promise<Camera | Cameras | Promo>;
+  api: Promise<Camera | Cameras | Promo>;
   apiPromo: Promise<Cameras | Promo>;
 };
+
+export type Comment = {
+  id: string;
+  userName: string;
+  advantage: string;
+  disadvantage: string;
+  review: string;
+  rating: number;
+  createAt: string;
+  cameraId: number;
+}

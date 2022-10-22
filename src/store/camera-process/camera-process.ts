@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera, Cameras, Promo } from '../../types/camera';
-import { fetchCameraAction, fetchCamerasAction, fetchPromoAction } from '../api-actions';
+import { Camera, Cameras, Comment, Promo } from '../../types/camera';
+import { fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction } from '../api-actions';
 
 type CamerasProsecc = {
   cameras: Cameras;
   camera: Camera;
   promo: Promo;
   isDataLoad: boolean;
+  similarCameras: Cameras;
+  comments: Comment[];
 };
 
 const initialState : CamerasProsecc = {
@@ -36,6 +38,8 @@ const initialState : CamerasProsecc = {
     previewImgWebp2x: 'img/content/promo@2x.webp'
   },
   isDataLoad: false,
+  similarCameras: [],
+  comments: [],
 };
 
 export const cameraProcess = createSlice({
@@ -63,6 +67,20 @@ export const cameraProcess = createSlice({
         state.isDataLoad = false;
       })
       .addCase(fetchCamerasAction.pending, (state, action) => {
+        state.isDataLoad = true;
+      })
+      .addCase(fetchSimilarCamerasAction.fulfilled, (state, action) => {
+        state.similarCameras = action.payload;
+        state.isDataLoad = false;
+      })
+      .addCase(fetchSimilarCamerasAction.pending, (state, action) => {
+        state.isDataLoad = true;
+      })
+      .addCase(fetchCommentsCameraAction.fulfilled, (state, action) => {
+        state.comments = action.payload;
+        state.isDataLoad = false;
+      })
+      .addCase(fetchCommentsCameraAction.pending, (state, action) => {
         state.isDataLoad = true;
       });
   },

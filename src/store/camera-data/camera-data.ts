@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera } from '../../types/camera';
+import { Camera, Cameras } from '../../types/camera';
 
 type CameraData = {
   catalogPage: number;
@@ -7,7 +7,9 @@ type CameraData = {
   cardPopup: Camera;
   startSlice: number;
   countSlice: number;
-  camerasCatalog: Camera[];
+  camerasCatalog: Cameras;
+  cardsInBasket: Cameras;
+  isBasketSuccess: boolean;
 };
 
 const initialState: CameraData = {
@@ -32,6 +34,8 @@ const initialState: CameraData = {
   startSlice: 0,
   countSlice: 9,
   camerasCatalog: [],
+  cardsInBasket: [],
+  isBasketSuccess: false,
 };
 
 export const cameraData = createSlice({
@@ -62,8 +66,18 @@ export const cameraData = createSlice({
     setCamerasCatalog: (state, action) => {
       state.camerasCatalog = action.payload as Camera[];
     },
+    addCardInBasket: (state, action) => {
+      const camera = action.payload as Camera;
+      state.cardsInBasket.push(camera) as unknown as Cameras;
+    },
+    deleteCardInBasket: (state, action) => {
+      state.cardsInBasket = state.cardsInBasket.filter((card) => card.id !== action.payload as number);
+    },
+    changeIsBasketSuccess: (state, action) => {
+      state.isBasketSuccess = action.payload as boolean;
+    },
 
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess} = cameraData.actions;

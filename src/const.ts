@@ -1,5 +1,7 @@
 export const COUNT_CARDS_ON_PAGE = 9;
 
+export const COUNT_SHOW_COMMENTS = 3;
+
 export enum AppRoute {
   SignIn = '/login',
   MyList = '/mylist',

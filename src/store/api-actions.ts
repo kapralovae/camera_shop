@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Api, AppDispatch, Camera, Cameras, Promo, State } from '../types/camera';
+import { Api, AppDispatch, Camera, Cameras, Comment, Promo, State } from '../types/camera';
 import { setCamerasCatalog } from './camera-data/camera-data';
 
 export const fetchCamerasAction = createAsyncThunk<Cameras, undefined, {
@@ -9,9 +9,8 @@ export const fetchCamerasAction = createAsyncThunk<Cameras, undefined, {
 }>(
   'fetchCameras',
   async (_arg, {dispatch, extra: {api}}) => {
-    const data = await api('https://camera-shop.accelerator.pages.academy/cameras', 'Cameras') as unknown as Promise<Cameras>;
-
-    dispatch(setCamerasCatalog(data));
+    const data = await api as unknown as Promise<Cameras>;
+    dispatch(setCamerasCatalog((await data).slice(0, 9)));
     return data;
   },
 );
@@ -23,8 +22,7 @@ export const fetchCameraAction = createAsyncThunk<Camera, string, {
 }>(
   'fetchCamera',
   async (id, {dispatch, extra: {api}}) => {
-    const data = await api(`https://camera-shop.accelerator.pages.academy/cameras/${id}`, 'Camera') as unknown as Camera;
-    console.log(data);
+    const data = (await fetch(`https://camera-shop.accelerator.pages.academy/cameras/${id}`)).json() as unknown as Promise<Camera>;
     return data;
   },
 );
@@ -35,8 +33,32 @@ export const fetchPromoAction = createAsyncThunk<Promo, undefined, {
   extra: Api;
 }>(
   'fetchPromo',
-  async (_arg, {dispatch, extra: {api}}) => {
-    const data = api('https://camera-shop.accelerator.pages.academy/promo', 'Camera') as unknown as Promise<Promo>;
+  async (_arg, {dispatch, extra: {apiPromo}}) => {
+    const data = await apiPromo as unknown as Promise<Promo>;
+    return data;
+  },
+);
+
+export const fetchSimilarCamerasAction = createAsyncThunk<Cameras, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Api;
+}>(
+  'fetchSimilarCameras',
+  async (id, {dispatch, extra: {api}}) => {
+    const data = (await fetch(`https://camera-shop.accelerator.pages.academy/cameras/${id}/similar`)).json() as unknown as Promise<Cameras>;
+    return data;
+  },
+);
+
+export const fetchCommentsCameraAction = createAsyncThunk<Comment[], string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Api;
+}>(
+  'fetchCommentsCamera',
+  async (id, {dispatch, extra: {api}}) => {
+    const data = (await fetch(`https://camera-shop.accelerator.pages.academy/cameras/${id}/reviews`)).json() as unknown as Promise<Comment[]>;
     return data;
   },
 );

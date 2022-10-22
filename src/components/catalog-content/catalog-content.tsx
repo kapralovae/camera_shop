@@ -11,7 +11,7 @@ function CatalogContent () {
     <div className="catalog__content">
       <CatalogSort />
       <div className="cards catalog__cards">
-        {cardsCatalog.map((camera) => <Card item={camera} key={camera.id}></Card>)}
+        {cardsCatalog.map((camera) => <Card item={camera} isActive={false} key={camera.id}></Card>)}
       </div>
       <Pagination />
     </div>
