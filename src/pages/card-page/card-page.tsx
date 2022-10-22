@@ -37,7 +37,6 @@ function CardPage () {
 
   const handleButtonNextSimilarClick = (evt: React.MouseEvent<HTMLOrSVGElement>) => {
     evt.preventDefault();
-    console.log('popal');
     dispatch(setSliceStart(sliceStart + 3));
   };
 
