@@ -10,14 +10,15 @@ import Card from '../../components/card/card';
 import CommentCard from '../../components/comment/comments';
 import Footer from '../../components/footer/footer';
 import PopupAddInBasket from '../../components/popup_add_in_basket/popup_add_in_basket';
-import { getCardsInBasket, getIsBasketSuccess } from '../../store/camera-data/selectors';
+import { getCardsInBasket, getIsBasketSuccess, getSliceStart } from '../../store/camera-data/selectors';
 import PopupAddSuccess from '../../components/popup_add_success/popup_add_success';
-import { changeCardPopup, changeStatusPopup } from '../../store/camera-data/camera-data';
+import { changeCardPopup, changeStatusPopup, setSliceStart } from '../../store/camera-data/camera-data';
 
 function CardPage () {
   const dispatch = useAppDisptach();
   const {id} = useParams();
   const isAddSuccess = useAppSelector(getIsBasketSuccess);
+  const sliceStart = useAppSelector(getSliceStart);
 
   const [activeTabs, setActiveTabs] = useState('description');
 
@@ -34,14 +35,12 @@ function CardPage () {
   const comments = useAppSelector(getComments);
   const cardsInBasket = useAppSelector(getCardsInBasket);
 
-  const [sliceStart, setStartSlice] = useState(0);
-  const [countSlice, setCountSlice] = useState(3);
-
-  const handleNextSimilarClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const handleButtonNextSimilarClick = (evt: React.MouseEvent<HTMLOrSVGElement>) => {
     evt.preventDefault();
-    setStartSlice(sliceStart + 3);
-    setCountSlice(countSlice + 3);
+    console.log('popal');
+    dispatch(setSliceStart(sliceStart + 3));
   };
+
   const [countComment, setCountComment] = useState(COUNT_SHOW_COMMENTS);
 
   const handleMoreCommentsButtonClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -167,17 +166,17 @@ function CardPage () {
                 <h2 className="title title--h3">Похожие товары</h2>
                 <div className="product-similar__slider">
                   <div className="product-similar__slider-list">
-                    {similarCameras.slice(sliceStart, countSlice).map((camera) =>
+                    {similarCameras.slice(sliceStart, sliceStart + 3).map((camera) =>
                       <Card item={camera} isActive key={camera.id}/>
                     )}
                   </div>
-                  <button onClick={handleNextSimilarClick} className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled={sliceStart === 0}>
+                  <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" >
                     <svg width="7" height="12" aria-hidden="true">
                       <use xlinkHref="#icon-arrow"></use>
                     </svg>
                   </button>
-                  <button onClick={handleNextSimilarClick} className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" disabled={similarCameras.length <= countSlice}>
-                    <svg width="7" height="12" aria-hidden="true">
+                  <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд">
+                    <svg onClick={handleButtonNextSimilarClick} width="7" height="12" aria-hidden="true">
                       <use xlinkHref="#icon-arrow"></use>
                     </svg>
                   </button>

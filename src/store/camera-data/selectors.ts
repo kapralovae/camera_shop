@@ -16,3 +16,5 @@ export const getCardsInBasket = (state: State): Camera[] => state['dataReducer']
 
 export const getIsBasketSuccess = (state: State): boolean => state['dataReducer'].isBasketSuccess;
 
+export const getSliceStart = (state: State): number => state['dataReducer'].sliceStart;
+

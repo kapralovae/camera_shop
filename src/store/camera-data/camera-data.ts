@@ -10,6 +10,7 @@ type CameraData = {
   camerasCatalog: Cameras;
   cardsInBasket: Cameras;
   isBasketSuccess: boolean;
+  sliceStart: number;
 };
 
 const initialState: CameraData = {
@@ -36,6 +37,7 @@ const initialState: CameraData = {
   camerasCatalog: [],
   cardsInBasket: [],
   isBasketSuccess: false,
+  sliceStart: 0,
 };
 
 export const cameraData = createSlice({
@@ -76,8 +78,11 @@ export const cameraData = createSlice({
     changeIsBasketSuccess: (state, action) => {
       state.isBasketSuccess = action.payload as boolean;
     },
+    setSliceStart: (state, action) => {
+      state.startSlice = action.payload as number;
+    },
 
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setSliceStart} = cameraData.actions;
