@@ -10,5 +10,11 @@ export const getStartSlice = (state: State): number => state['dataReducer'].star
 
 export const getCountSlice = (state: State): number => state['dataReducer'].countSlice;
 
-export const getCameresCatalog = (state: State): Camera[] => state['dataReducer'].cameresCatalog;
+export const getCamerasCatalog = (state: State): Camera[] => state['dataReducer'].camerasCatalog;
+
+export const getCardsInBasket = (state: State): Camera[] => state['dataReducer'].cardsInBasket;
+
+export const getIsBasketSuccess = (state: State): boolean => state['dataReducer'].isBasketSuccess;
+
+export const getSliceStart = (state: State): number => state['dataReducer'].sliceStart;
 

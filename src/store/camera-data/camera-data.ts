@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera } from '../../types/camera';
+import { Camera, Cameras } from '../../types/camera';
 
 type CameraData = {
   catalogPage: number;
@@ -7,7 +7,10 @@ type CameraData = {
   cardPopup: Camera;
   startSlice: number;
   countSlice: number;
-  cameresCatalog: Camera[];
+  camerasCatalog: Cameras;
+  cardsInBasket: Cameras;
+  isBasketSuccess: boolean;
+  sliceStart: number;
 };
 
 const initialState: CameraData = {
@@ -31,7 +34,10 @@ const initialState: CameraData = {
   },
   startSlice: 0,
   countSlice: 9,
-  cameresCatalog: [],
+  camerasCatalog: [],
+  cardsInBasket: [],
+  isBasketSuccess: false,
+  sliceStart: 0,
 };
 
 export const cameraData = createSlice({
@@ -59,11 +65,24 @@ export const cameraData = createSlice({
     setCountSlice: (state, action) => {
       state.countSlice = action.payload as number;
     },
-    setCameresCatalog: (state, action) => {
-      state.cameresCatalog = action.payload as Camera[];
+    setCamerasCatalog: (state, action) => {
+      state.camerasCatalog = action.payload as Camera[];
+    },
+    addCardInBasket: (state, action) => {
+      const camera = action.payload as Camera;
+      state.cardsInBasket.push(camera) as unknown as Cameras;
+    },
+    deleteCardInBasket: (state, action) => {
+      state.cardsInBasket = state.cardsInBasket.filter((card) => card.id !== action.payload as number);
+    },
+    changeIsBasketSuccess: (state, action) => {
+      state.isBasketSuccess = action.payload as boolean;
+    },
+    setSliceStart: (state, action) => {
+      state.startSlice = action.payload as number;
     },
 
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCameresCatalog} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setSliceStart} = cameraData.actions;

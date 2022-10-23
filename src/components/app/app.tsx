@@ -1,7 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import CardPage from '../../pages/card-page/card-page';
 import CatalogPage from '../../pages/catalog-page/catalog-page';
 import { getIsDataLoad } from '../../store/camera-process/selecrots';
+import NotFound from '../not-found/not-found';
 import { SpinerLoading } from '../spinner-loading/spinner-loading';
 
 function App(): JSX.Element {
@@ -22,7 +24,12 @@ function App(): JSX.Element {
 
         <Route
           path='/catalog/camera/:id'
-          element={<CatalogPage />}
+          element={<CardPage />}
+        />
+
+        <Route
+          path='*'
+          element={<NotFound />}
         />
       </Routes>
     </BrowserRouter>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getCardPopup, getStatusPopup } from '../../store/camera-data/selectors';
-import { changeStatusPopup } from '../../store/camera-data/camera-data';
+import { addCardInBasket, changeIsBasketSuccess, changeStatusPopup } from '../../store/camera-data/camera-data';
 
 function PopupAddInBasket () {
   const dispatch = useAppDisptach();
@@ -33,6 +33,12 @@ function PopupAddInBasket () {
     evt.preventDefault();
     dispatch(changeStatusPopup(false));
   };
+  // console.log(cardPopup);
+  const handleButtonAddInBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    dispatch(addCardInBasket(cardPopup));
+    dispatch(changeIsBasketSuccess(true));
+  };
 
   return(
     <div className={isActivePopup ? 'modal is-active' : 'modal'}>
@@ -43,7 +49,7 @@ function PopupAddInBasket () {
           <div className="basket-item basket-item--short">
             <div className="basket-item__img">
               <picture>
-                <source type="image/webp" srcSet={`${previewImgWebp}, ${previewImgWebp2x}`}></source><img src={previewImg} srcSet={previewImg2x} width="140" height="120" alt="Фотоаппарат «Орлёнок»"></img>
+                <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`}></source><img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width="140" height="120" alt="Фотоаппарат «Орлёнок»"></img>
               </picture>
             </div>
             <div className="basket-item__description">
@@ -58,7 +64,7 @@ function PopupAddInBasket () {
             </div>
           </div>
           <div className="modal__buttons">
-            <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button">
+            <button onClick={handleButtonAddInBasketClick} className="btn btn--purple modal__btn modal__btn--fit-width" type="button">
               <svg width="24" height="16" aria-hidden="true">
                 <use xlinkHref="#icon-add-basket"></use>
               </svg>Добавить в корзину
