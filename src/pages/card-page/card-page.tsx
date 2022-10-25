@@ -10,17 +10,21 @@ import Card from '../../components/card/card';
 import CommentCard from '../../components/comment/comments';
 import Footer from '../../components/footer/footer';
 import PopupAddInBasket from '../../components/popup_add_in_basket/popup_add_in_basket';
-import { getCardsInBasket, getIsBasketSuccess, getSliceStart } from '../../store/camera-data/selectors';
+import { getCardsInBasket, getIsActivePopupReview, getIsAddReview, getIsBasketSuccess } from '../../store/camera-data/selectors';
 import PopupAddSuccess from '../../components/popup_add_success/popup_add_success';
-import { changeCardPopup, changeStatusPopup, setSliceStart } from '../../store/camera-data/camera-data';
+import { changeCardPopup, changeStatusPopup, setIsActivePopupReview } from '../../store/camera-data/camera-data';
+import PopupReviewSuccess from '../../components/popup-review-success/popup-review-success';
+import PopupAddReview from '../../components/popup-add-review/popup-add-review';
 
 function CardPage () {
   const dispatch = useAppDisptach();
   const {id} = useParams();
   const isAddSuccess = useAppSelector(getIsBasketSuccess);
-  const sliceStart = useAppSelector(getSliceStart);
+  const isAddReview = useAppSelector(getIsAddReview);
+  const IsActivePopupReview = useAppSelector(getIsActivePopupReview);
 
   const [activeTabs, setActiveTabs] = useState('description');
+  const [startSlice, setStartSlice] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -31,14 +35,18 @@ function CardPage () {
   }, [dispatch, id]);
 
   const card = useAppSelector(getCamera);
-  const similarCameras = useAppSelector(getSimilarCameras);
+  const similarCameras = useAppSelector(getSimilarCameras).slice(0, 4);
   const comments = useAppSelector(getComments);
   const cardsInBasket = useAppSelector(getCardsInBasket);
 
-  const handleButtonNextSimilarClick = (evt: React.MouseEvent<HTMLOrSVGElement>) => {
+  const handleButtonBackSimilarClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    console.log('popal');
-    dispatch(setSliceStart(sliceStart + 3));
+    setStartSlice(startSlice - 3);
+  };
+
+  const handleButtonNextSimilarClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setStartSlice(startSlice + 3);
   };
 
   const [countComment, setCountComment] = useState(COUNT_SHOW_COMMENTS);
@@ -71,6 +79,11 @@ function CardPage () {
       return true;
     }
     return false;
+  };
+
+  const handlerButtonAddReviewClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    dispatch(setIsActivePopupReview(true));
   };
 
   const {category, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, name, rating, reviewCount, price, vendorCode, type, level} = card;
@@ -166,17 +179,17 @@ function CardPage () {
                 <h2 className="title title--h3">Похожие товары</h2>
                 <div className="product-similar__slider">
                   <div className="product-similar__slider-list">
-                    {similarCameras.slice(sliceStart, sliceStart + 3).map((camera) =>
+                    {similarCameras.slice(startSlice, startSlice + 3).map((camera) =>
                       <Card item={camera} isActive key={camera.id}/>
                     )}
                   </div>
-                  <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" >
+                  <button onClick={handleButtonBackSimilarClick} className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд" disabled={startSlice < 3}>
                     <svg width="7" height="12" aria-hidden="true">
                       <use xlinkHref="#icon-arrow"></use>
                     </svg>
                   </button>
-                  <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд">
-                    <svg onClick={handleButtonNextSimilarClick} width="7" height="12" aria-hidden="true">
+                  <button onClick={handleButtonNextSimilarClick} className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" disabled={startSlice + 3 >= similarCameras.length}>
+                    <svg width="7" height="12" aria-hidden="true">
                       <use xlinkHref="#icon-arrow"></use>
                     </svg>
                   </button>
@@ -189,7 +202,7 @@ function CardPage () {
               <div className="container">
                 <div className="page-content__headed">
                   <h2 className="title title--h3">Отзывы</h2>
-                  <button className="btn" type="button">Оставить свой отзыв</button>
+                  <button onClick={handlerButtonAddReviewClick} className="btn" type="button">Оставить свой отзыв</button>
                 </div>
                 <ul className="review-block__list">
                   {comments.slice(0, countComment).map((comment) => <CommentCard item={comment} key={comment.id}/>)}
@@ -210,6 +223,7 @@ function CardPage () {
         </svg>
       </a>
       {isAddSuccess ? <PopupAddSuccess /> : <PopupAddInBasket />}
+      {isAddReview && IsActivePopupReview ? <PopupReviewSuccess /> : <PopupAddReview />}
       <Footer />
     </div>
   );

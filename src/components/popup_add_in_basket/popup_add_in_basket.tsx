@@ -6,7 +6,7 @@ import { addCardInBasket, changeIsBasketSuccess, changeStatusPopup } from '../..
 function PopupAddInBasket () {
   const dispatch = useAppDisptach();
 
-  const isActivePopup = useAppSelector(getStatusPopup);
+  const isActivePopupBasket = useAppSelector(getStatusPopup);
   const cardPopup = useAppSelector(getCardPopup);
 
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, category, vendorCode, level, type} = cardPopup;
@@ -41,7 +41,7 @@ function PopupAddInBasket () {
   };
 
   return(
-    <div className={isActivePopup ? 'modal is-active' : 'modal'}>
+    <div className={isActivePopupBasket ? 'modal is-active' : 'modal'}>
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content">

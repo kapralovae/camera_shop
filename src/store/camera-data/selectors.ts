@@ -2,7 +2,7 @@ import { Camera, State } from '../../types/camera';
 
 export const getCatalogPage = (state: State): number => state['dataReducer'].catalogPage;
 
-export const getStatusPopup = (state: State): boolean => state['dataReducer'].isActivePopup;
+export const getStatusPopup = (state: State): boolean => state['dataReducer'].isActivePopupBasket;
 
 export const getCardPopup = (state: State): Camera => state['dataReducer'].cardPopup;
 
@@ -17,4 +17,8 @@ export const getCardsInBasket = (state: State): Camera[] => state['dataReducer']
 export const getIsBasketSuccess = (state: State): boolean => state['dataReducer'].isBasketSuccess;
 
 export const getSliceStart = (state: State): number => state['dataReducer'].sliceStart;
+
+export const getIsAddReview = (state: State): boolean => state['dataReducer'].isAddReview;
+
+export const getIsActivePopupReview = (state: State): boolean => state['dataReducer'].isActivePopupReview;
 

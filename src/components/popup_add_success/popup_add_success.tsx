@@ -6,7 +6,7 @@ import { getStatusPopup } from '../../store/camera-data/selectors';
 function PopupAddSuccess () {
   const dispatch = useAppDisptach();
   const navigate = useNavigate();
-  const isActivePopup = useAppSelector(getStatusPopup);
+  const isActivePopupBasket = useAppSelector(getStatusPopup);
 
   const handleButtonNavigateBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -27,7 +27,7 @@ function PopupAddSuccess () {
   };
   return(
 
-    <div className={isActivePopup ? 'modal is-active modal--narrow' : ''}>
+    <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : ''}>
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content">
