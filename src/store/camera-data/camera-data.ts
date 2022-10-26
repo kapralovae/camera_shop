@@ -3,7 +3,7 @@ import { Camera, Cameras } from '../../types/camera';
 
 type CameraData = {
   catalogPage: number;
-  isActivePopup: boolean;
+  isActivePopupBasket: boolean;
   cardPopup: Camera;
   startSlice: number;
   countSlice: number;
@@ -11,11 +11,13 @@ type CameraData = {
   cardsInBasket: Cameras;
   isBasketSuccess: boolean;
   sliceStart: number;
+  isAddReview: boolean;
+  isActivePopupReview: boolean;
 };
 
 const initialState: CameraData = {
   catalogPage: 1,
-  isActivePopup: false,
+  isActivePopupBasket: false,
   cardPopup: {
     id: 1,
     name: '',
@@ -38,6 +40,8 @@ const initialState: CameraData = {
   cardsInBasket: [],
   isBasketSuccess: false,
   sliceStart: 0,
+  isAddReview: false,
+  isActivePopupReview: false,
 };
 
 export const cameraData = createSlice({
@@ -54,7 +58,7 @@ export const cameraData = createSlice({
       state.catalogPage = action.payload as number;
     },
     changeStatusPopup: (state, action) => {
-      state.isActivePopup = action.payload as boolean;
+      state.isActivePopupBasket = action.payload as boolean;
     },
     changeCardPopup: (state, action) => {
       state.cardPopup = action.payload as Camera;
@@ -81,8 +85,14 @@ export const cameraData = createSlice({
     setSliceStart: (state, action) => {
       state.startSlice = action.payload as number;
     },
+    setIsAddReview: (state, action) => {
+      state.isAddReview = action.payload as boolean;
+    },
+    setIsActivePopupReview: (state, action) => {
+      state.isActivePopupReview = action.payload as boolean;
+    },
 
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setSliceStart} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setSliceStart, setIsAddReview, setIsActivePopupReview} = cameraData.actions;

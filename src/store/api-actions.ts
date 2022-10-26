@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Api, AppDispatch, Camera, Cameras, Comment, Promo, State } from '../types/camera';
+import { Api, AppDispatch, Camera, Cameras, Comment, Promo, Review, State } from '../types/camera';
 import { setCamerasCatalog } from './camera-data/camera-data';
 
 export const fetchCamerasAction = createAsyncThunk<Cameras, undefined, {
@@ -60,5 +60,23 @@ export const fetchCommentsCameraAction = createAsyncThunk<Comment[], string, {
   async (id, {dispatch, extra: {api}}) => {
     const data = (await fetch(`https://camera-shop.accelerator.pages.academy/cameras/${id}/reviews`)).json() as unknown as Promise<Comment[]>;
     return data;
+  },
+);
+
+export const addComment = createAsyncThunk<void, Review, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Api;
+}>(
+  'postComment',
+  async (data, {dispatch, extra: api}) => {
+    await fetch('https://camera-shop.accelerator.pages.academy/reviews', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(data),
+    });
+
   },
 );

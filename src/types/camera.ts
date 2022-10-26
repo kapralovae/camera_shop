@@ -46,4 +46,13 @@ export type Comment = {
   rating: number;
   createAt: string;
   cameraId: number;
-}
+};
+
+export type Review = {
+  cameraId: number;
+  userName: string;
+  advantage: string;
+  disadvantage: string;
+  review: string;
+  rating: number;
+};
