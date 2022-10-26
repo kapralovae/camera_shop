@@ -13,9 +13,32 @@ export default function PopupAddReview () {
   const handleButtonClosePopupClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(setIsActivePopupReview(false));
+    setData({
+      cameraId: Number(id),
+      userName: '',
+      advantage: '',
+      disadvantage: '',
+      review: '',
+      rating: 0,
+    });
+    setIsValid({
+      rating: true,
+      userName: true,
+      advantage: true,
+      disadvantage: true,
+      review: true,
+    });
   };
 
   const id = useParams().id;
+
+  const [isValid, setIsValid] = useState({
+    rating: true,
+    userName: true,
+    advantage: true,
+    disadvantage: true,
+    review: true,
+  });
 
   const [data, setData] = useState({
     cameraId: Number(id),
@@ -31,13 +54,30 @@ export default function PopupAddReview () {
       ...data,
       rating: Number(evt.target.value),
     });
+    if (Number(evt.target.value) !== 0) {
+      setIsValid({
+        ...isValid,
+        rating: true,
+      });
+    }
   };
 
   const hanldeTextareaReviewChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     setData({
       ...data,
-      review: evt.target.value,
+      review: evt.currentTarget.value,
     });
+    if (evt.currentTarget.value.length > 5) {
+      setIsValid({
+        ...isValid,
+        review: true,
+      });
+    } else {
+      setIsValid({
+        ...isValid,
+        review: false,
+      });
+    }
   };
 
   const handleInputTextDataChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -47,22 +87,78 @@ export default function PopupAddReview () {
       ...data,
       [name]: value,
     });
+    if ((name === 'userName' || name === 'advantage' || name === 'disadvantage' || name === 'review') && value !== '') {
+      setIsValid({
+        ...isValid,
+        [name]: true,
+      });
+    } else {
+      setIsValid({
+        ...isValid,
+        [name]: false,
+      });
+    }
+  };
+
+  const handleButtonSubmitClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    setIsValid({
+      rating: false,
+      userName: false,
+      advantage: false,
+      disadvantage: false,
+      review: false,
+    });
+    if (data.rating !== 0) {
+      setIsValid({
+        ...isValid,
+        rating: true,
+      });
+    }
+
+    if (data.userName !== '') {
+      setIsValid({
+        ...isValid,
+        userName: true,
+      });
+    }
+
+    if (data.advantage !== '') {
+      setIsValid({
+        ...isValid,
+        advantage: true,
+      });
+    }
+
+    if (data.disadvantage !== '') {
+      setIsValid({
+        ...isValid,
+        disadvantage: true,
+      });
+    }
+
+    if (data.review !== '' && data.review.length >= 5) {
+      setIsValid({
+        ...isValid,
+        review: true,
+      });
+    }
   };
 
   const postForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    dispatch(addComment(data));
-    setData({
-      cameraId: Number(id),
-      userName: '',
-      advantage: '',
-      disadvantage: '',
-      review: '',
-      rating: 0,
-    });
-    dispatch(setIsAddReview(true));
+    if (isValid.advantage && isValid.disadvantage && isValid.rating && isValid.review && isValid.userName) {
+      dispatch(addComment(data));
+      setData({
+        cameraId: Number(id),
+        userName: '',
+        advantage: '',
+        disadvantage: '',
+        review: '',
+        rating: 0,
+      });
+      dispatch(setIsAddReview(true));
+    }
   };
-
 
   return(
     <div className={IsActivePopupReview ? 'modal is-active' : 'modal'}>
@@ -73,7 +169,7 @@ export default function PopupAddReview () {
           <div className="form-review">
             <form onSubmit={postForm} method="post">
               <div className="form-review__rate">
-                <fieldset className="rate form-review__item">
+                <fieldset className={isValid.rating ? 'rate form-review__item' : 'rate form-review__item is-invalid'}>
                   <legend className="rate__caption">Рейтинг
                     <svg width="9" height="9" aria-hidden="true">
                       <use xlinkHref="#icon-snowflake"></use>
@@ -97,40 +193,40 @@ export default function PopupAddReview () {
                   </div>
                   <p className="rate__message">Нужно оценить товар</p>
                 </fieldset>
-                <div className="custom-input form-review__item">
+                <div className={isValid.userName ? 'custom-input form-review__item' : 'custom-input form-review__item is-invalid'}>
                   <label>
                     <span className="custom-input__label">Ваше имя
                       <svg width="9" height="9" aria-hidden="true">
                         <use xlinkHref="#icon-snowflake"></use>
                       </svg>
                     </span>
-                    <input onChange={handleInputTextDataChange} type="text" name="userName" placeholder="Введите ваше имя" required />
+                    <input onChange={handleInputTextDataChange} type="text" name="userName" placeholder="Введите ваше имя" />
                   </label>
                   <p className="custom-input__error">Нужно указать имя</p>
                 </div>
-                <div className="custom-input form-review__item">
+                <div className={isValid.advantage ? 'custom-input form-review__item' : 'custom-input form-review__item is-invalid'}>
                   <label>
                     <span className="custom-input__label">Достоинства
                       <svg width="9" height="9" aria-hidden="true">
                         <use xlinkHref="#icon-snowflake"></use>
                       </svg>
                     </span>
-                    <input onChange={handleInputTextDataChange} type="text" name="advantage" placeholder="Основные преимущества товара" required />
+                    <input onChange={handleInputTextDataChange} type="text" name="advantage" placeholder="Основные преимущества товара" />
                   </label>
                   <p className="custom-input__error">Нужно указать достоинства</p>
                 </div>
-                <div className="custom-input form-review__item">
+                <div className={isValid.disadvantage ? 'custom-input form-review__item' : 'custom-input form-review__item is-invalid'}>
                   <label>
                     <span className="custom-input__label">Недостатки
                       <svg width="9" height="9" aria-hidden="true">
                         <use xlinkHref="#icon-snowflake"></use>
                       </svg>
                     </span>
-                    <input onChange={handleInputTextDataChange} type="text" name="disadvantage" placeholder="Главные недостатки товара" required />
+                    <input onChange={handleInputTextDataChange} type="text" name="disadvantage" placeholder="Главные недостатки товара" />
                   </label>
                   <p className="custom-input__error">Нужно указать недостатки</p>
                 </div>
-                <div className="custom-textarea form-review__item">
+                <div className={isValid.review ? 'custom-textarea form-review__item' : 'custom-textarea form-review__item is-invalid'}>
                   <label>
                     <span className="custom-textarea__label">Комментарий
                       <svg width="9" height="9" aria-hidden="true">
@@ -142,7 +238,7 @@ export default function PopupAddReview () {
                   <div className="custom-textarea__error">Нужно добавить комментарий</div>
                 </div>
               </div>
-              <button className="btn btn--purple form-review__btn" type="submit">Отправить отзыв</button>
+              <button onClick={handleButtonSubmitClick} className="btn btn--purple form-review__btn" type="submit">Отправить отзыв</button>
             </form>
           </div>
           <button onClick={handleButtonClosePopupClick} className="cross-btn" type="button" aria-label="Закрыть попап">
