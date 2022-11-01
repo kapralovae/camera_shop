@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { setIsActivePopupReview, setIsAddReview } from '../../store/camera-data/camera-data';
 import { getIsActivePopupReview } from '../../store/camera-data/selectors';
@@ -11,7 +12,20 @@ export default function PopupReviewSuccess() {
     evt.preventDefault();
     dispatch(setIsActivePopupReview(false));
     dispatch(setIsAddReview(false));
+    document.body.style.overflow = '';
   };
+
+  useEffect(() => {
+    const onKeyDownEsc = (evt: KeyboardEvent) => {
+      if (evt.key === 'Escape') {
+        dispatch(setIsActivePopupReview(false));
+        dispatch(setIsAddReview(false));
+        document.body.style.overflow = '';
+      }
+    };
+    window.addEventListener('keydown', onKeyDownEsc);
+    return () => window.removeEventListener('keydown', onKeyDownEsc);
+  },[dispatch, IsActivePopupReview]);
 
   return(
     <div className={IsActivePopupReview ? 'modal is-active modal--narrow' : 'modal'}>

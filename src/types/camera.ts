@@ -19,6 +19,20 @@ export type Camera = {
 
 export type Cameras = Camera[];
 
+export type CameraData = {
+  catalogPage: number;
+  isActivePopupBasket: boolean;
+  cardPopup: Camera;
+  startSlice: number;
+  countSlice: number;
+  camerasCatalog: Cameras;
+  cardsInBasket: Cameras;
+  isBasketSuccess: boolean;
+  sliceStart: number;
+  isAddReview: boolean;
+  isActivePopupReview: boolean;
+};
+
 export type Promo = {
   id: number;
   name: string;

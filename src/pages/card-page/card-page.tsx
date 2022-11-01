@@ -60,6 +60,7 @@ function CardPage () {
     evt.preventDefault();
     dispatch(changeStatusPopup(true));
     dispatch(changeCardPopup(card));
+    document.body.style.overflow = 'hidden';
   };
 
   const handleButtonChangeTabsClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
@@ -84,6 +85,7 @@ function CardPage () {
   const handlerButtonAddReviewClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(setIsActivePopupReview(true));
+    document.body.style.overflow = 'hidden';
   };
 
   const {category, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, name, rating, reviewCount, price, vendorCode, type, level} = card;

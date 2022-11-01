@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { addComment } from '../../store/api-actions';
@@ -28,7 +28,35 @@ export default function PopupAddReview () {
       disadvantage: true,
       review: true,
     });
+    document.body.style.overflow = '';
   };
+
+  useEffect(() => {
+    const onKeyDownEsc = (evt: KeyboardEvent) => {
+
+      if (evt.key === 'Escape') {
+        dispatch(setIsActivePopupReview(false));
+        setData({
+          cameraId: Number(id),
+          userName: '',
+          advantage: '',
+          disadvantage: '',
+          review: '',
+          rating: 0,
+        });
+        setIsValid({
+          rating: true,
+          userName: true,
+          advantage: true,
+          disadvantage: true,
+          review: true,
+        });
+        document.body.style.overflow = '';
+      }
+    };
+    window.addEventListener('keydown', onKeyDownEsc);
+    return () => window.removeEventListener('keydown', onKeyDownEsc);
+  },[dispatch, IsActivePopupReview]);
 
   const id = useParams().id;
 
@@ -101,6 +129,7 @@ export default function PopupAddReview () {
   };
 
   const handleButtonSubmitClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+
     setIsValid({
       rating: false,
       userName: false,

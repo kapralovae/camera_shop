@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getCardPopup, getStatusPopup } from '../../store/camera-data/selectors';
 import { addCardInBasket, changeIsBasketSuccess, changeStatusPopup } from '../../store/camera-data/camera-data';
@@ -32,6 +32,7 @@ function PopupAddInBasket () {
   const handleButtonClosePopupClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(changeStatusPopup(false));
+    document.body.style.overflow = '';
   };
   // console.log(cardPopup);
   const handleButtonAddInBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,8 +41,20 @@ function PopupAddInBasket () {
     dispatch(changeIsBasketSuccess(true));
   };
 
+
+  useEffect(() => {
+    const onKeyDownEsc = (evt: KeyboardEvent) => {
+      if (evt.key === 'Escape') {
+        dispatch(changeStatusPopup(false));
+        document.body.style.overflow = '';
+      }
+    };
+    window.addEventListener('keydown', onKeyDownEsc);
+    return () => window.removeEventListener('keydown', onKeyDownEsc);
+  },[dispatch, isActivePopupBasket]);
+
   return(
-    <div className={isActivePopupBasket ? 'modal is-active' : 'modal'}>
+    <div className={isActivePopupBasket ? 'modal is-active scroll-lock no-scrollbar' : 'modal'}>
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content">
