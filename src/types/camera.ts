@@ -33,6 +33,15 @@ export type CameraData = {
   isActivePopupReview: boolean;
 };
 
+export type CamerasProsecc = {
+  cameras: Cameras;
+  camera: Camera;
+  promo: Promo;
+  isDataLoad: boolean;
+  similarCameras: Cameras;
+  comments: Comment[];
+};
+
 export type Promo = {
   id: number;
   name: string;

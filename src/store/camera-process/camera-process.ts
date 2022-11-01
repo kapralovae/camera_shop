@@ -1,15 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera, Cameras, Comment, Promo } from '../../types/camera';
+import { CamerasProsecc} from '../../types/camera';
 import { fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction } from '../api-actions';
 
-type CamerasProsecc = {
-  cameras: Cameras;
-  camera: Camera;
-  promo: Promo;
-  isDataLoad: boolean;
-  similarCameras: Cameras;
-  comments: Comment[];
-};
 
 const initialState : CamerasProsecc = {
   cameras: [],

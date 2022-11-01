@@ -1,6 +1,6 @@
 import faker from 'faker';
 import { Camera, CameraData } from '../../types/camera';
-import createFakeCamera from '../mock-store-data';
+import { createFakeCamera } from '../mock-store-data';
 import { addCardInBasket, cameraData, changeCardPopup, changeIsBasketSuccess, changeStatusPopup, deleteCardInBasket, increaseCatalogPage, setCamerasCatalog, setCountSlice, setIsActivePopupReview, setIsAddReview, setStartSlice } from './camera-data';
 
 describe('Reducer: cameraData', () => {
