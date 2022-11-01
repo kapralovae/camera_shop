@@ -21,6 +21,7 @@ function Card ({item, isActive = true}: CartType) {
     evt.preventDefault();
     dispatch(changeStatusPopup(true));
     dispatch(changeCardPopup(item));
+    document.body.style.overflow = 'hidden';
   };
   // console.log(cardsInBasket);
 

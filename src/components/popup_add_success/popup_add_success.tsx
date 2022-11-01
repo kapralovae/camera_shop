@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { changeIsBasketSuccess, changeStatusPopup } from '../../store/camera-data/camera-data';
@@ -19,7 +20,20 @@ function PopupAddSuccess () {
     evt.preventDefault();
     dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(false));
+    document.body.style.overflow = '';
   };
+
+  useEffect(() => {
+    const onKeyDownEsc = (evt: KeyboardEvent) => {
+      if (evt.key === 'Escape') {
+        dispatch(changeStatusPopup(false));
+        dispatch(changeIsBasketSuccess(false));
+        document.body.style.overflow = '';
+      }
+    };
+    window.addEventListener('keydown', onKeyDownEsc);
+    return () => window.removeEventListener('keydown', onKeyDownEsc);
+  },[dispatch, isActivePopupBasket]);
 
   const handleLinkChangeStatusPopupClick = () => {
     dispatch(changeStatusPopup(false));

@@ -1,19 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera, Cameras } from '../../types/camera';
-
-type CameraData = {
-  catalogPage: number;
-  isActivePopupBasket: boolean;
-  cardPopup: Camera;
-  startSlice: number;
-  countSlice: number;
-  camerasCatalog: Cameras;
-  cardsInBasket: Cameras;
-  isBasketSuccess: boolean;
-  sliceStart: number;
-  isAddReview: boolean;
-  isActivePopupReview: boolean;
-};
+import { Camera, CameraData, Cameras } from '../../types/camera';
 
 const initialState: CameraData = {
   catalogPage: 1,
@@ -82,9 +68,6 @@ export const cameraData = createSlice({
     changeIsBasketSuccess: (state, action) => {
       state.isBasketSuccess = action.payload as boolean;
     },
-    setSliceStart: (state, action) => {
-      state.startSlice = action.payload as number;
-    },
     setIsAddReview: (state, action) => {
       state.isAddReview = action.payload as boolean;
     },
@@ -95,4 +78,4 @@ export const cameraData = createSlice({
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setSliceStart, setIsAddReview, setIsActivePopupReview} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview} = cameraData.actions;
