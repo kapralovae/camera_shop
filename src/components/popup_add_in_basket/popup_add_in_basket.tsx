@@ -34,7 +34,6 @@ function PopupAddInBasket () {
     dispatch(changeStatusPopup(false));
     document.body.style.overflow = '';
   };
-  // console.log(cardPopup);
   const handleButtonAddInBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(addCardInBasket(cardPopup));
