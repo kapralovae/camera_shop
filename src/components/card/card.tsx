@@ -23,7 +23,6 @@ function Card ({item, isActive = true}: CartType) {
     dispatch(changeCardPopup(item));
     document.body.style.overflow = 'hidden';
   };
-  // console.log(cardsInBasket);
 
   const isInBasket = () => {
     if (cardsInBasket.length > 0 && cardsInBasket.find((card) => card.id === item.id) !== undefined) {

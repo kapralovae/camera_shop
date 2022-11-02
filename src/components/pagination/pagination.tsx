@@ -24,18 +24,17 @@ function Pagination () {
   const handleLiNextpageClick = () => {
     dispatch(increaseCatalogPage(catalogPage + 1));
     dispatch(setStartSlice(startSlice + COUNT_CARDS_ON_PAGE));
-    // dispatch(setCountSlice((catalogPage + 1) * COUNT_CARDS_ON_PAGE));
-
-    dispatch(setCamerasCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
+    // dispatch(setCamerasCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, (catalogPage + 1) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, startSlice + 2 * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiBackpageClick = () => {
     dispatch(decreaseCatalogPage(catalogPage - 1));
     dispatch(setStartSlice(startSlice - COUNT_CARDS_ON_PAGE));
-    dispatch(setCamerasCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, (catalogPage - 1) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, startSlice)));
   };
   const handleLiClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     dispatch(setCatalogPage(Number(evt.currentTarget.text)));
-    dispatch(setStartSlice( Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * (COUNT_CARDS_ON_PAGE - 1)));
+    dispatch(setStartSlice( Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * (COUNT_CARDS_ON_PAGE)));
     dispatch(setCamerasCatalog(allCards.slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
   };
 
