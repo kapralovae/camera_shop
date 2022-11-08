@@ -9,9 +9,9 @@ import { fetchCameraAction, fetchCommentsCameraAction, fetchSimilarCamerasAction
 import Card from '../../components/card/card';
 import CommentCard from '../../components/comment/comments';
 import Footer from '../../components/footer/footer';
-import PopupAddInBasket from '../../components/popup_add_in_basket/popup_add_in_basket';
+import PopupAddInBasket from '../../components/popup-add-in-basket/popup-add-in-basket';
 import { getCardsInBasket, getIsActivePopupReview, getIsAddReview, getIsBasketSuccess } from '../../store/camera-data/selectors';
-import PopupAddSuccess from '../../components/popup_add_success/popup_add_success';
+import PopupAddSuccess from '../../components/popup-add-success/popup-add-success';
 import { changeCardPopup, changeStatusPopup, setIsActivePopupReview } from '../../store/camera-data/camera-data';
 import PopupReviewSuccess from '../../components/popup-review-success/popup-review-success';
 import PopupAddReview from '../../components/popup-add-review/popup-add-review';
