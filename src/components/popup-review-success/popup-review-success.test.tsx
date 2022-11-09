@@ -3,27 +3,28 @@ import {render, screen} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createFakeCamera } from '../../store/mock-store-data';
 import { BrowserRouter } from 'react-router-dom';
-import Breadcrump from './breadcrump';
+import PopupReviewSuccess from './popup-review-success';
 
 const mockStore = configureMockStore();
 
 const store = mockStore({
-  serverReducer: {
-    cameras: [createFakeCamera(), createFakeCamera()],
+  dataReducer:{
+    isActivePopupBasket: true,
+    cardPopup: createFakeCamera(),
   }
 });
 
-describe('Breadcrump component', () => {
+describe('PopupReviewSuccess component', () => {
   it('correctly render', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Breadcrump />
+          <PopupReviewSuccess />
         </BrowserRouter>
       </Provider>
     );
-    const linkElement = screen.getByText('Каталог');
+    const pElement = screen.getByText('Спасибо за отзыв');
 
-    expect(linkElement).toBeInTheDocument();
+    expect(pElement).toBeInTheDocument();
   });
 });

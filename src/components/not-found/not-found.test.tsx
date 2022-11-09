@@ -3,27 +3,31 @@ import {render, screen} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createFakeCamera } from '../../store/mock-store-data';
 import { BrowserRouter } from 'react-router-dom';
-import Breadcrump from './breadcrump';
+import NotFound from './not-found';
 
 const mockStore = configureMockStore();
 
 const store = mockStore({
   serverReducer: {
     cameras: [createFakeCamera(), createFakeCamera()],
+  },
+  dataReducer:{
+    camerasCatalog: [createFakeCamera(), createFakeCamera()],
+    cardsInBasket: [createFakeCamera(), createFakeCamera()],
   }
 });
 
-describe('Breadcrump component', () => {
+describe('NotFound component', () => {
   it('correctly render', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Breadcrump />
+          <NotFound />
         </BrowserRouter>
       </Provider>
     );
-    const linkElement = screen.getByText('Каталог');
+    const pElement = screen.getByText('Good luck.');
 
-    expect(linkElement).toBeInTheDocument();
+    expect(pElement).toBeInTheDocument();
   });
 });

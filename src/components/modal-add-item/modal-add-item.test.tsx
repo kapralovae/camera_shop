@@ -3,27 +3,31 @@ import {render, screen} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createFakeCamera } from '../../store/mock-store-data';
 import { BrowserRouter } from 'react-router-dom';
-import Breadcrump from './breadcrump';
+import ModalAddItem from './modal-add-item';
 
 const mockStore = configureMockStore();
 
 const store = mockStore({
   serverReducer: {
     cameras: [createFakeCamera(), createFakeCamera()],
+  },
+  dataReducer:{
+    camerasCatalog: [createFakeCamera(), createFakeCamera()],
+    cardsInBasket: [createFakeCamera(), createFakeCamera()],
   }
 });
 
-describe('Breadcrump component', () => {
+describe('ModalAddItem component', () => {
   it('correctly render', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Breadcrump />
+          <ModalAddItem />
         </BrowserRouter>
       </Provider>
     );
-    const linkElement = screen.getByText('Каталог');
+    const pElement = screen.getByText('Добавить товар в корзину');
 
-    expect(linkElement).toBeInTheDocument();
+    expect(pElement).toBeInTheDocument();
   });
 });
