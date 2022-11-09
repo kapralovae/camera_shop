@@ -4,7 +4,7 @@ import CardPage from '../../pages/card-page/card-page';
 import CatalogPage from '../../pages/catalog-page/catalog-page';
 import { getIsDataLoad } from '../../store/camera-process/selecrots';
 import NotFound from '../not-found/not-found';
-import { SpinerLoading } from '../spinner-loading/spinner-loading';
+import SpinerLoading from '../spinner-loading/spinner-loading';
 
 function App(): JSX.Element {
   const isDataLoaded = useAppSelector(getIsDataLoad);
