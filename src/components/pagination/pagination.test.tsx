@@ -3,27 +3,36 @@ import {render, screen} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createFakeCamera } from '../../store/mock-store-data';
 import { BrowserRouter } from 'react-router-dom';
-import Breadcrump from './breadcrump';
+import Pagination from './pagination';
 
 const mockStore = configureMockStore();
+
+const mockPage = 1;
+const mockstartSlice = 0;
 
 const store = mockStore({
   serverReducer: {
     cameras: [createFakeCamera(), createFakeCamera()],
+  },
+  dataReducer:{
+    camerasCatalog: [createFakeCamera(), createFakeCamera()],
+    cardsInBasket: [createFakeCamera(), createFakeCamera()],
+    catalogPage: mockPage,
+    startSlice: mockstartSlice
   }
 });
 
-describe('Breadcrump component', () => {
+describe('Pagination component', () => {
   it('correctly render', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Breadcrump />
+          <Pagination />
         </BrowserRouter>
       </Provider>
     );
-    const linkElement = screen.getByText('Каталог');
+    const pElement = screen.getByText(`${String(mockPage)}`);
 
-    expect(linkElement).toBeInTheDocument();
+    expect(pElement).toBeInTheDocument();
   });
 });

@@ -8,7 +8,7 @@ function CatalogContent () {
   const cardsCatalog = useAppSelector(getCamerasCatalog);
 
   return (
-    <div className="catalog__content">
+    <div className="catalog__content" data-testid="testid">
       <CatalogSort />
       <div className="cards catalog__cards">
         {cardsCatalog.map((camera) => <Card item={camera} isActive={false} key={camera.id}></Card>)}

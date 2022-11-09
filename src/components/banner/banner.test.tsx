@@ -14,7 +14,9 @@ const mockStore = configureMockStore();
 const mockPromo = createPromoCamera();
 
 const store = mockStore({
-  promo: mockPromo,
+  serverReducer: {
+    promo: mockPromo,
+  }
 });
 // console.log(mockStore);
 // describe('Banner component', () => {

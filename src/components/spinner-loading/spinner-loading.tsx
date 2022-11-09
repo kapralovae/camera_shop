@@ -1,6 +1,6 @@
 import { RotatingLines } from 'react-loader-spinner';
 
-export function SpinerLoading () {
+export default function SpinerLoading () {
   return(
     <RotatingLines
       strokeColor="grey"

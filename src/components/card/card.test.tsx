@@ -3,26 +3,26 @@ import {render, screen} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createFakeCamera } from '../../store/mock-store-data';
 import { BrowserRouter } from 'react-router-dom';
-import Breadcrump from './breadcrump';
+import Card from './card';
 
 const mockStore = configureMockStore();
 
 const store = mockStore({
-  serverReducer: {
-    cameras: [createFakeCamera(), createFakeCamera()],
+  dataReducer: {
+    cardsInBasket: [createFakeCamera(), createFakeCamera()],
   }
 });
 
-describe('Breadcrump component', () => {
+describe('Card component', () => {
   it('correctly render', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Breadcrump />
+          <Card item={createFakeCamera()} isActive />
         </BrowserRouter>
       </Provider>
     );
-    const linkElement = screen.getByText('Каталог');
+    const linkElement = screen.getByText('Подробнее');
 
     expect(linkElement).toBeInTheDocument();
   });

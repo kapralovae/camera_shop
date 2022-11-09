@@ -61,7 +61,7 @@ export type Api = {
 };
 
 export type Comment = {
-  id: string;
+  id: number;
   userName: string;
   advantage: string;
   disadvantage: string;
