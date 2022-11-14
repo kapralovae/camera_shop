@@ -87,6 +87,11 @@ export default function PopupAddReview () {
         ...isValid,
         rating: true,
       });
+    } else {
+      setIsValid({
+        ...isValid,
+        rating: false,
+      });
     }
   };
 

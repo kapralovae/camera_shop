@@ -77,6 +77,6 @@ export const addComment = createAsyncThunk<void, Review, {
       },
       body: JSON.stringify(data),
     });
-
+    dispatch(fetchCommentsCameraAction(String(data.cameraId)));
   },
 );

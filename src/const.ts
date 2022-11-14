@@ -26,4 +26,3 @@ export function getNumberPage(currentPage: number, countPage:number) {
   }
 }
 
-//comments
