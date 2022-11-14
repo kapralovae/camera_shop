@@ -27,10 +27,17 @@ export default function PopupReviewSuccess() {
     return () => window.removeEventListener('keydown', onKeyDownEsc);
   },[dispatch, IsActivePopupReview]);
 
+  const handleOverlayClosePopupClick = (evt: React.MouseEvent<HTMLDivElement>) => {
+    evt.preventDefault();
+    dispatch(setIsActivePopupReview(false));
+    dispatch(setIsAddReview(false));
+    document.body.style.overflow = '';
+  };
+
   return(
     <div className={IsActivePopupReview ? 'modal is-active modal--narrow' : 'modal'}>
       <div className="modal__wrapper">
-        <div className="modal__overlay"></div>
+        <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
         <div className="modal__content">
           <p className="title title--h4">Спасибо за отзыв</p>
           <svg className="modal__icon" width="80" height="78" aria-hidden="true">

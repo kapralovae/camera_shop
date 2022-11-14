@@ -52,10 +52,16 @@ function PopupAddInBasket () {
     return () => window.removeEventListener('keydown', onKeyDownEsc);
   },[dispatch, isActivePopupBasket]);
 
+  const handleOverlayClosePopupClick = (evt: React.MouseEvent<HTMLDivElement>) => {
+    evt.preventDefault();
+    dispatch(changeStatusPopup(false));
+    document.body.style.overflow = '';
+  };
+
   return(
     <div className={isActivePopupBasket ? 'modal is-active scroll-lock no-scrollbar' : 'modal'}>
       <div className="modal__wrapper">
-        <div className="modal__overlay"></div>
+        <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
         <div className="modal__content">
           <p className="title title--h4">Добавить товар в корзину</p>
           <div className="basket-item basket-item--short">
