@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CamerasProsecc} from '../../types/camera';
-import { fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction } from '../api-actions';
+import { addComment, fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction } from '../api-actions';
 
 
 const initialState : CamerasProsecc = {
@@ -73,6 +73,12 @@ export const cameraProcess = createSlice({
         state.isDataLoad = false;
       })
       .addCase(fetchCommentsCameraAction.pending, (state, action) => {
+        state.isDataLoad = true;
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.isDataLoad = false;
+      })
+      .addCase(addComment.pending, (state, action) => {
         state.isDataLoad = true;
       });
   },

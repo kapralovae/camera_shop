@@ -39,11 +39,17 @@ function PopupAddSuccess () {
     dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(false));
   };
+  const handleOverlayClosePopupClick = (evt: React.MouseEvent<HTMLDivElement>) => {
+    evt.preventDefault();
+    dispatch(changeStatusPopup(false));
+    dispatch(changeIsBasketSuccess(false));
+    document.body.style.overflow = '';
+  };
   return(
 
     <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : ''}>
       <div className="modal__wrapper">
-        <div className="modal__overlay"></div>
+        <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
         <div className="modal__content">
           <p className="title title--h4">Товар успешно добавлен в корзину</p>
           <svg className="modal__icon" width="86" height="80" aria-hidden="true">
