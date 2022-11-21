@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Banner from '../../components/banner/banner';
 import Catalog from '../../components/catalog/catalog';
 import Footer from '../../components/footer/footer';
