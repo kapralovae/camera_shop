@@ -1,3 +1,4 @@
+import FocusTrap from 'focus-trap-react';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
@@ -46,27 +47,27 @@ function PopupAddSuccess () {
     document.body.style.overflow = '';
   };
   return(
-
-    <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : ''}>
-      <div className="modal__wrapper">
-        <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
-        <div className="modal__content">
-          <p className="title title--h4">Товар успешно добавлен в корзину</p>
-          <svg className="modal__icon" width="86" height="80" aria-hidden="true">
-            <use xlinkHref="#icon-success"></use>
-          </svg>
-          <div className="modal__buttons"><Link onClick={handleLinkChangeStatusPopupClick} className="btn btn--transparent modal__btn" to="/">Продолжить покупки</Link>
-            <button onClick={handleButtonNavigateBasketClick} className="btn btn--purple modal__btn modal__btn--fit-width">Перейти в корзину</button>
-          </div>
-          <button onClick={handleButtonClosePopupClick} className="cross-btn" type="button" aria-label="Закрыть попап">
-            <svg width="10" height="10" aria-hidden="true">
-              <use xlinkHref="#icon-close"></use>
+    <FocusTrap>
+      <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : ''}>
+        <div className="modal__wrapper">
+          <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
+          <div className="modal__content">
+            <p className="title title--h4">Товар успешно добавлен в корзину</p>
+            <svg className="modal__icon" width="86" height="80" aria-hidden="true">
+              <use xlinkHref="#icon-success"></use>
             </svg>
-          </button>
+            <div className="modal__buttons"><Link onClick={handleLinkChangeStatusPopupClick} className="btn btn--transparent modal__btn" to="/">Продолжить покупки</Link>
+              <button onClick={handleButtonNavigateBasketClick} className="btn btn--purple modal__btn modal__btn--fit-width">Перейти в корзину</button>
+            </div>
+            <button onClick={handleButtonClosePopupClick} className="cross-btn" type="button" aria-label="Закрыть попап">
+              <svg width="10" height="10" aria-hidden="true">
+                <use xlinkHref="#icon-close"></use>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
+    </FocusTrap>
 
   );
 }
