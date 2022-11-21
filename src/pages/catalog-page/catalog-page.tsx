@@ -5,10 +5,11 @@ import Header from '../../components/header/header';
 import PopupAddInBasket from '../../components/popup-add-in-basket/popup-add-in-basket';
 import PopupAddSuccess from '../../components/popup-add-success/popup-add-success';
 import { useAppSelector } from '../../hooks';
-import { getIsBasketSuccess } from '../../store/camera-data/selectors';
+import { getIsBasketSuccess, getStatusPopup } from '../../store/camera-data/selectors';
 
 function CatalogPage () {
   const isAddSuccess = useAppSelector(getIsBasketSuccess);
+  const isActivePopupBasket = useAppSelector(getStatusPopup);
 
   return (
     <>
@@ -16,7 +17,8 @@ function CatalogPage () {
       <main>
         <Banner />
         <Catalog />
-        {isAddSuccess ? <PopupAddSuccess /> : <PopupAddInBasket />}
+        {isAddSuccess ? <PopupAddSuccess /> : null}
+        {isActivePopupBasket ? <PopupAddInBasket /> : null}
       </main>
       <Footer />
     </>
