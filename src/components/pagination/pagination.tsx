@@ -39,7 +39,7 @@ function Pagination () {
   const paginationItemPages = (numberPage: number) => {
     const paginationItems = [];
     for (let i = 1; i <= countPage; i++) {
-      paginationItems.push(<li className="pagination__item"><Link onClick={handleLiClick} className={numberPage === i ? 'pagination__link pagination__link--active' : 'pagination__link'} to={`/catalog/page/${i}`}>{i}</Link></li>);
+      paginationItems.push(<li key={`${i}abc`} className="pagination__item"><Link onClick={handleLiClick} className={numberPage === i ? 'pagination__link pagination__link--active' : 'pagination__link'} to={`/catalog/page/${i}`}>{i}</Link></li>);
     }
     return paginationItems;
   };
