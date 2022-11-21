@@ -225,7 +225,8 @@ function CardPage () {
         </svg>
       </a>
       {isAddSuccess ? <PopupAddSuccess /> : <PopupAddInBasket />}
-      {isAddReview && IsActivePopupReview ? <PopupReviewSuccess /> : <PopupAddReview />}
+      {IsActivePopupReview ? <PopupAddReview /> : null}
+      {isAddReview ? <PopupReviewSuccess /> : null}
       <Footer />
     </div>
   );

@@ -191,6 +191,7 @@ export default function PopupAddReview () {
         rating: 0,
       });
       dispatch(setIsAddReview(true));
+      dispatch(setIsActivePopupReview(false));
     }
   };
 
@@ -219,7 +220,7 @@ export default function PopupAddReview () {
     <div className={IsActivePopupReview ? 'modal is-active' : 'modal'}>
       <div className="modal__wrapper">
         <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
-        <div className="modal__content">
+        <div className="modal__content" >
           <p className="title title--h4">Оставить отзыв</p>
           <div className="form-review">
             <form onSubmit={postForm} method="post">
@@ -255,7 +256,7 @@ export default function PopupAddReview () {
                         <use xlinkHref="#icon-snowflake"></use>
                       </svg>
                     </span>
-                    <input onChange={handleInputTextDataChange} type="text" name="userName" placeholder="Введите ваше имя" />
+                    <input autoFocus onChange={handleInputTextDataChange} type="text" name="userName" placeholder="Введите ваше имя" />
                   </label>
                   <p className="custom-input__error">Нужно указать имя</p>
                 </div>

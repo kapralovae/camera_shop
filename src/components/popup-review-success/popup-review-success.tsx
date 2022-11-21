@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { setIsActivePopupReview, setIsAddReview } from '../../store/camera-data/camera-data';
-import { getIsActivePopupReview } from '../../store/camera-data/selectors';
+import { setIsAddReview } from '../../store/camera-data/camera-data';
+import { getIsActivePopupReview, getIsAddReview } from '../../store/camera-data/selectors';
 
 export default function PopupReviewSuccess() {
 
   const dispatch = useAppDisptach();
   const IsActivePopupReview = useAppSelector(getIsActivePopupReview);
+  const isAddReview = useAppSelector(getIsAddReview);
 
   const handleButtonClosePopupClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    dispatch(setIsActivePopupReview(false));
     dispatch(setIsAddReview(false));
     document.body.style.overflow = '';
   };
@@ -18,7 +18,6 @@ export default function PopupReviewSuccess() {
   useEffect(() => {
     const onKeyDownEsc = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
-        dispatch(setIsActivePopupReview(false));
         dispatch(setIsAddReview(false));
         document.body.style.overflow = '';
       }
@@ -29,13 +28,12 @@ export default function PopupReviewSuccess() {
 
   const handleOverlayClosePopupClick = (evt: React.MouseEvent<HTMLDivElement>) => {
     evt.preventDefault();
-    dispatch(setIsActivePopupReview(false));
     dispatch(setIsAddReview(false));
     document.body.style.overflow = '';
   };
 
   return(
-    <div className={IsActivePopupReview ? 'modal is-active modal--narrow' : 'modal'}>
+    <div className={isAddReview ? 'modal is-active modal--narrow' : 'modal'}>
       <div className="modal__wrapper">
         <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
         <div className="modal__content">
