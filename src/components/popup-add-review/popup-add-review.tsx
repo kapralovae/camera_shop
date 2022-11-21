@@ -180,7 +180,48 @@ export default function PopupAddReview () {
 
   const postForm = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
     if (isValid.advantage && isValid.disadvantage && isValid.rating && isValid.review && isValid.userName) {
+      if (data.rating === 0 || data.review === '' || data.review.length < 5 || data.userName === '' || data.advantage === '' || data.disadvantage === '') {
+
+        if (data.rating === 0) {
+          setIsValid({
+            ...isValid,
+            rating: false,
+          });
+        }
+        if (data.review === '' && data.review.length < 5) {
+          setIsValid({
+            ...isValid,
+            review: false,
+          });
+
+        }
+        if (data.userName === '') {
+          setIsValid({
+            ...isValid,
+            userName: false,
+          });
+
+        }
+
+        if (data.advantage === '') {
+          setIsValid({
+            ...isValid,
+            advantage: false,
+          });
+
+        }
+
+        if (data.disadvantage === '') {
+          setIsValid({
+            ...isValid,
+            disadvantage: false,
+          });
+
+        }
+        return;
+      }
       dispatch(addComment(data));
       setData({
         cameraId: Number(id),
