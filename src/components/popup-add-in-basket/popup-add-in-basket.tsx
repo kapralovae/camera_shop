@@ -38,6 +38,7 @@ function PopupAddInBasket () {
   const handleButtonAddInBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(addCardInBasket(cardPopup));
+    dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(true));
   };
 
@@ -61,7 +62,7 @@ function PopupAddInBasket () {
 
   return(
     <FocusTrap>
-      <div className={isActivePopupBasket ? 'modal is-active scroll-lock no-scrollbar' : ''}>
+      <div className={isActivePopupBasket ? 'modal is-active scroll-lock no-scrollbar' : 'modal'}>
         <div className="modal__wrapper">
           <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
           <div className="modal__content">
