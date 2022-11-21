@@ -10,7 +10,7 @@ import Card from '../../components/card/card';
 import CommentCard from '../../components/comment/comments';
 import Footer from '../../components/footer/footer';
 import PopupAddInBasket from '../../components/popup-add-in-basket/popup-add-in-basket';
-import { getCardsInBasket, getIsActivePopupReview, getIsAddReview, getIsBasketSuccess } from '../../store/camera-data/selectors';
+import { getCardsInBasket, getIsActivePopupReview, getIsAddReview, getIsBasketSuccess, getStatusPopup } from '../../store/camera-data/selectors';
 import PopupAddSuccess from '../../components/popup-add-success/popup-add-success';
 import { changeCardPopup, changeStatusPopup, setIsActivePopupReview } from '../../store/camera-data/camera-data';
 import PopupReviewSuccess from '../../components/popup-review-success/popup-review-success';
@@ -22,6 +22,7 @@ function CardPage () {
   const isAddSuccess = useAppSelector(getIsBasketSuccess);
   const isAddReview = useAppSelector(getIsAddReview);
   const IsActivePopupReview = useAppSelector(getIsActivePopupReview);
+  const isActivePopupBasket = useAppSelector(getStatusPopup);
 
   const [activeTabs, setActiveTabs] = useState('description');
   const [startSlice, setStartSlice] = useState(0);
@@ -224,7 +225,8 @@ function CardPage () {
           <use xlinkHref="#icon-arrow2"></use>
         </svg>
       </a>
-      {isAddSuccess ? <PopupAddSuccess /> : <PopupAddInBasket />}
+      {isAddSuccess ? <PopupAddSuccess /> : null}
+      {isActivePopupBasket ? <PopupAddInBasket /> : null}
       {IsActivePopupReview ? <PopupAddReview /> : null}
       {isAddReview ? <PopupReviewSuccess /> : null}
       <Footer />

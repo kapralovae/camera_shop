@@ -1,7 +1,4 @@
-// import * as focusTrap from 'focus-trap'; // ESM
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-// import createFocusTrap from 'focus-trap';
-// import focusTrap from 'focus-trap'; // CJS
 import { useParams } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { addComment } from '../../store/api-actions';
@@ -33,7 +30,6 @@ export default function PopupAddReview () {
       review: true,
     });
     document.body.style.overflow = '';
-    // trap.deactivate();
   };
 
   useEffect(() => {
@@ -57,7 +53,6 @@ export default function PopupAddReview () {
           review: true,
         });
         document.body.style.overflow = '';
-        // trap.deactivate();
       }
     };
     window.addEventListener('keydown', onKeyDownEsc);
@@ -262,21 +257,6 @@ export default function PopupAddReview () {
     });
     document.body.style.overflow = '';
   };
-
-  // const fucusElements = 'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])';
-
-  // const trap = focusTrap.createFocusTrap(fucusElements, {
-  //   initialFocus: false,
-  //   fallbackFocus: () => '.cross-btn',
-  //   escapeDeactivates: false,
-  //   allowOutsideClick: true,
-  // });
-
-  // // trap.updateContainerElements('.is-active');
-  // useEffect(() => {
-  //   trap.activate();
-  // }, []);
-
 
   return(
     <FocusTrap active={IsActivePopupReview}>
