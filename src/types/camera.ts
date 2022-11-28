@@ -31,6 +31,7 @@ export type CameraData = {
   sliceStart: number;
   isAddReview: boolean;
   isActivePopupReview: boolean;
+  sortType: string;
 };
 
 export type CamerasProsecc = {

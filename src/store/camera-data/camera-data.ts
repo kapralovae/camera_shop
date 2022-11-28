@@ -28,6 +28,7 @@ const initialState: CameraData = {
   sliceStart: 0,
   isAddReview: false,
   isActivePopupReview: false,
+  sortType: 'sortPrice',
 };
 
 export const cameraData = createSlice({
@@ -74,8 +75,10 @@ export const cameraData = createSlice({
     setIsActivePopupReview: (state, action) => {
       state.isActivePopupReview = action.payload as boolean;
     },
-
+    setSortType: (state, action) => {
+      state.sortType = action.payload as string;
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType} = cameraData.actions;

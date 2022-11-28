@@ -6,6 +6,7 @@ import Pagination from '../pagination/pagination';
 
 function CatalogContent () {
   const cardsCatalog = useAppSelector(getCamerasCatalog);
+  // const sortType = useAppSelector(getSortType);
 
   return (
     <div className="catalog__content" data-testid="testid">

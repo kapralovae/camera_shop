@@ -22,3 +22,5 @@ export const getIsAddReview = (state: State): boolean => state['dataReducer'].is
 
 export const getIsActivePopupReview = (state: State): boolean => state['dataReducer'].isActivePopupReview;
 
+export const getSortType = (state: State): string => state['dataReducer'].sortType;
+

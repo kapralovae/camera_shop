@@ -33,16 +33,6 @@ function Header () {
       });
     }
   };
-  // const handlerOnBlurInput = () => {
-  //   setStyle({
-  //     visibility: 'hidden',
-  //     opacity: 0,
-  //   });
-  //   setStyleButton({
-  //     display: 'none',
-  //   });
-  // };
-
 
   const handlerInputChangeText = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
@@ -89,13 +79,6 @@ function Header () {
         }
       }
     };
-    // window.onclick = (evt: MouseEvent) => {
-    //   if (inputRef && inputRef.current) {
-    //     if (evt.target.contains(inputRef.current) && evt.target !== inputRef.current) {
-    //       // console.log(`You clicked Outside the box!`);
-    //     }
-    //   }
-    // };
   }, []);
 
   return (
