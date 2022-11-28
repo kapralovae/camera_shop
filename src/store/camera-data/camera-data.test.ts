@@ -32,6 +32,7 @@ describe('Reducer: cameraData', () => {
     sliceStart: 0,
     isAddReview: false,
     isActivePopupReview: false,
+    sortType: 'price',
   };
 
   beforeAll(() => {
