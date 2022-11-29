@@ -32,6 +32,9 @@ export type CameraData = {
   isAddReview: boolean;
   isActivePopupReview: boolean;
   sortType: string;
+  sortDirection: string;
+  isSort: boolean;
+  sortCards: Cameras;
 };
 
 export type CamerasProsecc = {

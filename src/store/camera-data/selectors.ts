@@ -1,4 +1,4 @@
-import { Camera, State } from '../../types/camera';
+import { Camera, Cameras, State } from '../../types/camera';
 
 export const getCatalogPage = (state: State): number => state['dataReducer'].catalogPage;
 
@@ -23,4 +23,10 @@ export const getIsAddReview = (state: State): boolean => state['dataReducer'].is
 export const getIsActivePopupReview = (state: State): boolean => state['dataReducer'].isActivePopupReview;
 
 export const getSortType = (state: State): string => state['dataReducer'].sortType;
+
+export const getSortDirection = (state: State): string => state['dataReducer'].sortDirection;
+
+export const getIsSort = (state: State): boolean => state['dataReducer'].isSort;
+
+export const getSortCards = (state: State): Cameras => state['dataReducer'].sortCards;
 
