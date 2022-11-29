@@ -29,6 +29,9 @@ const initialState: CameraData = {
   isAddReview: false,
   isActivePopupReview: false,
   sortType: 'sortPrice',
+  sortDirection: 'up',
+  isSort: false,
+  sortCards: [],
 };
 
 export const cameraData = createSlice({
@@ -78,7 +81,28 @@ export const cameraData = createSlice({
     setSortType: (state, action) => {
       state.sortType = action.payload as string;
     },
+    setSortDirection: (state, action) => {
+      state.sortDirection = action.payload as string;
+    },
+    setIsSort: (state, action) => {
+      state.isSort = action.payload as boolean;
+    },
+    sortCards: (state, action) => {
+      const cards = action.payload as Cameras;
+      state.sortCards = cards;
+      // switch (state.sortType) {
+      //   case 'sortPrice':
+      //     if (state.sortDirection === 'up') {
+      //       state.sortCards.push(cards.map((camera) => camera));
+      //     }
+
+      //     if (state.sortDirection === 'down') {
+      //       state.sortCards = cards.sort((a, b) => b.price - a.price);
+      //     }
+      //     break;
+      // }
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, sortCards} = cameraData.actions;
