@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { COUNT_CARDS_ON_PAGE } from '../../const';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { decreaseCatalogPage, increaseCatalogPage, setCamerasCatalog, setCatalogPage, setStartSlice } from '../../store/camera-data/camera-data';
-import { getCatalogPage, getStartSlice } from '../../store/camera-data/selectors';
+import { getCatalogPage, getIsSort, getSortCards, getStartSlice } from '../../store/camera-data/selectors';
 import { getCameras } from '../../store/camera-process/selecrots';
 
 function Pagination () {
@@ -19,21 +19,23 @@ function Pagination () {
   const allCards = useAppSelector(getCameras);
   const startSlice = useAppSelector(getStartSlice);
   const countPage = Math.ceil(allCards.length / COUNT_CARDS_ON_PAGE);
+  const isSort = useAppSelector(getIsSort);
+  const sortCards = useAppSelector(getSortCards);
 
   const handleLiNextpageClick = () => {
     dispatch(increaseCatalogPage(catalogPage + 1));
     dispatch(setStartSlice(startSlice + COUNT_CARDS_ON_PAGE));
-    dispatch(setCamerasCatalog(allCards.slice(startSlice + COUNT_CARDS_ON_PAGE, startSlice + 2 * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog((isSort ? sortCards : allCards).slice(startSlice + COUNT_CARDS_ON_PAGE, startSlice + 2 * COUNT_CARDS_ON_PAGE)));
   };
   const handleLiBackpageClick = () => {
     dispatch(decreaseCatalogPage(catalogPage - 1));
     dispatch(setStartSlice(startSlice - COUNT_CARDS_ON_PAGE));
-    dispatch(setCamerasCatalog(allCards.slice(startSlice - COUNT_CARDS_ON_PAGE, startSlice)));
+    dispatch(setCamerasCatalog((isSort ? sortCards : allCards).slice(startSlice - COUNT_CARDS_ON_PAGE, startSlice)));
   };
   const handleLiClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     dispatch(setCatalogPage(Number(evt.currentTarget.text)));
     dispatch(setStartSlice( Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * (COUNT_CARDS_ON_PAGE)));
-    dispatch(setCamerasCatalog(allCards.slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
+    dispatch(setCamerasCatalog((isSort ? sortCards : allCards).slice(Number(evt.currentTarget.text) === 1 ? 0 : (Number(evt.currentTarget.text) - 1) * COUNT_CARDS_ON_PAGE, Number(evt.currentTarget.text) * COUNT_CARDS_ON_PAGE)));
   };
 
   const paginationItemPages = (numberPage: number) => {
