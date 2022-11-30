@@ -14,14 +14,16 @@ function CatalogSort () {
   }, [selectedType, selectedDirection]);
 
 
-  const click = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handlerInputChangeTypeSort = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setIsSort(true));
     setSelectedType(evt.target.id);
+    evt.target.style.display = 'none';
   };
 
-  const change = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handlerInputChangeDirectionSort = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setIsSort(true));
     setSelectedDirection(evt.target.id);
+    evt.target.style.display = 'none';
   };
 
   return (
@@ -31,17 +33,17 @@ function CatalogSort () {
           <p className="title title--h5">Сортировать:</p>
           <div className="catalog-sort__type">
             <div className="catalog-sort__btn-text">
-              <input onChange={click} type="radio" id="sortPrice" value={'sortPrice'} name="sort" checked={selectedType === 'sortPrice'}></input>
+              <input onChange={handlerInputChangeTypeSort} type="radio" id="sortPrice" name="sort" checked={selectedType === 'sortPrice'}></input>
               <label htmlFor="sortPrice">по цене</label>
             </div>
             <div className="catalog-sort__btn-text">
-              <input onChange={click} type="radio" id="sortPopular" value={'sortPopular'} name="sort" checked={selectedType === 'sortPopular'}></input>
+              <input onChange={handlerInputChangeTypeSort} type="radio" id="sortPopular" name="sort" checked={selectedType === 'sortPopular'}></input>
               <label htmlFor="sortPopular">по популярности</label>
             </div>
           </div>
           <div className="catalog-sort__order">
             <div className="catalog-sort__btn catalog-sort__btn--up">
-              <input onChange={change} type="radio" id="up" name="sort-icon" aria-label="По возрастанию" checked={selectedDirection === 'up'}></input>
+              <input onChange={handlerInputChangeDirectionSort} type="radio" id="up" name="sort-icon" aria-label="По возрастанию" checked={selectedDirection === 'up'}></input>
               <label htmlFor="up">
                 <svg width="16" height="14" aria-hidden="true">
                   <use xlinkHref="#icon-sort"></use>
@@ -49,7 +51,7 @@ function CatalogSort () {
               </label>
             </div>
             <div className="catalog-sort__btn catalog-sort__btn--down">
-              <input onChange={change} type="radio" id="down" name="sort-icon" aria-label="По убыванию" checked={selectedDirection === 'down'}></input>
+              <input onChange={handlerInputChangeDirectionSort} type="radio" id="down" name="sort-icon" aria-label="По убыванию" checked={selectedDirection === 'down'}></input>
               <label htmlFor="down">
                 <svg width="16" height="14" aria-hidden="true">
                   <use xlinkHref="#icon-sort"></use>

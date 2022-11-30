@@ -14,7 +14,6 @@ function CatalogContent () {
   const isSort = useAppSelector(getIsSort);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
-  // const go = Array.from(cardsCatalog);
 
   useEffect(() => {
     dispatch(sortCards(allCards));
