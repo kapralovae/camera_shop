@@ -89,18 +89,32 @@ export const cameraData = createSlice({
     },
     sortCards: (state, action) => {
       const cards = action.payload as Cameras;
-      state.sortCards = cards;
-      // switch (state.sortType) {
-      //   case 'sortPrice':
-      //     if (state.sortDirection === 'up') {
-      //       state.sortCards.push(cards.map((camera) => camera));
-      //     }
+      state.sortCards = Array.from(cards);
+      switch (state.sortType) {
+        case 'sortPrice':
+          if (state.sortDirection === 'up') {
+            state.sortCards.sort((a, b) => a.price - b.price);
+            state.camerasCatalog = state.sortCards.slice(0, 9);
+          }
 
-      //     if (state.sortDirection === 'down') {
-      //       state.sortCards = cards.sort((a, b) => b.price - a.price);
-      //     }
-      //     break;
-      // }
+          if (state.sortDirection === 'down') {
+            state.sortCards.sort((a, b) => b.price - a.price);
+            state.camerasCatalog = state.sortCards.slice(0, 9);
+          }
+          break;
+
+        case 'sortPopular':
+          if (state.sortDirection === 'up') {
+            state.sortCards.sort((a, b) => a.rating - b.rating);
+            state.camerasCatalog = state.sortCards.slice(0, 9);
+          }
+
+          if (state.sortDirection === 'down') {
+            state.sortCards.sort((a, b) => b.rating - a.rating);
+            state.camerasCatalog = state.sortCards.slice(0, 9);
+          }
+          break;
+      }
     },
   },
 });
