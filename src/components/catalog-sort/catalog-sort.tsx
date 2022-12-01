@@ -11,6 +11,7 @@ function CatalogSort () {
   useEffect(() => {
     dispatch(setSortType(selectedType));
     dispatch(setSortDirection(selectedDirection));
+    dispatch(setCatalogPage(1));
   }, [selectedType, selectedDirection]);
 
 
