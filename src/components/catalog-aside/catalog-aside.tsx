@@ -2,18 +2,19 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getCamerasCatalog, getIsSort, getSortCards } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
-import { setCamerasCatalog, setCatalogPage, sortCards } from '../../store/camera-data/camera-data';
+import { setCamerasCatalog, setCatalogPage, setSortCards } from '../../store/camera-data/camera-data';
 import { getCameras } from '../../store/camera-process/selecrots';
 
 
 function CatalogAside () {
   const dispatch = useAppDisptach();
   const allCards = useAppSelector(getCameras);
+  const copyAllCards = Array.from(allCards);
   const isSort = useAppSelector(getIsSort);
   const cardsCatalog = useAppSelector(getCamerasCatalog);
   const sortedCards = useAppSelector(getSortCards);
-  let copySortedCards: Cameras = [];
-  const copyCardsCatalog: Cameras = Array.from(cardsCatalog);
+  // let copySortedCards: Cameras = [];
+  // let copyCardsCatalog: Cameras = [];
 
   // type Filter = {
   //   photocamera: boolean;
@@ -39,6 +40,18 @@ function CatalogAside () {
     professional: 'professional',
   };
 
+  const [filterIsCheck, setFilterIsCheck] = useState({
+    photocamera: false,
+    videocamera: false,
+    digital: false,
+    film: false,
+    snapshot: false,
+    collection: false,
+    zero: false,
+    nonProfessional: false,
+    professional: false,
+  });
+
   // const [filterValues, setFilterValues] = useState({
   //   photocamera: 'photocamera',
   //   videocamera: 'videocamera',
@@ -50,51 +63,70 @@ function CatalogAside () {
   //   nonProfessional: 'non-professional',
   //   professional: 'professional',
   // });
+  // const [filteredCardsCatalog, setFilteredCardsCatalog] = useState<Cameras>([]);
+  // useEffect(() => {
+  //   if (isSort) {
+  //     setFilteredCardsCatalog(copySortedCards);
+  //   } else {
+  //     setFilteredCardsCatalog(copyCardsCatalog);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    copySortedCards = Array.from(sortedCards);
-    // copyCardsCatalog = Array.from(cardsCatalog);
-  }, [cardsCatalog, cardsCatalog, sortedCards]);
+  // useEffect(() => {
+  //   copySortedCards = Array.from(sortedCards);
+  //   copyCardsCatalog = Array.from(cardsCatalog);
+  // }, [cardsCatalog, cardsCatalog, sortedCards]);
 
-  const [filteredCardsCatalog, setFilteredCardsCatalog] = useState(isSort ? copySortedCards : copyCardsCatalog);
-  // const filteredCardsCatalog = isSort ? copyCardsCatalog : copyCardsCatalog;
 
   const dispatchCards = (isSorting: boolean) => {
     if (isSorting) {
-      dispatch(sortCards(filteredCardsCatalog));
+      dispatch(setSortCards(qwe));
     } else {
-      dispatch(setCamerasCatalog(filteredCardsCatalog));
+      console.log('da');
+      dispatch(setCamerasCatalog(qwe.slice(0, 9)));
     }
   };
+
+  const [qwe, setQwe] = useState(copyAllCards);
+
+  useEffect(() => {
+    dispatchCards(isSort);
+  }, [qwe, filterIsCheck]);
 
   const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const {name, checked} = evt.target;
 
-    // if (name === 'non-professional') {
-    //   setFilterValues({
-    //     ...filterValues,
-    //     nonProfessional: checked,
-    //   });
-    // } else {
-    //   setFilterValues({
-    //     ...filterValues,
-    //     [name]: checked,
-    //   });
-    //   console.log(filterValues[name]);
-    // }
-
-    if (filterValues.photocamera === name && checked) {
-      console.log(filteredCardsCatalog);
-      setFilteredCardsCatalog(filteredCardsCatalog.filter((camera) => camera.category.toLowerCase().includes('фото')));
-      console.log(filteredCardsCatalog);
+    if (name === 'non-professional') {
+      setFilterIsCheck({
+        ...filterIsCheck,
+        nonProfessional: checked,
+      });
+    } else {
+      setFilterIsCheck({
+        ...filterIsCheck,
+        [name]: checked,
+      });
+      console.log(filterIsCheck);
     }
 
-    if (filterValues.videocamera) {
-      filteredCardsCatalog.filter((camera) => camera.category.toLowerCase().includes('видео'));
+    if (filterIsCheck.photocamera && filterIsCheck.videocamera) {
+      setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео')));
+    } else {
+      if (filterValues.photocamera === name && checked) {
+        setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото')));
+      }
+
+      if (filterValues.videocamera === name && checked) {
+        setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('видео')));
+      }
     }
 
 
-    dispatchCards(isSort);
+    if (filterValues.digital === name && checked) {
+      setQwe(copyAllCards.filter((camera) => camera.type.toLowerCase().includes('цифровая')));
+    }
+
+    // dispatchCards(isSort);
     dispatch(setCatalogPage(1));
 
     // switch (name) {
