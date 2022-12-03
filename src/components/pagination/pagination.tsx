@@ -18,9 +18,9 @@ function Pagination () {
   const catalogPage = useAppSelector(getCatalogPage);
   const allCards = useAppSelector(getCameras);
   const startSlice = useAppSelector(getStartSlice);
-  const countPage = Math.ceil(allCards.length / COUNT_CARDS_ON_PAGE);
   const isSort = useAppSelector(getIsSort);
   const sortCards = useAppSelector(getSortCards);
+  const countPage = Math.ceil((isSort ? sortCards : allCards).length / COUNT_CARDS_ON_PAGE);
 
   const handleLiNextpageClick = () => {
     dispatch(increaseCatalogPage(catalogPage + 1));

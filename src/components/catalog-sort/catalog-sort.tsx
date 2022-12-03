@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDisptach } from '../../hooks';
-import { setIsSort, setSortDirection, setSortType, setCatalogPage } from '../../store/camera-data/camera-data';
+import { setIsSort, setSortDirection, setSortType } from '../../store/camera-data/camera-data';
 
 function CatalogSort () {
   const dispatch = useAppDisptach();
@@ -19,12 +19,14 @@ function CatalogSort () {
     dispatch(setIsSort(true));
     setSelectedType(evt.target.id);
     evt.target.style.display = 'none';
+    dispatch(setCatalogPage(1));
   };
 
   const handlerInputChangeDirectionSort = (evt: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setIsSort(true));
     setSelectedDirection(evt.target.id);
     evt.target.style.display = 'none';
+    dispatch(setCatalogPage(1));
   };
 
   return (

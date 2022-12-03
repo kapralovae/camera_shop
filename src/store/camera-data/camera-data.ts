@@ -87,7 +87,7 @@ export const cameraData = createSlice({
     setIsSort: (state, action) => {
       state.isSort = action.payload as boolean;
     },
-    sortCards: (state, action) => {
+    setSortCards: (state, action) => {
       const cards = action.payload as Cameras;
       state.sortCards = Array.from(cards);
       switch (state.sortType) {
@@ -119,4 +119,4 @@ export const cameraData = createSlice({
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, sortCards} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards} = cameraData.actions;

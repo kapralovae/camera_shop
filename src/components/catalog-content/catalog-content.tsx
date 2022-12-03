@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { sortCards } from '../../store/camera-data/camera-data';
+import { setSortCards } from '../../store/camera-data/camera-data';
 import { getCamerasCatalog, getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { getCameras } from '../../store/camera-process/selecrots';
 import Card from '../card/card';
@@ -16,7 +16,7 @@ function CatalogContent () {
   const sortDirection = useAppSelector(getSortDirection);
 
   useEffect(() => {
-    dispatch(sortCards(allCards));
+    dispatch(setSortCards(allCards));
   }, [isSort, sortDirection, sortType]);
 
   return (
