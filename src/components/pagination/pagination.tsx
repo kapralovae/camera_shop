@@ -4,7 +4,6 @@ import { COUNT_CARDS_ON_PAGE } from '../../const';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { decreaseCatalogPage, increaseCatalogPage, setCamerasCatalog, setCatalogPage, setStartSlice } from '../../store/camera-data/camera-data';
 import { getCamerasForRender, getCatalogPage, getIsSort, getSortCards, getStartSlice } from '../../store/camera-data/selectors';
-import { getCameras } from '../../store/camera-process/selecrots';
 
 function Pagination () {
   const dispatch = useAppDisptach();
@@ -16,12 +15,10 @@ function Pagination () {
     }
   }, [dispatch, id]);
   const catalogPage = useAppSelector(getCatalogPage);
-  const allCards = useAppSelector(getCameras);
   const startSlice = useAppSelector(getStartSlice);
   const isSort = useAppSelector(getIsSort);
   const sortCards = useAppSelector(getSortCards);
   const camerasForRender = useAppSelector(getCamerasForRender);
-  console.log(camerasForRender);
   const countPage = Math.ceil((isSort ? sortCards : camerasForRender).length / COUNT_CARDS_ON_PAGE);
 
   const handleLiNextpageClick = () => {

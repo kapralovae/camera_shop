@@ -20,9 +20,9 @@ function CatalogContent () {
     <div className="catalog__content" data-testid="testid">
       <CatalogSort />
       <div className="cards catalog__cards">
-        {cardsCatalog.map((camera) => <Card item={camera} isActive={false} key={camera.id}></Card>)}
+        {cardsCatalog.length > 0 ? cardsCatalog.map((camera) => <Card item={camera} isActive={false} key={camera.id}></Card>) : <h2>Такого товара нет</h2>}
       </div>
-      <Pagination />
+      {cardsCatalog.length > 0 ? <Pagination /> : null }
     </div>
   );
 }

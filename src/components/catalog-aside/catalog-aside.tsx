@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { getCamerasCatalog, getIsSort, getSortCards, getSortDirection, getSortType } from '../../store/camera-data/selectors';
+import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
 import { setCamerasCatalog, setCamerasForRender, setCatalogPage, setSortCards } from '../../store/camera-data/camera-data';
 import { getCameras } from '../../store/camera-process/selecrots';
@@ -11,8 +11,6 @@ function CatalogAside () {
   const allCards = useAppSelector(getCameras);
   const copyAllCards = Array.from(allCards);
   const isSort = useAppSelector(getIsSort);
-  const cardsCatalog = useAppSelector(getCamerasCatalog);
-  const sortedCards = useAppSelector(getSortCards);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
   const inputPhoto = useRef<HTMLInputElement>(null);
@@ -25,74 +23,33 @@ function CatalogAside () {
   const inputNonProfessional = useRef<HTMLInputElement>(null);
   const inputProfessional = useRef<HTMLInputElement>(null);
 
-  // let copySortedCards: Cameras = [];
-  // let copyCardsCatalog: Cameras = [];
-
   // type Filter = {
-  //   photocamera: boolean;
-  //   videocamera: boolean;
-  //   digital: boolean;
-  //   film: boolean;
-  //   snapshot: boolean;
-  //   collection: boolean;
-  //   zero: boolean;
-  //   nonProfessional: boolean;
-  //   professional: boolean;
+  //   'photocamera': string;
+  //   'videocamera': string;
+  //   'digital': string;
+  //   'film': string;
+  //   'snapshot': string;
+  //   'collection': string;
+  //   'zero': string;
+  //   'non-professional': string;
+  //   'professional': string;
   // };
 
-  const filterValues = {
-    'photocamera': 'фото',
-    'videocamera': 'видео',
-    'digital': 'цифровая',
-    'film': 'плёночная',
-    'snapshot': 'моментальная',
-    'collection': 'коллекционная',
-    'zero': 'zero',
-    'non-professional': 'любительский',
-    'professional': 'профессиональный',
-  };
-
-  const [filterIsCheck, setFilterIsCheck] = useState({
-    photocamera: false,
-    videocamera: false,
-    digital: false,
-    film: false,
-    snapshot: false,
-    collection: false,
-    zero: false,
-    nonProfessional: false,
-    professional: false,
-  });
-
-  // const [filterValues, setFilterValues] = useState({
-  //   photocamera: 'photocamera',
-  //   videocamera: 'videocamera',
-  //   digital: 'digital',
-  //   film: 'film',
-  //   snapshot: 'snapshot',
-  //   collection: 'collection',
-  //   zero: 'zero',
-  //   nonProfessional: 'non-professional',
-  //   professional: 'professional',
-  // });
-  // const [filteredCardsCatalog, setFilteredCardsCatalog] = useState<Cameras>([]);
-  // useEffect(() => {
-  //   if (isSort) {
-  //     setFilteredCardsCatalog(copySortedCards);
-  //   } else {
-  //     setFilteredCardsCatalog(copyCardsCatalog);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   copySortedCards = Array.from(sortedCards);
-  //   copyCardsCatalog = Array.from(cardsCatalog);
-  // }, [cardsCatalog, cardsCatalog, sortedCards]);
+  // const FILTER_NAME: Filter = {
+  //   'photocamera': 'фото',
+  //   'videocamera': 'видео',
+  //   'digital': 'цифровая',
+  //   'film': 'плёночная',
+  //   'snapshot': 'моментальная',
+  //   'collection': 'коллекционная',
+  //   'zero': 'zero',
+  //   'non-professional': 'любительский',
+  //   'professional': 'профессиональный',
+  // };
 
   const [qwe, setQwe] = useState<Cameras>(copyAllCards);
 
   const dispatchCards = () => {
-    console.log('popal sort', isSort);
     if (isSort) {
       dispatch(setSortCards(qwe));
     } else {
@@ -101,201 +58,52 @@ function CatalogAside () {
     }
   };
 
-  // useEffect(() => {
-  //   setQwe(sortedCards);
-  //   setSortCards(sortedCards);
-  //   dispatch(setCatalogPage(1));
-  // }, [isSort]);
-
-
   useEffect(() => {
     dispatchCards();
     dispatch(setCatalogPage(1));
   }, [qwe, isSort, sortDirection, sortType]);
-  console.log(qwe, cardsCatalog);
-
-
-  // const handlerInputPhotoVideoCameraChange = (evt: ChangeEvent<HTMLInputElement>) => {
-  //   // console.log(qwe, copyAllCards);
-  //   const {name, checked} = evt.target;
-  //   setFilterIsCheck({
-  //     ...filterIsCheck,
-  //     [name]: checked,
-  //   });
-
-  //   // if (filterIsCheck.photocamera && filterIsCheck.videocamera) {
-  //   if (inputPhoto.current?.checked && inputVideo.current?.checked) {
-  //     setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео')));
-  //   } else {
-  //     if (inputPhoto.current?.checked) {
-  //       console.log('popal', qwe);
-  //       setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото')));
-  //     }
-
-  //     if (inputVideo.current?.checked) {
-  //       setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('видео')));
-  //     }
-  //   }
-
-  //   if (!inputPhoto.current?.checked && !inputVideo.current?.checked) {
-  //     setQwe(copyAllCards); // возможно изменить
-  //   }
-  // };
 
   const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const {name, checked} = evt.target;
-    // setQwe(copyAllCards);
+    // const {name} = evt.target;
+    // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
 
     let filteredCards = copyAllCards;
 
-    if (name === 'non-professional') {
-      setFilterIsCheck({
-        ...filterIsCheck,
-        nonProfessional: checked,
-      });
-    } else {
-      setFilterIsCheck({
-        ...filterIsCheck,
-        [name]: checked,
-      });
-    }
-
-
     if (inputPhoto.current?.checked && inputVideo.current?.checked) {
       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
-      // setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео')));
     } else {
       if (inputPhoto.current?.checked) {
-        // setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('фото')));
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото'));
       }
 
       if (inputVideo.current?.checked) {
-        // setQwe(copyAllCards.filter((camera) => camera.category.toLowerCase().includes('видео')));
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
       }
     }
 
-
-
-    // if (filterIsCheck.photocamera === true && filterIsCheck.videocamera === true) {
-    //   setQwe(qwe.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео')));
-    // } else {
-    //   if (filterValues.photocamera === name && checked) {
-    //     setQwe(qwe.filter((camera) => camera.category.toLowerCase().includes('фото')));
-    //   }
-
-    //   if (filterValues.videocamera === name && checked) {
-    //     setQwe(qwe.filter((camera) => camera.category.toLowerCase().includes('видео')));
-    //   }
-    // }
-    if (inputDigital.current?.checked || inputFilm.current?.checked || inputSnapshot.current?.checked || inputCollection.current?.checked || inputZero.current?.checked || inputNonProfessional.current?.checked || inputProfessional.current?.checked) {
+    if (inputDigital.current?.checked || inputFilm.current?.checked || inputSnapshot.current?.checked || inputCollection.current?.checked) {
       filteredCards = filteredCards.filter((camera) =>
         (inputDigital.current?.checked ? camera.type.toLowerCase().includes('цифровая') : false) ||
         (inputFilm.current?.checked ? camera.type.toLowerCase().includes('плёночная') : false) ||
         (inputSnapshot.current?.checked ? camera.type.toLowerCase().includes('моментальная') : false) ||
-        (inputCollection.current?.checked ? camera.type.toLowerCase().includes('коллекционная') : false) ||
+        (inputCollection.current?.checked ? camera.type.toLowerCase().includes('коллекционная') : false)
+      );
+    }
+
+    if (inputZero.current?.checked || inputNonProfessional.current?.checked || inputProfessional.current?.checked) {
+      filteredCards = filteredCards.filter((camera) =>
         (inputZero.current?.checked ? camera.level.toLowerCase().includes('нулевой') : false) ||
         (inputNonProfessional.current?.checked ? camera.level.toLowerCase().includes('любительский') : false) ||
         (inputProfessional.current?.checked ? camera.level.toLowerCase().includes('профессиональный') : false)
       );
     }
-    // if (inputDigital.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.type.toLowerCase().includes('цифровая'));
-    //   // setQwe(qwe.filter((camera) => camera.type.toLowerCase().includes('цифровая')));
-    // }
 
-    // if (inputFilm.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.type.toLowerCase().includes('плёночная'));
-    // }
-
-    // if (inputSnapshot.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.type.toLowerCase().includes('моментальная'));
-    // }
-
-    // if (inputCollection.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.type.toLowerCase().includes('коллекционная'));
-    // }
-
-    // if (inputZero.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.level.toLowerCase().includes('нулевой'));
-    // }
-
-    // if (inputNonProfessional.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.level.toLowerCase().includes('любительский'));
-    // }
-
-    // if (inputProfessional.current?.checked) {
-    //   filteredCards = filteredCards.filter((camera) => camera.level.toLowerCase().includes('профессиональный'));
-    // }
-    console.log(filteredCards);
     setQwe(filteredCards);
 
     if (!inputPhoto.current?.checked && !inputVideo.current?.checked && !inputDigital.current?.checked && !inputFilm.current?.checked && !inputSnapshot.current?.checked && !inputCollection.current?.checked && !inputZero.current?.checked && !inputNonProfessional.current?.checked && !inputProfessional.current?.checked) {
       setQwe(copyAllCards);
     }
-    // switch (name) {
-    //   case 'photocamera':
-    //     includeKey = 'фото';
-    //     if (checked) {
-    //       if (isSort) {
-    //         setFilteredCardsCatalog(copySortedCards.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //         dispatch(sortCards(filteredCardsCatalog));
-    //         dispatch(setCatalogPage(1));
-    //       } else {
-    //         setFilteredCardsCatalog(copyCardsCatalog.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //         dispatch(sortCards(filteredCardsCatalog));
-    //         dispatch(setCatalogPage(1));
-    //       }
-    //     } else {
-    //       if (isSort) {
-    //         setFilteredCardsCatalog(copySortedCards.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //         dispatch(sortCards(filteredCardsCatalog));
-    //         dispatch(setCatalogPage(1));
-    //       } else {
-    //         setFilteredCardsCatalog(copyCardsCatalog.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //         dispatch(sortCards(filteredCardsCatalog));
-    //         dispatch(setCatalogPage(1));
-    //       }
-    //     }
 
-    //     break;
-    // }
-
-    // if (checked && (name === 'photocamera' || 'videocamera')) {
-    //   const includeKey = name === 'photocamera' ? 'фото' : 'видео';
-    //   if (isSort) {
-    //     setFilteredCardsCatalog(copySortedCards.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //     dispatch(sortCards(filteredCardsCatalog));
-    //     dispatch(setCatalogPage(1));
-    //   } else {
-    //     setFilteredCardsCatalog(copyCardsCatalog.filter((camera) => camera.category.toLowerCase().includes(includeKey)));
-    //     dispatch(setCamerasCatalog(filteredCardsCatalog));
-    //     dispatch(setCatalogPage(1));
-    //   }
-    // } else {
-    //   if (isSort) {
-    //     dispatch(sortCards(allCards));
-    //     dispatch(setCatalogPage(1));
-    //   } else {
-    //     dispatch(setCamerasCatalog(copyCardsCatalog));
-    //     dispatch(setCatalogPage(1));
-    //   }
-    // }
-    // // // filteredCardsCatalog.filter((camera) => camera.name.includes('фото'));
-    // // dispatch();
-    // if (name === 'non-professional') {
-    //   setFilterValues({
-    //     ...filterValues,
-    //     nonProfessional: !filterValues.nonProfessional,
-    //   });
-    // } else {
-    //   console.log(filterValues);
-    //   setFilterValues({
-    //     ...filterValues,
-    //     [name]: !filterValues[name],
-    //   });
-    // }
   };
 
   return (
