@@ -36,6 +36,7 @@ describe('Reducer: cameraData', () => {
     sortDirection: 'up',
     isSort: false,
     sortCards: [],
+    camerasForRender: [],
   };
 
   beforeAll(() => {

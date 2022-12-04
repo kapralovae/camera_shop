@@ -32,6 +32,7 @@ const initialState: CameraData = {
   sortDirection: 'up',
   isSort: false,
   sortCards: [],
+  camerasForRender: [],
 };
 
 export const cameraData = createSlice({
@@ -59,8 +60,11 @@ export const cameraData = createSlice({
     setCountSlice: (state, action) => {
       state.countSlice = action.payload as number;
     },
+    setCamerasForRender: (state, action) => {
+      state.camerasForRender = action.payload as Cameras;
+    },
     setCamerasCatalog: (state, action) => {
-      state.camerasCatalog = action.payload as Camera[];
+      state.camerasCatalog = action.payload as Cameras;
     },
     addCardInBasket: (state, action) => {
       const camera = action.payload as Camera;
@@ -119,4 +123,4 @@ export const cameraData = createSlice({
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender} = cameraData.actions;

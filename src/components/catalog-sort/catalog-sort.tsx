@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDisptach } from '../../hooks';
-import { setIsSort, setSortDirection, setSortType } from '../../store/camera-data/camera-data';
+import { setCatalogPage, setIsSort, setSortDirection, setSortType } from '../../store/camera-data/camera-data';
 
 function CatalogSort () {
   const dispatch = useAppDisptach();
