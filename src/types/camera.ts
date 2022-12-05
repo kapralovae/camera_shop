@@ -35,6 +35,7 @@ export type CameraData = {
   sortDirection: string;
   isSort: boolean;
   sortCards: Cameras;
+  camerasForRender: Cameras;
 };
 
 export type CamerasProsecc = {

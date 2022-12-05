@@ -30,3 +30,4 @@ export const getIsSort = (state: State): boolean => state['dataReducer'].isSort;
 
 export const getSortCards = (state: State): Cameras => state['dataReducer'].sortCards;
 
+export const getCamerasForRender = (state: State): Cameras => state['dataReducer'].camerasForRender;
