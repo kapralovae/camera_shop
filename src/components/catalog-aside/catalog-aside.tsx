@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
