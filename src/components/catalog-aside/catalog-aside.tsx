@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
@@ -47,21 +47,36 @@ function CatalogAside () {
   //   'professional': 'профессиональный',
   // };
 
-  const [qwe, setQwe] = useState<Cameras>(copyAllCards);
+  const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
+  const [placeholderMax, setPlaceholderMax] = useState('0');
+  const [placeholderMin, setPlaceholderMin] = useState('0');
 
   const dispatchCards = () => {
     if (isSort) {
-      dispatch(setSortCards(qwe));
+      dispatch(setSortCards(renderedCards));
     } else {
-      dispatch(setCamerasForRender(qwe));
-      dispatch(setCamerasCatalog(qwe.slice(0, 9)));
+      dispatch(setCamerasForRender(renderedCards));
+      dispatch(setCamerasCatalog(renderedCards.slice(0, 9)));
     }
   };
+  useEffect(() => {
+    const copyAllForPlaceholder = Array.from(copyAllCards);
+    const copyRenderCards = Array.from(renderedCards);
+    if (renderedCards === undefined || renderedCards.length === 0) {
+      setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[copyAllForPlaceholder.length - 1].price.toString());
+      setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[0].price.toString());
+    } else {
+      setPlaceholderMin(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[copyRenderCards.length - 1].price.toString());
+      setPlaceholderMax(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[0].price.toString());
+    }
+
+  }, [copyAllCards, renderedCards]);
+
 
   useEffect(() => {
     dispatchCards();
     dispatch(setCatalogPage(1));
-  }, [qwe, isSort, sortDirection, sortType]);
+  }, [renderedCards, isSort, sortDirection, sortType]);
 
   const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
     // const {name} = evt.target;
@@ -98,12 +113,19 @@ function CatalogAside () {
       );
     }
 
-    setQwe(filteredCards);
+    setRenderedCards(filteredCards);
 
     if (!inputPhoto.current?.checked && !inputVideo.current?.checked && !inputDigital.current?.checked && !inputFilm.current?.checked && !inputSnapshot.current?.checked && !inputCollection.current?.checked && !inputZero.current?.checked && !inputNonProfessional.current?.checked && !inputProfessional.current?.checked) {
-      setQwe(copyAllCards);
+      setRenderedCards(copyAllCards);
     }
 
+  };
+
+  const handlerInputPriceInput = (evt: ChangeEvent<HTMLInputElement>) => {
+    console.log(evt.target.value, placeholderMin);
+    if (evt.target.value < placeholderMin) {
+      evt.target.textContent = placeholderMin;
+    }
   };
 
   return (
@@ -116,12 +138,12 @@ function CatalogAside () {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input type="number" name="price" placeholder="от"></input>
+                  <input onInput={handlerInputPriceInput} type="number" name="price" min={0} placeholder={placeholderMin}></input>
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" name="priceUp" placeholder="до"></input>
+                  <input type="number" name="priceUp" min={0} placeholder={placeholderMax}></input>
                 </label>
               </div>
             </div>
