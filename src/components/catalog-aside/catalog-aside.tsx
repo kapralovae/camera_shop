@@ -50,6 +50,7 @@ function CatalogAside () {
   const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
+  const [priceMinValue, setPriceMinValue] = useState(Number(placeholderMin));
 
   const dispatchCards = () => {
     if (isSort) {
@@ -121,10 +122,14 @@ function CatalogAside () {
 
   };
 
-  const handlerInputPriceInput = (evt: ChangeEvent<HTMLInputElement>) => {
-    console.log(evt.target.value, placeholderMin);
+  const handlerInputPriceChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    // console.log(evt.target.value, placeholderMin);
+    setPriceMinValue(+evt.target.value);
+  };
+
+  const handlerInputPriceBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     if (evt.target.value < placeholderMin) {
-      evt.target.textContent = placeholderMin;
+      evt.target.value = placeholderMin;
     }
   };
 
@@ -138,7 +143,7 @@ function CatalogAside () {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input onInput={handlerInputPriceInput} type="number" name="price" min={0} placeholder={placeholderMin}></input>
+                  <input onChange={handlerInputPriceChange} onBlur={handlerInputPriceBlur} type="number" name="price" min={0} placeholder={placeholderMin}></input>
                 </label>
               </div>
               <div className="custom-input">
