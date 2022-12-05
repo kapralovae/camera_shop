@@ -129,7 +129,7 @@ function CatalogAside () {
 
   const handlerInputPriceBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     if (evt.target.value < placeholderMin) {
-      evt.target.value = placeholderMin;
+      evt.target.value = String(priceMinValue);
     }
   };
 
