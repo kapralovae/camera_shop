@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
@@ -50,7 +50,8 @@ function CatalogAside () {
   const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
-  const [priceMinValue, setPriceMinValue] = useState(Number(placeholderMin));
+  const [priceMinValue, setPriceMinValue] = useState(0);
+  const [priceMaxValue, setPriceMaxValue] = useState(0);
 
   const dispatchCards = () => {
     if (isSort) {
@@ -63,16 +64,22 @@ function CatalogAside () {
   useEffect(() => {
     const copyAllForPlaceholder = Array.from(copyAllCards);
     const copyRenderCards = Array.from(renderedCards);
-    if (renderedCards === undefined || renderedCards.length === 0) {
-      setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[copyAllForPlaceholder.length - 1].price.toString());
-      setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[0].price.toString());
+    if (inputPhoto.current?.checked === false &&
+      inputVideo.current?.checked === false &&
+      inputDigital.current?.checked === false &&
+      inputSnapshot.current?.checked === false &&
+      inputCollection.current?.checked === false &&
+      inputZero.current?.checked === false &&
+      inputNonProfessional.current?.checked === false &&
+      inputProfessional.current?.checked === false) {
+      setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMin : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[0].price.toString());
+      setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMax : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[copyAllForPlaceholder.length - 1].price.toString());
     } else {
-      setPlaceholderMin(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[copyRenderCards.length - 1].price.toString());
-      setPlaceholderMax(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[0].price.toString());
+      setPlaceholderMin(copyRenderCards === undefined || copyRenderCards.length === 0 ? placeholderMin : copyRenderCards.sort((a, b) => b.price - a.price)[copyRenderCards.length - 1].price.toString());
+      setPlaceholderMax(copyRenderCards === undefined || copyRenderCards.length === 0 ? placeholderMax : copyRenderCards.sort((a, b) => b.price - a.price)[0].price.toString());
     }
 
-  }, [copyAllCards, renderedCards]);
-
+  }, [copyAllCards, placeholderMax, placeholderMin, renderedCards]);
 
   useEffect(() => {
     dispatchCards();
@@ -83,7 +90,7 @@ function CatalogAside () {
     // const {name} = evt.target;
     // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
 
-    let filteredCards = copyAllCards;
+    let filteredCards = (priceMinValue || priceMaxValue) && renderedCards.length !== 0 ? renderedCards : copyAllCards;
 
     if (inputPhoto.current?.checked && inputVideo.current?.checked) {
       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
@@ -113,8 +120,8 @@ function CatalogAside () {
         (inputProfessional.current?.checked ? camera.level.toLowerCase().includes('профессиональный') : false)
       );
     }
-
-    setRenderedCards(filteredCards);
+    console.log(priceMinValue, priceMaxValue);
+    setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
 
     if (!inputPhoto.current?.checked && !inputVideo.current?.checked && !inputDigital.current?.checked && !inputFilm.current?.checked && !inputSnapshot.current?.checked && !inputCollection.current?.checked && !inputZero.current?.checked && !inputNonProfessional.current?.checked && !inputProfessional.current?.checked) {
       setRenderedCards(copyAllCards);
@@ -122,16 +129,83 @@ function CatalogAside () {
 
   };
 
-  const handlerInputPriceChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    // console.log(evt.target.value, placeholderMin);
-    setPriceMinValue(+evt.target.value);
+  const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    console.log(placeholderMin);
+    if (Number(evt.target.value) <= Number(placeholderMin)) {
+      setPriceMinValue(Number(placeholderMin));
+    }
+
+    if (Number(evt.target.value) >= Number(placeholderMax)) {
+      setPriceMinValue(Number(placeholderMax));
+    }
+
+    setPriceMinValue(Number(evt.target.value));
+    // if (Number(evt.target.value) < Number(placeholderMin) || Number(evt.target.value) > Number(placeholderMax)) {
+    // }
+    console.log(priceMaxValue, placeholderMax);
   };
 
-  const handlerInputPriceBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.value < placeholderMin) {
-      evt.target.value = placeholderMin;
-    }
+
+  const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    const copyRenderCards = Array.from(
+      inputPhoto.current?.checked === false &&
+      inputVideo.current?.checked === false &&
+      inputDigital.current?.checked === false &&
+      inputSnapshot.current?.checked === false &&
+      inputCollection.current?.checked === false &&
+      inputZero.current?.checked === false &&
+      inputNonProfessional.current?.checked === false &&
+      inputProfessional.current?.checked === false ? copyAllCards : renderedCards);
+    console.log(priceMinValue, placeholderMin, placeholderMax, priceMaxValue);
+    const priceMinFilter = priceMinValue >= Number(placeholderMax) ? placeholderMax : priceMinValue;
+
+    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
+    const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
+    setPriceMinValue(Number(minValue));
+    setRenderedCards(filtered);
   };
+
+  const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (Number(evt.target.value) >= Number(placeholderMax)) {
+      setPriceMaxValue(Number(placeholderMax));
+    }
+
+    if (Number(evt.target.value) <= Number(placeholderMin)) {
+      setPriceMaxValue(Number(placeholderMin));
+    }
+    console.log(priceMaxValue, placeholderMin, placeholderMax);
+    setPriceMaxValue(Number(evt.target.value));
+  };
+
+  const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    const copyRenderCards = Array.from(
+      inputPhoto.current?.checked === false &&
+      inputVideo.current?.checked === false &&
+      inputDigital.current?.checked === false &&
+      inputSnapshot.current?.checked === false &&
+      inputCollection.current?.checked === false &&
+      inputZero.current?.checked === false &&
+      inputNonProfessional.current?.checked === false &&
+      inputProfessional.current?.checked === false ? copyAllCards : renderedCards);
+
+      console.log(priceMaxValue, placeholderMin, placeholderMax, priceMinValue);
+
+
+    const priceMaxFilter = priceMaxValue <= Number(placeholderMin) ? placeholderMin : priceMaxValue;
+
+    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
+    setRenderedCards(filtered);
+    const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
+    setPriceMaxValue(Number(maxValue));
+
+    // if (Number(evt.target.value) > Number(placeholderMax)) {
+    //   setPriceMaxValue(Number(placeholderMax));
+    // }
+    // if (Number(evt.target.value) < Number(priceMinValue)) {
+    //   setPriceMaxValue(Number(priceMinValue));
+    // }
+  };
+
 
   return (
     <div className="catalog__aside">
@@ -143,12 +217,12 @@ function CatalogAside () {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input onChange={handlerInputPriceChange} onBlur={handlerInputPriceBlur} type="number" name="price" min={0} placeholder={placeholderMin}></input>
+                  <input onChange={handlerInputPriceMinChange} value={priceMinValue || ''} onBlur={handlerInputPriceMinBlur} type="number" name="price" min={0} placeholder={placeholderMin}></input>
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" name="priceUp" min={0} placeholder={placeholderMax}></input>
+                  <input onChange={handlerInputPriceMaxChange} value={priceMaxValue || ''} onBlur={handlerInputPriceMaxBlur} type="number" name="priceUp" min={0} placeholder={placeholderMax}></input>
                 </label>
               </div>
             </div>
