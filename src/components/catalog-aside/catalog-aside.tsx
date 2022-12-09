@@ -13,6 +13,7 @@ function CatalogAside () {
   const isSort = useAppSelector(getIsSort);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
+
   const [inputPhotoChecked, setInputPhotoChecked] = useState(false);
   const [inputVideoChecked, setInputVideoChecked] = useState(false);
   const [inputDigitalChecked, setInputDigitalChecked] = useState(false);
@@ -23,36 +24,11 @@ function CatalogAside () {
   const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
   const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
-  // type Filter = {
-  //   'photocamera': string;
-  //   'videocamera': string;
-  //   'digital': string;
-  //   'film': string;
-  //   'snapshot': string;
-  //   'collection': string;
-  //   'zero': string;
-  //   'non-professional': string;
-  //   'professional': string;
-  // };
-
-  // const FILTER_NAME: Filter = {
-  //   'photocamera': 'фото',
-  //   'videocamera': 'видео',
-  //   'digital': 'цифровая',
-  //   'film': 'плёночная',
-  //   'snapshot': 'моментальная',
-  //   'collection': 'коллекционная',
-  //   'zero': 'zero',
-  //   'non-professional': 'любительский',
-  //   'professional': 'профессиональный',
-  // };
-
   const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
-  console.log(renderedCards);
 
   const dispatchCards = () => {
     if (isSort) {
@@ -84,13 +60,11 @@ function CatalogAside () {
   }, [copyAllCards, placeholderMax, placeholderMin, renderedCards]);
 
   useEffect(() => {
-    console.log('prislo', renderedCards);
     dispatchCards();
     dispatch(setCatalogPage(1));
   }, [renderedCards, isSort, sortDirection, sortType]);
 
   useEffect(() => {
-    console.log('popal', copyAllCards);
     globalFilteredCard();
   }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked]);
 
@@ -106,7 +80,6 @@ function CatalogAside () {
       }
 
       if (inputVideoChecked) {
-        // console.log('popal');
         setInputFilmChecked(false);
         setInputSnapshotChecked(false);
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
@@ -129,8 +102,7 @@ function CatalogAside () {
         (inputProfessionalChecked ? camera.level.toLowerCase().includes('профессиональный') : false)
       );
     }
-    console.log(priceMinValue, priceMaxValue, filteredCards);
-    // setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
+
     if (priceMinValue || priceMaxValue) {
       setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
     } else if (priceMinValue !== 0 && priceMaxValue !== 0 && (priceMinValue === priceMaxValue)) {
@@ -141,88 +113,24 @@ function CatalogAside () {
       setRenderedCards(filteredCards);
     }
 
-    // if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
-    //   setRenderedCards(copyAllCards);
-    // }
   };
 
-  // const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
-  //   // const {name} = evt.target;
-  //   // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
-
-  //   // let filteredCards = (priceMinValue || priceMaxValue) && renderedCards.length !== 0 ? renderedCards : copyAllCards;
-  //   let filteredCards = copyAllCards;
-
-  //   if (inputPhotoChecked && inputVideoChecked) {
-  //     filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
-  //   } else {
-  //     if (inputPhotoChecked) {
-  //       console.log('popal');
-  //       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото'));
-  //     }
-
-  //     if (inputVideoChecked) {
-  //       console.log('popal');
-  //       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
-  //     }
-  //   }
-
-  //   if (inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked) {
-  //     filteredCards = filteredCards.filter((camera) =>
-  //       (inputDigitalChecked ? camera.type.toLowerCase().includes('цифровая') : false) ||
-  //       (inputFilmChecked ? camera.type.toLowerCase().includes('плёночная') : false) ||
-  //       (inputSnapshotChecked ? camera.type.toLowerCase().includes('моментальная') : false) ||
-  //       (inputCollectionChecked ? camera.type.toLowerCase().includes('коллекционная') : false)
-  //     );
-  //   }
-
-  //   if (inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked) {
-  //     filteredCards = filteredCards.filter((camera) =>
-  //       (inputZeroChecked ? camera.level.toLowerCase().includes('нулевой') : false) ||
-  //       (inputNonProfessionalChecked ? camera.level.toLowerCase().includes('любительский') : false) ||
-  //       (inputProfessionalChecked ? camera.level.toLowerCase().includes('профессиональный') : false)
-  //     );
-  //   }
-  //   console.log(priceMinValue, priceMaxValue);
-  //   setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
-
-  //   if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked&& !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && (priceMinValue === 0 && priceMaxValue === 0)) {
-  //     setRenderedCards(copyAllCards);
-  //   }
-
-  // };
-
   const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    // console.log(placeholderMin, priceMaxValue);
-
-    // if (Number(evt.target.value) <= Number(placeholderMin)) {
-    //   setPriceMinValue(Number(placeholderMin));
-    // }
-
-    // if (Number(evt.target.value) >= priceMaxValue ? priceMaxValue : Number(placeholderMax)) {
-    //   setPriceMinValue(priceMaxValue ? priceMaxValue : Number(placeholderMax));
-    // }
     setPriceMinValue(Number(evt.target.value));
-    // if (Number(evt.target.value) < Number(placeholderMin) || Number(evt.target.value) > Number(placeholderMax)) {
-    // }
-    // console.log(priceMaxValue, placeholderMax);
   };
 
 
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     const copyRenderCards = Array.from(copyAllCards);
 
-    console.log(priceMinValue, placeholderMin, placeholderMax, priceMaxValue);
-
     const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
-
     const priceMinFilter = (priceMinValue >= priceMaxValue || priceMinValue >= Number(placeholderMax)) ? priceMax : priceMinValue;
-    console.log(priceMinFilter);
-
     const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
+
     setRenderedCards(filtered);
+
     const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
-    // console.log(minValue, priceMinFilter);
+
     setPriceMinValue(minValue);
     globalFilteredCard();
   };
@@ -233,33 +141,32 @@ function CatalogAside () {
 
   const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     const copyRenderCards = Array.from(copyAllCards);
-
-    console.log(priceMaxValue, placeholderMin, placeholderMax, priceMinValue, copyRenderCards);
-
     const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
-
     const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMin : priceMaxValue;
-    console.log(priceMaxFilter);
 
     const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
     setRenderedCards(filtered);
     const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
     setPriceMaxValue(maxValue);
     globalFilteredCard();
-    // if (Number(evt.target.value) > Number(placeholderMax)) {
-    //   setPriceMaxValue(Number(placeholderMax));
-    // }
-    // if (Number(evt.target.value) < Number(priceMinValue)) {
-    //   setPriceMaxValue(Number(priceMinValue));
-    // }
   };
 
   const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     setPriceMinValue(0);
     setPriceMaxValue(0);
-    // inputPhoto.current?.checked == false;
+    setRenderedCards(copyAllCards);
+    setInputPhotoChecked(false);
+    setInputVideoChecked(false);
+    setInputDigitalChecked(false);
+    setInputFilmChecked(false);
+    setInputSnapshotChecked(false);
+    setInputCollectionChecked(false);
+    setInputZeroChecked(false);
+    setInputNonProfessionalChecked(false);
+    setInputProfessionalChecked(false);
   };
+
 
   return (
     <div className="catalog__aside">
