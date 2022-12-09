@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
@@ -13,15 +13,15 @@ function CatalogAside () {
   const isSort = useAppSelector(getIsSort);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
-  const inputPhoto = useRef<HTMLInputElement>(null);
-  const inputVideo = useRef<HTMLInputElement>(null);
-  const inputDigital = useRef<HTMLInputElement>(null);
-  const inputFilm = useRef<HTMLInputElement>(null);
-  const inputSnapshot = useRef<HTMLInputElement>(null);
-  const inputCollection = useRef<HTMLInputElement>(null);
-  const inputZero = useRef<HTMLInputElement>(null);
-  const inputNonProfessional = useRef<HTMLInputElement>(null);
-  const inputProfessional = useRef<HTMLInputElement>(null);
+  const [inputPhotoChecked, setInputPhotoChecked] = useState(false);
+  const [inputVideoChecked, setInputVideoChecked] = useState(false);
+  const [inputDigitalChecked, setInputDigitalChecked] = useState(false);
+  const [inputFilmChecked, setInputFilmChecked] = useState(false);
+  const [inputSnapshotChecked, setInputSnapshotChecked] = useState(false);
+  const [inputCollectionChecked, setInputCollectionChecked] = useState(false);
+  const [inputZeroChecked, setInputZeroChecked] = useState(false);
+  const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
+  const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
   // type Filter = {
   //   'photocamera': string;
@@ -52,6 +52,7 @@ function CatalogAside () {
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
+  console.log(renderedCards);
 
   const dispatchCards = () => {
     if (isSort) {
@@ -64,14 +65,15 @@ function CatalogAside () {
   useEffect(() => {
     const copyAllForPlaceholder = Array.from(copyAllCards);
     const copyRenderCards = Array.from(renderedCards);
-    if (inputPhoto.current?.checked === false &&
-      inputVideo.current?.checked === false &&
-      inputDigital.current?.checked === false &&
-      inputSnapshot.current?.checked === false &&
-      inputCollection.current?.checked === false &&
-      inputZero.current?.checked === false &&
-      inputNonProfessional.current?.checked === false &&
-      inputProfessional.current?.checked === false) {
+    if (inputPhotoChecked === false &&
+      inputVideoChecked === false &&
+      inputDigitalChecked === false &&
+      inputFilmChecked === false &&
+      inputSnapshotChecked === false &&
+      inputCollectionChecked === false &&
+      inputZeroChecked === false &&
+      inputNonProfessionalChecked === false &&
+      inputProfessionalChecked === false) {
       setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMin : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[0].price.toString());
       setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMax : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[copyAllForPlaceholder.length - 1].price.toString());
     } else {
@@ -82,122 +84,168 @@ function CatalogAside () {
   }, [copyAllCards, placeholderMax, placeholderMin, renderedCards]);
 
   useEffect(() => {
+    console.log('prislo', renderedCards);
     dispatchCards();
     dispatch(setCatalogPage(1));
   }, [renderedCards, isSort, sortDirection, sortType]);
 
-  const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    // const {name} = evt.target;
-    // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
+  useEffect(() => {
+    console.log('popal', copyAllCards);
+    globalFilteredCard();
+  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked]);
 
-    let filteredCards = (priceMinValue || priceMaxValue) && renderedCards.length !== 0 ? renderedCards : copyAllCards;
 
-    if (inputPhoto.current?.checked && inputVideo.current?.checked) {
+  const globalFilteredCard = () => {
+    let filteredCards = copyAllCards;
+
+    if (inputPhotoChecked && inputVideoChecked) {
       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
     } else {
-      if (inputPhoto.current?.checked) {
+      if (inputPhotoChecked) {
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото'));
       }
 
-      if (inputVideo.current?.checked) {
+      if (inputVideoChecked) {
+        // console.log('popal');
+        setInputFilmChecked(false);
+        setInputSnapshotChecked(false);
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
       }
     }
 
-    if (inputDigital.current?.checked || inputFilm.current?.checked || inputSnapshot.current?.checked || inputCollection.current?.checked) {
+    if (inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked) {
       filteredCards = filteredCards.filter((camera) =>
-        (inputDigital.current?.checked ? camera.type.toLowerCase().includes('цифровая') : false) ||
-        (inputFilm.current?.checked ? camera.type.toLowerCase().includes('плёночная') : false) ||
-        (inputSnapshot.current?.checked ? camera.type.toLowerCase().includes('моментальная') : false) ||
-        (inputCollection.current?.checked ? camera.type.toLowerCase().includes('коллекционная') : false)
+        (inputDigitalChecked ? camera.type.toLowerCase().includes('цифровая') : false) ||
+        (inputFilmChecked ? camera.type.toLowerCase().includes('плёночная') : false) ||
+        (inputSnapshotChecked ? camera.type.toLowerCase().includes('моментальная') : false) ||
+        (inputCollectionChecked ? camera.type.toLowerCase().includes('коллекционная') : false)
       );
     }
 
-    if (inputZero.current?.checked || inputNonProfessional.current?.checked || inputProfessional.current?.checked) {
+    if (inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked) {
       filteredCards = filteredCards.filter((camera) =>
-        (inputZero.current?.checked ? camera.level.toLowerCase().includes('нулевой') : false) ||
-        (inputNonProfessional.current?.checked ? camera.level.toLowerCase().includes('любительский') : false) ||
-        (inputProfessional.current?.checked ? camera.level.toLowerCase().includes('профессиональный') : false)
+        (inputZeroChecked ? camera.level.toLowerCase().includes('нулевой') : false) ||
+        (inputNonProfessionalChecked ? camera.level.toLowerCase().includes('любительский') : false) ||
+        (inputProfessionalChecked ? camera.level.toLowerCase().includes('профессиональный') : false)
       );
     }
-    console.log(priceMinValue, priceMaxValue);
-    setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
-
-    if (!inputPhoto.current?.checked && !inputVideo.current?.checked && !inputDigital.current?.checked && !inputFilm.current?.checked && !inputSnapshot.current?.checked && !inputCollection.current?.checked && !inputZero.current?.checked && !inputNonProfessional.current?.checked && !inputProfessional.current?.checked) {
+    console.log(priceMinValue, priceMaxValue, filteredCards);
+    // setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
+    if (priceMinValue || priceMaxValue) {
+      setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+    } else if (priceMinValue !== 0 && priceMaxValue !== 0 && (priceMinValue === priceMaxValue)) {
+      setRenderedCards(filteredCards.filter((card) => card.price === priceMinValue || card.price === priceMaxValue));
+    } else if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
       setRenderedCards(copyAllCards);
+    } else {
+      setRenderedCards(filteredCards);
     }
 
+    // if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
+    //   setRenderedCards(copyAllCards);
+    // }
   };
 
+  // const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  //   // const {name} = evt.target;
+  //   // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
+
+  //   // let filteredCards = (priceMinValue || priceMaxValue) && renderedCards.length !== 0 ? renderedCards : copyAllCards;
+  //   let filteredCards = copyAllCards;
+
+  //   if (inputPhotoChecked && inputVideoChecked) {
+  //     filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
+  //   } else {
+  //     if (inputPhotoChecked) {
+  //       console.log('popal');
+  //       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото'));
+  //     }
+
+  //     if (inputVideoChecked) {
+  //       console.log('popal');
+  //       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
+  //     }
+  //   }
+
+  //   if (inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked) {
+  //     filteredCards = filteredCards.filter((camera) =>
+  //       (inputDigitalChecked ? camera.type.toLowerCase().includes('цифровая') : false) ||
+  //       (inputFilmChecked ? camera.type.toLowerCase().includes('плёночная') : false) ||
+  //       (inputSnapshotChecked ? camera.type.toLowerCase().includes('моментальная') : false) ||
+  //       (inputCollectionChecked ? camera.type.toLowerCase().includes('коллекционная') : false)
+  //     );
+  //   }
+
+  //   if (inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked) {
+  //     filteredCards = filteredCards.filter((camera) =>
+  //       (inputZeroChecked ? camera.level.toLowerCase().includes('нулевой') : false) ||
+  //       (inputNonProfessionalChecked ? camera.level.toLowerCase().includes('любительский') : false) ||
+  //       (inputProfessionalChecked ? camera.level.toLowerCase().includes('профессиональный') : false)
+  //     );
+  //   }
+  //   console.log(priceMinValue, priceMaxValue);
+  //   setRenderedCards(filteredCards.filter((card) => card.price >= (priceMinValue !== 0 ? priceMinValue : Number(placeholderMin)) && card.price <= (priceMaxValue !== 0 ? priceMaxValue : Number(placeholderMax))));
+
+  //   if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked&& !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && (priceMinValue === 0 && priceMaxValue === 0)) {
+  //     setRenderedCards(copyAllCards);
+  //   }
+
+  // };
+
   const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    console.log(placeholderMin);
-    if (Number(evt.target.value) <= Number(placeholderMin)) {
-      setPriceMinValue(Number(placeholderMin));
-    }
+    // console.log(placeholderMin, priceMaxValue);
 
-    if (Number(evt.target.value) >= Number(placeholderMax)) {
-      setPriceMinValue(Number(placeholderMax));
-    }
+    // if (Number(evt.target.value) <= Number(placeholderMin)) {
+    //   setPriceMinValue(Number(placeholderMin));
+    // }
 
+    // if (Number(evt.target.value) >= priceMaxValue ? priceMaxValue : Number(placeholderMax)) {
+    //   setPriceMinValue(priceMaxValue ? priceMaxValue : Number(placeholderMax));
+    // }
     setPriceMinValue(Number(evt.target.value));
     // if (Number(evt.target.value) < Number(placeholderMin) || Number(evt.target.value) > Number(placeholderMax)) {
     // }
-    console.log(priceMaxValue, placeholderMax);
+    // console.log(priceMaxValue, placeholderMax);
   };
 
 
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    const copyRenderCards = Array.from(
-      inputPhoto.current?.checked === false &&
-      inputVideo.current?.checked === false &&
-      inputDigital.current?.checked === false &&
-      inputSnapshot.current?.checked === false &&
-      inputCollection.current?.checked === false &&
-      inputZero.current?.checked === false &&
-      inputNonProfessional.current?.checked === false &&
-      inputProfessional.current?.checked === false ? copyAllCards : renderedCards);
+    const copyRenderCards = Array.from(copyAllCards);
+
     console.log(priceMinValue, placeholderMin, placeholderMax, priceMaxValue);
-    const priceMinFilter = priceMinValue >= Number(placeholderMax) ? placeholderMax : priceMinValue;
+
+    const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
+
+    const priceMinFilter = (priceMinValue >= priceMaxValue || priceMinValue >= Number(placeholderMax)) ? priceMax : priceMinValue;
+    console.log(priceMinFilter);
 
     const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
-    const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
-    setPriceMinValue(Number(minValue));
     setRenderedCards(filtered);
+    const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
+    // console.log(minValue, priceMinFilter);
+    setPriceMinValue(minValue);
+    globalFilteredCard();
   };
 
   const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (Number(evt.target.value) >= Number(placeholderMax)) {
-      setPriceMaxValue(Number(placeholderMax));
-    }
-
-    if (Number(evt.target.value) <= Number(placeholderMin)) {
-      setPriceMaxValue(Number(placeholderMin));
-    }
-    console.log(priceMaxValue, placeholderMin, placeholderMax);
     setPriceMaxValue(Number(evt.target.value));
   };
 
   const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    const copyRenderCards = Array.from(
-      inputPhoto.current?.checked === false &&
-      inputVideo.current?.checked === false &&
-      inputDigital.current?.checked === false &&
-      inputSnapshot.current?.checked === false &&
-      inputCollection.current?.checked === false &&
-      inputZero.current?.checked === false &&
-      inputNonProfessional.current?.checked === false &&
-      inputProfessional.current?.checked === false ? copyAllCards : renderedCards);
+    const copyRenderCards = Array.from(copyAllCards);
 
-      console.log(priceMaxValue, placeholderMin, placeholderMax, priceMinValue);
+    console.log(priceMaxValue, placeholderMin, placeholderMax, priceMinValue, copyRenderCards);
 
+    const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
 
-    const priceMaxFilter = priceMaxValue <= Number(placeholderMin) ? placeholderMin : priceMaxValue;
+    const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMin : priceMaxValue;
+    console.log(priceMaxFilter);
 
     const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
     setRenderedCards(filtered);
     const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
-    setPriceMaxValue(Number(maxValue));
-
+    setPriceMaxValue(maxValue);
+    globalFilteredCard();
     // if (Number(evt.target.value) > Number(placeholderMax)) {
     //   setPriceMaxValue(Number(placeholderMax));
     // }
@@ -206,6 +254,12 @@ function CatalogAside () {
     // }
   };
 
+  const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setPriceMinValue(0);
+    setPriceMaxValue(0);
+    // inputPhoto.current?.checked == false;
+  };
 
   return (
     <div className="catalog__aside">
@@ -231,12 +285,12 @@ function CatalogAside () {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputPhoto} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
+                <input onChange={() => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputVideo} type="checkbox" name="videocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Видеокамера</span>
+                <input onChange={() => {setInputVideoChecked(!inputVideoChecked);}} checked={inputVideoChecked} type="checkbox" name="videocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Видеокамера</span>
               </label>
             </div>
           </fieldset>
@@ -244,22 +298,22 @@ function CatalogAside () {
             <legend className="title title--h5">Тип камеры</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputDigital} type="checkbox" name="digital"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
+                <input onChange={() => {setInputDigitalChecked(!inputDigitalChecked);}} checked={inputDigitalChecked} type="checkbox" name="digital"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputFilm} type="checkbox" name="film"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Плёночная</span>
+                <input onChange={() => {setInputFilmChecked(!inputFilmChecked);}} checked={inputFilmChecked} disabled={inputVideoChecked} type="checkbox" name="film"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Плёночная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputSnapshot} type="checkbox" name="snapshot"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Моментальная</span>
+                <input onChange={() => {setInputSnapshotChecked(!inputSnapshotChecked);}} checked={inputSnapshotChecked} disabled={inputVideoChecked} type="checkbox" name="snapshot"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Моментальная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputCollection} type="checkbox" name="collection"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Коллекционная</span>
+                <input onChange={() => {setInputCollectionChecked(!inputCollectionChecked);}} checked={inputCollectionChecked} type="checkbox" name="collection"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Коллекционная</span>
               </label>
             </div>
           </fieldset>
@@ -267,21 +321,21 @@ function CatalogAside () {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputZero} type="checkbox" name="zero"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
+                <input onChange={() => {setInputZeroChecked(!inputZeroChecked);}} checked={inputZeroChecked} type="checkbox" name="zero"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputNonProfessional} type="checkbox" name="non-professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Любительский</span>
+                <input onChange={() => {setInputNonProfessionalChecked(!inputNonProfessionalChecked);}} checked={inputNonProfessionalChecked} type="checkbox" name="non-professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Любительский</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputProfessional} type="checkbox" name="professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Профессиональный</span>
+                <input onChange={() => {setInputProfessionalChecked(!inputProfessionalChecked);}} checked={inputProfessionalChecked} type="checkbox" name="professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Профессиональный</span>
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры
+          <button onClick={handlerButtonResetFilter} className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры
           </button>
         </form>
       </div>
