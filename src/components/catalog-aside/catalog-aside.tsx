@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { getIsSort, getSortDirection, getSortType } from '../../store/camera-data/selectors';
 import { Cameras } from '../../types/camera';
@@ -13,44 +13,22 @@ function CatalogAside () {
   const isSort = useAppSelector(getIsSort);
   const sortType = useAppSelector(getSortType);
   const sortDirection = useAppSelector(getSortDirection);
-  const inputPhoto = useRef<HTMLInputElement>(null);
-  const inputVideo = useRef<HTMLInputElement>(null);
-  const inputDigital = useRef<HTMLInputElement>(null);
-  const inputFilm = useRef<HTMLInputElement>(null);
-  const inputSnapshot = useRef<HTMLInputElement>(null);
-  const inputCollection = useRef<HTMLInputElement>(null);
-  const inputZero = useRef<HTMLInputElement>(null);
-  const inputNonProfessional = useRef<HTMLInputElement>(null);
-  const inputProfessional = useRef<HTMLInputElement>(null);
 
-  // type Filter = {
-  //   'photocamera': string;
-  //   'videocamera': string;
-  //   'digital': string;
-  //   'film': string;
-  //   'snapshot': string;
-  //   'collection': string;
-  //   'zero': string;
-  //   'non-professional': string;
-  //   'professional': string;
-  // };
-
-  // const FILTER_NAME: Filter = {
-  //   'photocamera': 'фото',
-  //   'videocamera': 'видео',
-  //   'digital': 'цифровая',
-  //   'film': 'плёночная',
-  //   'snapshot': 'моментальная',
-  //   'collection': 'коллекционная',
-  //   'zero': 'zero',
-  //   'non-professional': 'любительский',
-  //   'professional': 'профессиональный',
-  // };
+  const [inputPhotoChecked, setInputPhotoChecked] = useState(false);
+  const [inputVideoChecked, setInputVideoChecked] = useState(false);
+  const [inputDigitalChecked, setInputDigitalChecked] = useState(false);
+  const [inputFilmChecked, setInputFilmChecked] = useState(false);
+  const [inputSnapshotChecked, setInputSnapshotChecked] = useState(false);
+  const [inputCollectionChecked, setInputCollectionChecked] = useState(false);
+  const [inputZeroChecked, setInputZeroChecked] = useState(false);
+  const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
+  const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
   const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
-  const [priceMinValue, setPriceMinValue] = useState(Number(placeholderMin));
+  const [priceMinValue, setPriceMinValue] = useState(0);
+  const [priceMaxValue, setPriceMaxValue] = useState(0);
 
   const dispatchCards = () => {
     if (isSort) {
@@ -63,75 +41,131 @@ function CatalogAside () {
   useEffect(() => {
     const copyAllForPlaceholder = Array.from(copyAllCards);
     const copyRenderCards = Array.from(renderedCards);
-    if (renderedCards === undefined || renderedCards.length === 0) {
-      setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[copyAllForPlaceholder.length - 1].price.toString());
-      setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? '0' : copyAllForPlaceholder.sort((a, b) => b.price - a.price)[0].price.toString());
+    if (inputPhotoChecked === false &&
+      inputVideoChecked === false &&
+      inputDigitalChecked === false &&
+      inputFilmChecked === false &&
+      inputSnapshotChecked === false &&
+      inputCollectionChecked === false &&
+      inputZeroChecked === false &&
+      inputNonProfessionalChecked === false &&
+      inputProfessionalChecked === false) {
+      setPlaceholderMin(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMin : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[0].price.toString());
+      setPlaceholderMax(copyAllForPlaceholder === undefined || copyAllForPlaceholder.length === 0 ? placeholderMax : copyAllForPlaceholder.sort((a, b) => a.price - b.price)[copyAllForPlaceholder.length - 1].price.toString());
     } else {
-      setPlaceholderMin(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[copyRenderCards.length - 1].price.toString());
-      setPlaceholderMax(copyRenderCards === undefined || copyRenderCards.length === 0 ? '0' : copyRenderCards.sort((a, b) => b.price - a.price)[0].price.toString());
+      setPlaceholderMin(copyRenderCards === undefined || copyRenderCards.length === 0 ? placeholderMin : copyRenderCards.sort((a, b) => b.price - a.price)[copyRenderCards.length - 1].price.toString());
+      setPlaceholderMax(copyRenderCards === undefined || copyRenderCards.length === 0 ? placeholderMax : copyRenderCards.sort((a, b) => b.price - a.price)[0].price.toString());
     }
 
-  }, [copyAllCards, renderedCards]);
-
+  }, [copyAllCards, placeholderMax, placeholderMin, renderedCards]);
 
   useEffect(() => {
     dispatchCards();
     dispatch(setCatalogPage(1));
   }, [renderedCards, isSort, sortDirection, sortType]);
 
-  const handlerInputCheckedChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    // const {name} = evt.target;
-    // const filterText = name as keyof Filter; // Попробовать оптимизмровать, чтобы было без текста
+  useEffect(() => {
+    globalFilteredCard();
+  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked]);
 
+
+  const globalFilteredCard = () => {
     let filteredCards = copyAllCards;
 
-    if (inputPhoto.current?.checked && inputVideo.current?.checked) {
+    if (inputPhotoChecked && inputVideoChecked) {
       filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото') || camera.category.toLowerCase().includes('видео'));
     } else {
-      if (inputPhoto.current?.checked) {
+      if (inputPhotoChecked) {
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('фото'));
       }
 
-      if (inputVideo.current?.checked) {
+      if (inputVideoChecked) {
+        setInputFilmChecked(false);
+        setInputSnapshotChecked(false);
         filteredCards = filteredCards.filter((camera) => camera.category.toLowerCase().includes('видео'));
       }
     }
 
-    if (inputDigital.current?.checked || inputFilm.current?.checked || inputSnapshot.current?.checked || inputCollection.current?.checked) {
+    if (inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked) {
       filteredCards = filteredCards.filter((camera) =>
-        (inputDigital.current?.checked ? camera.type.toLowerCase().includes('цифровая') : false) ||
-        (inputFilm.current?.checked ? camera.type.toLowerCase().includes('плёночная') : false) ||
-        (inputSnapshot.current?.checked ? camera.type.toLowerCase().includes('моментальная') : false) ||
-        (inputCollection.current?.checked ? camera.type.toLowerCase().includes('коллекционная') : false)
+        (inputDigitalChecked ? camera.type.toLowerCase().includes('цифровая') : false) ||
+        (inputFilmChecked ? camera.type.toLowerCase().includes('плёночная') : false) ||
+        (inputSnapshotChecked ? camera.type.toLowerCase().includes('моментальная') : false) ||
+        (inputCollectionChecked ? camera.type.toLowerCase().includes('коллекционная') : false)
       );
     }
 
-    if (inputZero.current?.checked || inputNonProfessional.current?.checked || inputProfessional.current?.checked) {
+    if (inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked) {
       filteredCards = filteredCards.filter((camera) =>
-        (inputZero.current?.checked ? camera.level.toLowerCase().includes('нулевой') : false) ||
-        (inputNonProfessional.current?.checked ? camera.level.toLowerCase().includes('любительский') : false) ||
-        (inputProfessional.current?.checked ? camera.level.toLowerCase().includes('профессиональный') : false)
+        (inputZeroChecked ? camera.level.toLowerCase().includes('нулевой') : false) ||
+        (inputNonProfessionalChecked ? camera.level.toLowerCase().includes('любительский') : false) ||
+        (inputProfessionalChecked ? camera.level.toLowerCase().includes('профессиональный') : false)
       );
     }
 
-    setRenderedCards(filteredCards);
-
-    if (!inputPhoto.current?.checked && !inputVideo.current?.checked && !inputDigital.current?.checked && !inputFilm.current?.checked && !inputSnapshot.current?.checked && !inputCollection.current?.checked && !inputZero.current?.checked && !inputNonProfessional.current?.checked && !inputProfessional.current?.checked) {
+    if (priceMinValue || priceMaxValue) {
+      setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+    } else if (priceMinValue !== 0 && priceMaxValue !== 0 && (priceMinValue === priceMaxValue)) {
+      setRenderedCards(filteredCards.filter((card) => card.price === priceMinValue || card.price === priceMaxValue));
+    } else if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
       setRenderedCards(copyAllCards);
+    } else {
+      setRenderedCards(filteredCards);
     }
 
   };
 
-  const handlerInputPriceChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    // console.log(evt.target.value, placeholderMin);
-    setPriceMinValue(+evt.target.value);
+  const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    setPriceMinValue(Number(evt.target.value));
   };
 
-  const handlerInputPriceBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.value < placeholderMin) {
-      evt.target.value = String(priceMinValue);
-    }
+  const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    const copyRenderCards = Array.from(copyAllCards);
+
+    const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
+    const priceMinFilter = (priceMinValue >= priceMaxValue || priceMinValue >= Number(placeholderMax)) ? priceMax : priceMinValue;
+    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
+
+    setRenderedCards(filtered);
+
+    const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
+
+    setPriceMinValue(minValue);
+    globalFilteredCard();
   };
+
+  const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    setPriceMaxValue(Number(evt.target.value));
+  };
+
+  const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    const copyRenderCards = Array.from(copyAllCards);
+    const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
+    const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMin : priceMaxValue;
+
+    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
+    setRenderedCards(filtered);
+    const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
+    setPriceMaxValue(maxValue);
+    globalFilteredCard();
+  };
+
+  const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setPriceMinValue(0);
+    setPriceMaxValue(0);
+    setRenderedCards(copyAllCards);
+    setInputPhotoChecked(false);
+    setInputVideoChecked(false);
+    setInputDigitalChecked(false);
+    setInputFilmChecked(false);
+    setInputSnapshotChecked(false);
+    setInputCollectionChecked(false);
+    setInputZeroChecked(false);
+    setInputNonProfessionalChecked(false);
+    setInputProfessionalChecked(false);
+  };
+
 
   return (
     <div className="catalog__aside">
@@ -143,12 +177,12 @@ function CatalogAside () {
             <div className="catalog-filter__price-range">
               <div className="custom-input">
                 <label>
-                  <input onChange={handlerInputPriceChange} onBlur={handlerInputPriceBlur} type="number" name="price" min={0} placeholder={placeholderMin}></input>
+                  <input onChange={handlerInputPriceMinChange} value={priceMinValue || ''} onBlur={handlerInputPriceMinBlur} type="number" name="price" min={0} placeholder={placeholderMin}></input>
                 </label>
               </div>
               <div className="custom-input">
                 <label>
-                  <input type="number" name="priceUp" min={0} placeholder={placeholderMax}></input>
+                  <input onChange={handlerInputPriceMaxChange} value={priceMaxValue || ''} onBlur={handlerInputPriceMaxBlur} type="number" name="priceUp" min={0} placeholder={placeholderMax}></input>
                 </label>
               </div>
             </div>
@@ -157,12 +191,12 @@ function CatalogAside () {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputPhoto} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
+                <input onChange={() => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputVideo} type="checkbox" name="videocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Видеокамера</span>
+                <input onChange={() => {setInputVideoChecked(!inputVideoChecked);}} checked={inputVideoChecked} type="checkbox" name="videocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Видеокамера</span>
               </label>
             </div>
           </fieldset>
@@ -170,22 +204,22 @@ function CatalogAside () {
             <legend className="title title--h5">Тип камеры</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputDigital} type="checkbox" name="digital"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
+                <input onChange={() => {setInputDigitalChecked(!inputDigitalChecked);}} checked={inputDigitalChecked} type="checkbox" name="digital"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputFilm} type="checkbox" name="film"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Плёночная</span>
+                <input onChange={() => {setInputFilmChecked(!inputFilmChecked);}} checked={inputFilmChecked} disabled={inputVideoChecked} type="checkbox" name="film"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Плёночная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputSnapshot} type="checkbox" name="snapshot"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Моментальная</span>
+                <input onChange={() => {setInputSnapshotChecked(!inputSnapshotChecked);}} checked={inputSnapshotChecked} disabled={inputVideoChecked} type="checkbox" name="snapshot"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Моментальная</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputCollection} type="checkbox" name="collection"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Коллекционная</span>
+                <input onChange={() => {setInputCollectionChecked(!inputCollectionChecked);}} checked={inputCollectionChecked} type="checkbox" name="collection"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Коллекционная</span>
               </label>
             </div>
           </fieldset>
@@ -193,21 +227,21 @@ function CatalogAside () {
             <legend className="title title--h5">Уровень</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputZero} type="checkbox" name="zero"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
+                <input onChange={() => {setInputZeroChecked(!inputZeroChecked);}} checked={inputZeroChecked} type="checkbox" name="zero"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputNonProfessional} type="checkbox" name="non-professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Любительский</span>
+                <input onChange={() => {setInputNonProfessionalChecked(!inputNonProfessionalChecked);}} checked={inputNonProfessionalChecked} type="checkbox" name="non-professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Любительский</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={handlerInputCheckedChange} ref={inputProfessional} type="checkbox" name="professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Профессиональный</span>
+                <input onChange={() => {setInputProfessionalChecked(!inputProfessionalChecked);}} checked={inputProfessionalChecked} type="checkbox" name="professional"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Профессиональный</span>
               </label>
             </div>
           </fieldset>
-          <button className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры
+          <button onClick={handlerButtonResetFilter} className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры
           </button>
         </form>
       </div>
