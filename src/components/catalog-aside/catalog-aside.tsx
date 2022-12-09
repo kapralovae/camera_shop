@@ -119,7 +119,6 @@ function CatalogAside () {
     setPriceMinValue(Number(evt.target.value));
   };
 
-
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     const copyRenderCards = Array.from(copyAllCards);
 
