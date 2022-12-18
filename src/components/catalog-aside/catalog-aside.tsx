@@ -24,7 +24,7 @@ function CatalogAside () {
   const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
   const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
-  const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
+  const [renderedCards, setRenderedCards] = useState<Cameras>([]);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
@@ -66,7 +66,7 @@ function CatalogAside () {
 
   useEffect(() => {
     globalFilteredCard();
-  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked]);
+  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked, priceMinValue, priceMaxValue]);
 
 
   const globalFilteredCard = () => {
@@ -104,7 +104,14 @@ function CatalogAside () {
     }
 
     if (priceMinValue || priceMaxValue) {
-      setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+      console.log(priceMinValue, priceMaxValue);
+      if (priceMinValue && priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+      } else if (!priceMinValue && priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price <= priceMaxValue));
+      } else if (priceMinValue && !priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue));
+      }
     } else if (priceMinValue !== 0 && priceMaxValue !== 0 && (priceMinValue === priceMaxValue)) {
       setRenderedCards(filteredCards.filter((card) => card.price === priceMinValue || card.price === priceMaxValue));
     } else if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
@@ -117,22 +124,55 @@ function CatalogAside () {
 
   const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setPriceMinValue(Number(evt.target.value));
+    // console.log(evt.target.value);
   };
 
 
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    // console.log(priceMinValue, priceMaxValue, Number(placeholderMax));
+    // const copyRenderCards = inputPhotoChecked ||
+    // inputVideoChecked ||
+    // inputDigitalChecked ||
+    // inputFilmChecked ||
+    // inputSnapshotChecked ||
+    // inputCollectionChecked ||
+    // inputZeroChecked ||
+    // inputNonProfessionalChecked ||
+    // inputProfessionalChecked ? renderedCards : Array.from(copyAllCards);
     const copyRenderCards = Array.from(copyAllCards);
+    console.log(priceMinValue);
 
+
+    // if (priceMinValue >= Number(placeholderMax) || priceMinValue >= priceMaxValue) {
+    //   setPriceMinValue(priceMaxValue ? priceMaxValue : Number(placeholderMax));
+    //   return;
+    // }
+
+    // const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
     const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
-    const priceMinFilter = (priceMinValue >= priceMaxValue || priceMinValue >= Number(placeholderMax)) ? priceMax : priceMinValue;
-    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
+    // const priceMin = priceMinValue && priceMinValue <= priceMax ? priceMinValue : priceMax;
+    // const priceMin = priceMinValue === 0 ||
+    let priceMin: number;
+    if (priceMinValue === 0) {
+      setPriceMinValue(0);
+    } else if (priceMinValue <= Number(placeholderMin)) {
+      priceMin = Number(placeholderMin);
+    } else if (priceMinValue > Number(placeholderMin) && priceMinValue <= priceMax) {
+      priceMin = priceMinValue;
+    } else if (priceMinValue >= priceMax) {
+      priceMin = priceMax;
+    }
 
-    setRenderedCards(filtered);
+    // const priceMinFilter = (priceMinValue <= priceMaxValue || priceMinValue <= Number(placeholderMax)) ? priceMin : priceMax;
+    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMin);
+    console.log(filtered);
+
+    // setRenderedCards(filtered);
 
     const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
-
+    console.log(minValue);
     setPriceMinValue(minValue);
-    globalFilteredCard();
+    // globalFilteredCard();
   };
 
   const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -140,15 +180,40 @@ function CatalogAside () {
   };
 
   const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
+    // const copyRenderCards = inputPhotoChecked ||
+    // inputVideoChecked ||
+    // inputDigitalChecked ||
+    // inputFilmChecked ||
+    // inputSnapshotChecked ||
+    // inputCollectionChecked ||
+    // inputZeroChecked ||
+    // inputNonProfessionalChecked ||
+    // inputProfessionalChecked ? renderedCards : Array.from(copyAllCards);
     const copyRenderCards = Array.from(copyAllCards);
-    const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
-    const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMin : priceMaxValue;
+    // const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
 
-    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
-    setRenderedCards(filtered);
+    const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
+
+    // const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMax : priceMaxValue;
+
+    let priceMax: number;
+    if (priceMaxValue === 0) {
+      setPriceMaxValue(0);
+    } else if (priceMaxValue >= Number(placeholderMax)) {
+      priceMax = Number(placeholderMax);
+    } else if (priceMaxValue < Number(placeholderMax) && priceMaxValue >= priceMin) {
+      priceMax = priceMaxValue;
+    } else if (priceMaxValue <= priceMin) {
+      priceMax = priceMin;
+    }
+    console.log(priceMin, copyRenderCards);
+    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMax);
+    console.log(filtered);
+    // setRenderedCards(filtered);
     const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
     setPriceMaxValue(maxValue);
-    globalFilteredCard();
+    console.log(maxValue);
+    // globalFilteredCard();
   };
 
   const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
