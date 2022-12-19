@@ -4,7 +4,7 @@ import { getIsSort, getSortDirection, getSortType } from '../../store/camera-dat
 import { Cameras } from '../../types/camera';
 import { setCamerasCatalog, setCamerasForRender, setCatalogPage, setSortCards } from '../../store/camera-data/camera-data';
 import { getCameras } from '../../store/camera-process/selecrots';
-import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 
 function CatalogAside () {
@@ -30,7 +30,6 @@ function CatalogAside () {
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
-  const [params, setParams] = useState<URLSearchParamsInit | undefined>({});
   const [, setSearchParams] = useSearchParams();
 
   const dispatchCards = () => {
@@ -67,26 +66,8 @@ function CatalogAside () {
     dispatch(setCatalogPage(1));
   }, [renderedCards, isSort, sortDirection, sortType]);
 
-  // const params = {
-  //   'inputPhotoChecked': String(inputPhotoChecked),
-  //   'inputVideoChecked': String(inputVideoChecked),
-  //   'inputDigitalChecked': String(inputDigitalChecked),
-  //   'inputFilmChecked': String(inputFilmChecked),
-  //   'inputSnapshotChecked': String(inputSnapshotChecked),
-  //   'inputCollectionChecked': String(inputCollectionChecked),
-  //   'inputZeroChecked': String(inputZeroChecked),
-  //   'inputNonProfessionalChecked': String(inputNonProfessionalChecked),
-  //   'inputProfessionalChecked': String(inputProfessionalChecked),
-  // };
-
-  // useEffect(() => {
-
-  // }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked, priceMinValue, priceMaxValue]);
-
   useEffect(() => {
-    console.log(priceMinValue, priceMaxValue);
     if (inputPhotoChecked || inputVideoChecked || inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked || inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked || priceMinValue || priceMaxValue) {
-      // || inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked || inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked
       setSearchParams({
         'priceMin': priceMinValue ? String(priceMinValue) : placeholderMin,
         'priceMax': priceMaxValue ? String(priceMaxValue) : placeholderMax,
@@ -103,11 +84,7 @@ function CatalogAside () {
     } else {
       setSearchParams(undefined);
     }
-    // setSearchParams(params, {replace: true});
-    // qwe({
-    //   'photo': String(inputPhotoChecked),
-    //   'video': String(inputVideoChecked),
-    // });
+
   }, [priceMinValue, priceMaxValue, inputCollectionChecked, inputDigitalChecked, inputFilmChecked, inputNonProfessionalChecked, inputPhotoChecked, inputProfessionalChecked, inputSnapshotChecked, inputVideoChecked, inputZeroChecked]);
 
   useEffect(() => {
