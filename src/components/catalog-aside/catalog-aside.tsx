@@ -25,12 +25,16 @@ function CatalogAside () {
   const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
   const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
-  const [renderedCards, setRenderedCards] = useState<Cameras>([]);
+  const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
   const [, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setRenderedCards(copyAllCards);
+  }, [allCards]);
 
   const dispatchCards = () => {
     if (isSort) {
