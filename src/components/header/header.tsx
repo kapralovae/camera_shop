@@ -110,7 +110,7 @@ function Header () {
               <input ref={inputRef} onChange={handlerInputChangeText} onFocus={handlerOnFocusInput} className="form-search__input" type="text" autoComplete="off" placeholder="Поиск по сайту"></input>
             </label>
             <ul className="form-search__select-list scroller" style={style}>
-              {filteredCameras(camerasAll, value).map((camera, tabIndex) => <li key={camera.vendorCode} className="form-search__select-item" tabIndex={tabIndex}><Link to={`/catalog/camera/${camera.id}`}>{camera.name}</Link></li>)}
+              {filteredCameras(camerasAll, value).map((camera) => <li key={camera.vendorCode} className="form-search__select-item"><Link to={`/catalog/camera/${camera.id}`}>{camera.name}</Link></li>)}
             </ul>
           </form>
           <button onClick={handlerClickResetSearchButton} style={styleButton} className="form-search__reset" type="reset">
