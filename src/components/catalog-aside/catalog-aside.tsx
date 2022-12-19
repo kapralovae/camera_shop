@@ -4,6 +4,7 @@ import { getIsSort, getSortDirection, getSortType } from '../../store/camera-dat
 import { Cameras } from '../../types/camera';
 import { setCamerasCatalog, setCamerasForRender, setCatalogPage, setSortCards } from '../../store/camera-data/camera-data';
 import { getCameras } from '../../store/camera-process/selecrots';
+import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
 
 
 function CatalogAside () {
@@ -29,6 +30,8 @@ function CatalogAside () {
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
+  const [params, setParams] = useState<URLSearchParamsInit | undefined>({});
+  const [, setSearchParams] = useSearchParams();
 
   const dispatchCards = () => {
     if (isSort) {
@@ -63,6 +66,49 @@ function CatalogAside () {
     dispatchCards();
     dispatch(setCatalogPage(1));
   }, [renderedCards, isSort, sortDirection, sortType]);
+
+  // const params = {
+  //   'inputPhotoChecked': String(inputPhotoChecked),
+  //   'inputVideoChecked': String(inputVideoChecked),
+  //   'inputDigitalChecked': String(inputDigitalChecked),
+  //   'inputFilmChecked': String(inputFilmChecked),
+  //   'inputSnapshotChecked': String(inputSnapshotChecked),
+  //   'inputCollectionChecked': String(inputCollectionChecked),
+  //   'inputZeroChecked': String(inputZeroChecked),
+  //   'inputNonProfessionalChecked': String(inputNonProfessionalChecked),
+  //   'inputProfessionalChecked': String(inputProfessionalChecked),
+  // };
+
+  // useEffect(() => {
+
+  // }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked, priceMinValue, priceMaxValue]);
+
+  useEffect(() => {
+    console.log(priceMinValue, priceMaxValue);
+    if (inputPhotoChecked || inputVideoChecked || inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked || inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked || priceMinValue || priceMaxValue) {
+      // || inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked || inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked
+      setSearchParams({
+        'priceMin': priceMinValue ? String(priceMinValue) : placeholderMin,
+        'priceMax': priceMaxValue ? String(priceMaxValue) : placeholderMax,
+        'photo': String(inputPhotoChecked),
+        'video': String(inputVideoChecked),
+        'digital': String(inputDigitalChecked),
+        'film': String(inputFilmChecked),
+        'snapshot':String(inputSnapshotChecked),
+        'collection': String(inputCollectionChecked),
+        'zero': String(inputZeroChecked),
+        'nonProfessional': String(inputNonProfessionalChecked),
+        'professional': String(inputProfessionalChecked),
+      });
+    } else {
+      setSearchParams(undefined);
+    }
+    // setSearchParams(params, {replace: true});
+    // qwe({
+    //   'photo': String(inputPhotoChecked),
+    //   'video': String(inputVideoChecked),
+    // });
+  }, [priceMinValue, priceMaxValue, inputCollectionChecked, inputDigitalChecked, inputFilmChecked, inputNonProfessionalChecked, inputPhotoChecked, inputProfessionalChecked, inputSnapshotChecked, inputVideoChecked, inputZeroChecked]);
 
   useEffect(() => {
     globalFilteredCard();
@@ -104,7 +150,6 @@ function CatalogAside () {
     }
 
     if (priceMinValue || priceMaxValue) {
-      console.log(priceMinValue, priceMaxValue);
       if (priceMinValue && priceMaxValue) {
         setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
       } else if (!priceMinValue && priceMaxValue) {
@@ -124,34 +169,12 @@ function CatalogAside () {
 
   const handlerInputPriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setPriceMinValue(Number(evt.target.value));
-    // console.log(evt.target.value);
   };
 
-
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    // console.log(priceMinValue, priceMaxValue, Number(placeholderMax));
-    // const copyRenderCards = inputPhotoChecked ||
-    // inputVideoChecked ||
-    // inputDigitalChecked ||
-    // inputFilmChecked ||
-    // inputSnapshotChecked ||
-    // inputCollectionChecked ||
-    // inputZeroChecked ||
-    // inputNonProfessionalChecked ||
-    // inputProfessionalChecked ? renderedCards : Array.from(copyAllCards);
     const copyRenderCards = Array.from(copyAllCards);
-    console.log(priceMinValue);
-
-
-    // if (priceMinValue >= Number(placeholderMax) || priceMinValue >= priceMaxValue) {
-    //   setPriceMinValue(priceMaxValue ? priceMaxValue : Number(placeholderMax));
-    //   return;
-    // }
-
-    // const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
     const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
-    // const priceMin = priceMinValue && priceMinValue <= priceMax ? priceMinValue : priceMax;
-    // const priceMin = priceMinValue === 0 ||
+
     let priceMin: number;
     if (priceMinValue === 0) {
       setPriceMinValue(0);
@@ -163,16 +186,9 @@ function CatalogAside () {
       priceMin = priceMax;
     }
 
-    // const priceMinFilter = (priceMinValue <= priceMaxValue || priceMinValue <= Number(placeholderMax)) ? priceMin : priceMax;
     const filtered = copyRenderCards.filter((camera) => camera.price >= priceMin);
-    console.log(filtered);
-
-    // setRenderedCards(filtered);
-
     const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
-    console.log(minValue);
     setPriceMinValue(minValue);
-    // globalFilteredCard();
   };
 
   const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -180,21 +196,8 @@ function CatalogAside () {
   };
 
   const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
-    // const copyRenderCards = inputPhotoChecked ||
-    // inputVideoChecked ||
-    // inputDigitalChecked ||
-    // inputFilmChecked ||
-    // inputSnapshotChecked ||
-    // inputCollectionChecked ||
-    // inputZeroChecked ||
-    // inputNonProfessionalChecked ||
-    // inputProfessionalChecked ? renderedCards : Array.from(copyAllCards);
     const copyRenderCards = Array.from(copyAllCards);
-    // const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
-
     const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
-
-    // const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMax : priceMaxValue;
 
     let priceMax: number;
     if (priceMaxValue === 0) {
@@ -206,14 +209,10 @@ function CatalogAside () {
     } else if (priceMaxValue <= priceMin) {
       priceMax = priceMin;
     }
-    console.log(priceMin, copyRenderCards);
+
     const filtered = copyRenderCards.filter((camera) => camera.price <= priceMax);
-    console.log(filtered);
-    // setRenderedCards(filtered);
     const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
     setPriceMaxValue(maxValue);
-    console.log(maxValue);
-    // globalFilteredCard();
   };
 
   const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -230,6 +229,7 @@ function CatalogAside () {
     setInputZeroChecked(false);
     setInputNonProfessionalChecked(false);
     setInputProfessionalChecked(false);
+    setSearchParams({});
   };
 
 
@@ -257,7 +257,7 @@ function CatalogAside () {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={() => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
+                <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
