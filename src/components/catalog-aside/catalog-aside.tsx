@@ -4,6 +4,7 @@ import { getIsSort, getSortDirection, getSortType } from '../../store/camera-dat
 import { Cameras } from '../../types/camera';
 import { setCamerasCatalog, setCamerasForRender, setCatalogPage, setSortCards } from '../../store/camera-data/camera-data';
 import { getCameras } from '../../store/camera-process/selecrots';
+import { useSearchParams } from 'react-router-dom';
 
 
 function CatalogAside () {
@@ -24,11 +25,12 @@ function CatalogAside () {
   const [inputNonProfessionalChecked, setInputNonProfessionalChecked] = useState(false);
   const [inputProfessionalChecked, setInputProfessionalChecked] = useState(false);
 
-  const [renderedCards, setRenderedCards] = useState<Cameras>(copyAllCards);
+  const [renderedCards, setRenderedCards] = useState<Cameras>([]);
   const [placeholderMax, setPlaceholderMax] = useState('0');
   const [placeholderMin, setPlaceholderMin] = useState('0');
   const [priceMinValue, setPriceMinValue] = useState(0);
   const [priceMaxValue, setPriceMaxValue] = useState(0);
+  const [, setSearchParams] = useSearchParams();
 
   const dispatchCards = () => {
     if (isSort) {
@@ -65,8 +67,29 @@ function CatalogAside () {
   }, [renderedCards, isSort, sortDirection, sortType]);
 
   useEffect(() => {
+    if (inputPhotoChecked || inputVideoChecked || inputDigitalChecked || inputFilmChecked || inputSnapshotChecked || inputCollectionChecked || inputZeroChecked || inputNonProfessionalChecked || inputProfessionalChecked || priceMinValue || priceMaxValue) {
+      setSearchParams({
+        'priceMin': priceMinValue ? String(priceMinValue) : placeholderMin,
+        'priceMax': priceMaxValue ? String(priceMaxValue) : placeholderMax,
+        'photo': String(inputPhotoChecked),
+        'video': String(inputVideoChecked),
+        'digital': String(inputDigitalChecked),
+        'film': String(inputFilmChecked),
+        'snapshot':String(inputSnapshotChecked),
+        'collection': String(inputCollectionChecked),
+        'zero': String(inputZeroChecked),
+        'nonProfessional': String(inputNonProfessionalChecked),
+        'professional': String(inputProfessionalChecked),
+      });
+    } else {
+      setSearchParams(undefined);
+    }
+
+  }, [priceMinValue, priceMaxValue, inputCollectionChecked, inputDigitalChecked, inputFilmChecked, inputNonProfessionalChecked, inputPhotoChecked, inputProfessionalChecked, inputSnapshotChecked, inputVideoChecked, inputZeroChecked]);
+
+  useEffect(() => {
     globalFilteredCard();
-  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked]);
+  }, [inputPhotoChecked, inputVideoChecked, inputDigitalChecked, inputFilmChecked, inputSnapshotChecked, inputCollectionChecked, inputZeroChecked, inputNonProfessionalChecked, inputProfessionalChecked, priceMinValue, priceMaxValue]);
 
 
   const globalFilteredCard = () => {
@@ -104,7 +127,13 @@ function CatalogAside () {
     }
 
     if (priceMinValue || priceMaxValue) {
-      setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+      if (priceMinValue && priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue && card.price <= priceMaxValue));
+      } else if (!priceMinValue && priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price <= priceMaxValue));
+      } else if (priceMinValue && !priceMaxValue) {
+        setRenderedCards(filteredCards.filter((card) => card.price >= priceMinValue));
+      }
     } else if (priceMinValue !== 0 && priceMaxValue !== 0 && (priceMinValue === priceMaxValue)) {
       setRenderedCards(filteredCards.filter((card) => card.price === priceMinValue || card.price === priceMaxValue));
     } else if (!inputPhotoChecked && !inputVideoChecked && !inputDigitalChecked && !inputFilmChecked && !inputSnapshotChecked && !inputCollectionChecked && !inputZeroChecked && !inputNonProfessionalChecked && !inputProfessionalChecked && priceMinValue === 0 && priceMaxValue === 0) {
@@ -121,17 +150,22 @@ function CatalogAside () {
 
   const handlerInputPriceMinBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     const copyRenderCards = Array.from(copyAllCards);
-
     const priceMax = priceMaxValue ? priceMaxValue : Number(placeholderMax);
-    const priceMinFilter = (priceMinValue >= priceMaxValue || priceMinValue >= Number(placeholderMax)) ? priceMax : priceMinValue;
-    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMinFilter);
 
-    setRenderedCards(filtered);
+    let priceMin: number;
+    if (priceMinValue === 0) {
+      setPriceMinValue(0);
+    } else if (priceMinValue <= Number(placeholderMin)) {
+      priceMin = Number(placeholderMin);
+    } else if (priceMinValue > Number(placeholderMin) && priceMinValue <= priceMax) {
+      priceMin = priceMinValue;
+    } else if (priceMinValue >= priceMax) {
+      priceMin = priceMax;
+    }
 
+    const filtered = copyRenderCards.filter((camera) => camera.price >= priceMin);
     const minValue = (filtered.sort((a, b) => a.price - b.price)[0].price);
-
     setPriceMinValue(minValue);
-    globalFilteredCard();
   };
 
   const handlerInputPriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -141,13 +175,21 @@ function CatalogAside () {
   const handlerInputPriceMaxBlur = (evt: ChangeEvent<HTMLInputElement>) => {
     const copyRenderCards = Array.from(copyAllCards);
     const priceMin = priceMinValue ? priceMinValue : Number(placeholderMin);
-    const priceMaxFilter = (priceMaxValue <= priceMinValue || priceMaxValue <= Number(placeholderMin)) ? priceMin : priceMaxValue;
 
-    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMaxFilter);
-    setRenderedCards(filtered);
+    let priceMax: number;
+    if (priceMaxValue === 0) {
+      setPriceMaxValue(0);
+    } else if (priceMaxValue >= Number(placeholderMax)) {
+      priceMax = Number(placeholderMax);
+    } else if (priceMaxValue < Number(placeholderMax) && priceMaxValue >= priceMin) {
+      priceMax = priceMaxValue;
+    } else if (priceMaxValue <= priceMin) {
+      priceMax = priceMin;
+    }
+
+    const filtered = copyRenderCards.filter((camera) => camera.price <= priceMax);
     const maxValue = (filtered.sort((a, b) => a.price - b.price)[filtered.length - 1].price);
     setPriceMaxValue(maxValue);
-    globalFilteredCard();
   };
 
   const handlerButtonResetFilter = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -164,6 +206,7 @@ function CatalogAside () {
     setInputZeroChecked(false);
     setInputNonProfessionalChecked(false);
     setInputProfessionalChecked(false);
+    setSearchParams({});
   };
 
 
@@ -191,7 +234,7 @@ function CatalogAside () {
             <legend className="title title--h5">Категория</legend>
             <div className="custom-checkbox catalog-filter__item">
               <label>
-                <input onChange={() => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
+                <input onChange={(evt: ChangeEvent<HTMLInputElement>) => {setInputPhotoChecked(!inputPhotoChecked);}} checked={inputPhotoChecked} type="checkbox" name="photocamera"></input><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Фотокамера</span>
               </label>
             </div>
             <div className="custom-checkbox catalog-filter__item">
