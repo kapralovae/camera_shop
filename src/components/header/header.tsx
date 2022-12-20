@@ -119,7 +119,7 @@ function Header () {
             </svg><span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
-        <Link className="header__basket-link" to="/">
+        <Link className="header__basket-link" to="/basket">
           <svg width="16" height="16" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg>

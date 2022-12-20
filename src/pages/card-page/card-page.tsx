@@ -3,14 +3,14 @@ import Breadcrump from '../../components/breadcrump/breadcrump';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { CountStarsSvg, COUNT_SHOW_COMMENTS } from '../../const';
 import { getCamera, getComments, getSimilarCameras } from '../../store/camera-process/selecrots';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { fetchCameraAction, fetchCommentsCameraAction, fetchSimilarCamerasAction } from '../../store/api-actions';
 import Card from '../../components/card/card';
 import CommentCard from '../../components/comment/comments';
 import Footer from '../../components/footer/footer';
 import PopupAddInBasket from '../../components/popup-add-in-basket/popup-add-in-basket';
-import { getCardsInBasket, getIsActivePopupReview, getIsAddReview, getIsBasketSuccess, getStatusPopup } from '../../store/camera-data/selectors';
+import { getIsActivePopupReview, getIsAddReview, getIsBasketSuccess, getStatusPopup } from '../../store/camera-data/selectors';
 import PopupAddSuccess from '../../components/popup-add-success/popup-add-success';
 import { changeCardPopup, changeStatusPopup, setIsActivePopupReview } from '../../store/camera-data/camera-data';
 import PopupReviewSuccess from '../../components/popup-review-success/popup-review-success';
@@ -38,7 +38,7 @@ function CardPage () {
   const card = useAppSelector(getCamera);
   const similarCameras = useAppSelector(getSimilarCameras).slice(0, 4);
   const comments = useAppSelector(getComments);
-  const cardsInBasket = useAppSelector(getCardsInBasket);
+  // const cardsInBasket = useAppSelector(getCardsInBasket);
 
   const handleButtonBackSimilarClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -76,12 +76,12 @@ function CardPage () {
     }
   };
 
-  const isInBasket = () => {
-    if (cardsInBasket.length > 0 && cardsInBasket.find((item) => item.id === card.id) !== undefined) {
-      return true;
-    }
-    return false;
-  };
+  // const isInBasket = () => {
+  //   if (cardsInBasket.length > 0 && cardsInBasket.find((item) => item.id === card.id) !== undefined) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   const handlerButtonAddReviewClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -128,7 +128,13 @@ function CardPage () {
                   </div>
                   <p className="product__price"><span className="visually-hidden">Цена:</span>{price} ₽</p>
 
-                  {isInBasket() ?
+                  <button onClick={handleButtonChangeStatusCardClick} className="btn btn--purple" type="button">
+                    <svg width="24" height="16" aria-hidden="true">
+                      <use xlinkHref="#icon-add-basket"></use>
+                    </svg>Добавить в корзину
+                  </button>
+
+                  {/* {isInBasket() ?
                     <Link className="btn btn--purple-border product-card__btn product-card__btn--in-cart" to="/basket">
                       <svg width="16" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-basket"></use>
@@ -139,7 +145,7 @@ function CardPage () {
                       <svg width="24" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-add-basket"></use>
                       </svg>Добавить в корзину
-                    </button>}
+                    </button>} */}
 
 
                   <div className="tabs product__tabs">

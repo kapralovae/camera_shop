@@ -3,17 +3,18 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { changeIsBasketSuccess, changeStatusPopup } from '../../store/camera-data/camera-data';
-import { getStatusPopup } from '../../store/camera-data/selectors';
+import { getIsBasketSuccess } from '../../store/camera-data/selectors';
 
 function PopupAddSuccess () {
   const dispatch = useAppDisptach();
   const navigate = useNavigate();
-  const isActivePopupBasket = useAppSelector(getStatusPopup);
+  const isActivePopupBasket = useAppSelector(getIsBasketSuccess);
 
   const handleButtonNavigateBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(false));
+    document.body.style.overflow = '';
     navigate('/basket');
   };
 
@@ -39,6 +40,7 @@ function PopupAddSuccess () {
   const handleLinkChangeStatusPopupClick = () => {
     dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(false));
+    document.body.style.overflow = '';
   };
   const handleOverlayClosePopupClick = (evt: React.MouseEvent<HTMLDivElement>) => {
     evt.preventDefault();
@@ -47,8 +49,8 @@ function PopupAddSuccess () {
     document.body.style.overflow = '';
   };
   return(
-    <FocusTrap>
-      <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : ''}>
+    <FocusTrap active={isActivePopupBasket}>
+      <div className={isActivePopupBasket ? 'modal is-active modal--narrow' : 'modal'}>
         <div className="modal__wrapper">
           <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
           <div className="modal__content">

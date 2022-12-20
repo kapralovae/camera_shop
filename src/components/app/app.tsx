@@ -28,6 +28,11 @@ function App(): JSX.Element {
         />
 
         <Route
+          path='/basket'
+          element={<CardPage />}
+        />
+
+        <Route
           path='*'
           element={<NotFound />}
         />
