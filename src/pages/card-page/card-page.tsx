@@ -38,7 +38,6 @@ function CardPage () {
   const card = useAppSelector(getCamera);
   const similarCameras = useAppSelector(getSimilarCameras).slice(0, 4);
   const comments = useAppSelector(getComments);
-  // const cardsInBasket = useAppSelector(getCardsInBasket);
 
   const handleButtonBackSimilarClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -75,13 +74,6 @@ function CardPage () {
         break;
     }
   };
-
-  // const isInBasket = () => {
-  //   if (cardsInBasket.length > 0 && cardsInBasket.find((item) => item.id === card.id) !== undefined) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
 
   const handlerButtonAddReviewClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();

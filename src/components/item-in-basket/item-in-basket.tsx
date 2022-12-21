@@ -6,13 +6,10 @@ import { Camera } from '../../types/camera';
 type CartType = {
   item: Camera;
   count: number;
-  // isActive: boolean;
 };
 
 function ItemInBasket({item, count}: CartType) {
   const dispatch = useAppDisptach();
-  // const inputQuantity = useRef(null);
-  // const [quantity, setQuantity] = useState(1);
 
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, vendorCode, type, level, id} = item;
 

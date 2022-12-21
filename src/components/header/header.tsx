@@ -8,11 +8,6 @@ import { Cameras } from '../../types/camera';
 function Header () {
   const camerasAll = useAppSelector(getCameras);
   const countCamerasInBasket = useAppSelector(getCountCamerasInBasket);
-  // let countCamerasInBasket = 0;
-
-  // for (const key in camerasInBasket) {
-  //   camerasRender += camerasInBasket[key].count;
-  // }
 
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

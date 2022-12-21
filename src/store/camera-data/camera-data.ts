@@ -68,13 +68,6 @@ export const cameraData = createSlice({
     setCamerasCatalog: (state, action) => {
       state.camerasCatalog = action.payload as Cameras;
     },
-    // addCardInBasket: (state, action) => {
-    //   const camera = action.payload as Camera;
-    //   state.cardsInBasket.push(camera) as unknown as Cameras;
-    // },
-    // deleteCardInBasket: (state, action) => {
-    //   state.cardsInBasket = state.cardsInBasket.filter((card) => card.id !== action.payload as number);
-    // },
     changeIsBasketSuccess: (state, action) => {
       state.isBasketSuccess = action.payload as boolean;
     },
@@ -135,8 +128,12 @@ export const cameraData = createSlice({
       state.countCamerasInBasket += 1;
     },
     setCountCamerasInBasket: (state, action) => {
-      const {id, count, doing} = action.payload as Count;
-      state.camerasInBasket[`${id}`].count = count;
+      const {id, countItem, doing} = action.payload as Count;
+      state.camerasInBasket[`${id}`] = {
+        ...state.camerasInBasket[`${id}`],
+        count: countItem,
+      };
+
       switch (doing) {
         case 'plus':
           state.countCamerasInBasket += 1;

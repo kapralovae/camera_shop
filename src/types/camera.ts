@@ -49,7 +49,7 @@ export type CameraData = {
 
 export type Count = {
   id: number;
-  count: number;
+  countItem: number;
   doing: string;
 };
 
