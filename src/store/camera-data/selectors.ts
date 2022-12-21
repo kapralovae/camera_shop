@@ -1,4 +1,4 @@
-import { Camera, Cameras, State } from '../../types/camera';
+import { Basket, Camera, Cameras, State } from '../../types/camera';
 
 export const getCatalogPage = (state: State): number => state['dataReducer'].catalogPage;
 
@@ -11,8 +11,6 @@ export const getStartSlice = (state: State): number => state['dataReducer'].star
 export const getCountSlice = (state: State): number => state['dataReducer'].countSlice;
 
 export const getCamerasCatalog = (state: State): Camera[] => state['dataReducer'].camerasCatalog;
-
-export const getCardsInBasket = (state: State): Camera[] => state['dataReducer'].cardsInBasket;
 
 export const getIsBasketSuccess = (state: State): boolean => state['dataReducer'].isBasketSuccess;
 
@@ -31,3 +29,9 @@ export const getIsSort = (state: State): boolean => state['dataReducer'].isSort;
 export const getSortCards = (state: State): Cameras => state['dataReducer'].sortCards;
 
 export const getCamerasForRender = (state: State): Cameras => state['dataReducer'].camerasForRender;
+
+export const getCountCamerasInBasket = (state: State): number => state['dataReducer'].countCamerasInBasket;
+
+export const getCamerasInBasket = (state: State): Basket => state['dataReducer'].camerasInBasket;
+
+export const getIsActivePopupDeleteCamera = (state: State): boolean => state['dataReducer'].isActivePopupDeleteCamera;

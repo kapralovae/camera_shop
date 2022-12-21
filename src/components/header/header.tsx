@@ -1,11 +1,13 @@
 import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import { getCountCamerasInBasket } from '../../store/camera-data/selectors';
 import { getCameras } from '../../store/camera-process/selecrots';
 import { Cameras } from '../../types/camera';
 
 function Header () {
   const camerasAll = useAppSelector(getCameras);
+  const countCamerasInBasket = useAppSelector(getCountCamerasInBasket);
 
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -119,10 +121,11 @@ function Header () {
             </svg><span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
-        <Link className="header__basket-link" to="/">
+        <Link className="header__basket-link" to="/basket">
           <svg width="16" height="16" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg>
+          {countCamerasInBasket ? <span className="header__basket-count">{countCamerasInBasket}</span> : null}
         </Link>
       </div>
     </header>

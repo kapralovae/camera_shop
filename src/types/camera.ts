@@ -19,6 +19,13 @@ export type Camera = {
 
 export type Cameras = Camera[];
 
+export type CameraInBasket = {
+    camera: Camera;
+    count: number;
+};
+
+export type Basket = {[key:string] : CameraInBasket}
+
 export type CameraData = {
   catalogPage: number;
   isActivePopupBasket: boolean;
@@ -26,7 +33,6 @@ export type CameraData = {
   startSlice: number;
   countSlice: number;
   camerasCatalog: Cameras;
-  cardsInBasket: Cameras;
   isBasketSuccess: boolean;
   sliceStart: number;
   isAddReview: boolean;
@@ -36,6 +42,15 @@ export type CameraData = {
   isSort: boolean;
   sortCards: Cameras;
   camerasForRender: Cameras;
+  countCamerasInBasket: number;
+  camerasInBasket: Basket;
+  isActivePopupDeleteCamera: boolean;
+};
+
+export type Count = {
+  id: number;
+  countItem: number;
+  doing: string;
 };
 
 export type CamerasProsecc = {

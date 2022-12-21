@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
+import BasketPage from '../../pages/basket-page/basket-page';
 import CardPage from '../../pages/card-page/card-page';
 import CatalogPage from '../../pages/catalog-page/catalog-page';
 import { getIsDataLoad } from '../../store/camera-process/selecrots';
@@ -25,6 +26,11 @@ function App(): JSX.Element {
         <Route
           path='/catalog/camera/:id'
           element={<CardPage />}
+        />
+
+        <Route
+          path='/basket'
+          element={<BasketPage />}
         />
 
         <Route

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { getCardPopup, getStatusPopup } from '../../store/camera-data/selectors';
-import { addCardInBasket, changeIsBasketSuccess, changeStatusPopup } from '../../store/camera-data/camera-data';
+import { getCardPopup, getCountCamerasInBasket, getStatusPopup } from '../../store/camera-data/selectors';
+import { changeIsBasketSuccess, changeStatusPopup, setCamerasInBasket, setCountCamerasInBasket} from '../../store/camera-data/camera-data';
 import FocusTrap from 'focus-trap-react';
 
 function PopupAddInBasket () {
@@ -9,6 +9,7 @@ function PopupAddInBasket () {
 
   const isActivePopupBasket = useAppSelector(getStatusPopup);
   const cardPopup = useAppSelector(getCardPopup);
+  const countCamerasInBasket = useAppSelector(getCountCamerasInBasket);
 
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, category, vendorCode, level, type} = cardPopup;
   let device = '';
@@ -37,9 +38,10 @@ function PopupAddInBasket () {
   };
   const handleButtonAddInBasketClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    dispatch(addCardInBasket(cardPopup));
     dispatch(changeStatusPopup(false));
     dispatch(changeIsBasketSuccess(true));
+    dispatch(setCamerasInBasket(cardPopup));
+    dispatch(setCountCamerasInBasket(countCamerasInBasket + 1));
   };
 
 
