@@ -1,7 +1,7 @@
 import faker from 'faker';
 import { Camera, CameraData } from '../../types/camera';
 import { createFakeCamera } from '../mock-store-data';
-import { addCardInBasket, cameraData, changeCardPopup, changeIsBasketSuccess, changeStatusPopup, deleteCardInBasket, increaseCatalogPage, setCamerasCatalog, setCountSlice, setIsActivePopupReview, setIsAddReview, setStartSlice } from './camera-data';
+import { cameraData, changeCardPopup, changeIsBasketSuccess, changeStatusPopup, deleteCameraInBasket, increaseCatalogPage, setCamerasCatalog, setCamerasInBasket, setCountSlice, setIsActivePopupReview, setIsAddReview, setStartSlice } from './camera-data';
 
 describe('Reducer: cameraData', () => {
 
@@ -27,7 +27,6 @@ describe('Reducer: cameraData', () => {
     startSlice: 0,
     countSlice: 9,
     camerasCatalog: [],
-    cardsInBasket: [],
     isBasketSuccess: false,
     sliceStart: 0,
     isAddReview: false,
@@ -37,10 +36,13 @@ describe('Reducer: cameraData', () => {
     isSort: false,
     sortCards: [],
     camerasForRender: [],
+    countCamerasInBasket: 0,
+    camerasInBasket: {},
+    isActivePopupDeleteCamera: false,
   };
 
   beforeAll(() => {
-    state.cardsInBasket = [];
+    state.camerasInBasket = {};
   });
 
   const fakeNumber = faker.random.alphaNumeric();
@@ -116,7 +118,7 @@ describe('Reducer: cameraData', () => {
   it('addCardInBasket', () => {
     const fakeCamer: Camera = createFakeCamera();
 
-    expect(cameraData.reducer(state, addCardInBasket(fakeCamer)))
+    expect(cameraData.reducer(state, setCamerasInBasket(fakeCamer)))
       .toEqual({
         ...state,
         cardsInBasket: [fakeCamer],
@@ -125,7 +127,7 @@ describe('Reducer: cameraData', () => {
 
   it('deleteCardInBasket', () => {
 
-    expect(cameraData.reducer(state, deleteCardInBasket(fakeCamera)))
+    expect(cameraData.reducer(state, deleteCameraInBasket(fakeCamera)))
       .toEqual({
         ...state,
         cardsInBasket: [],

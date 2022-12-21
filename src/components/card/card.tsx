@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { CountStarsSvg } from '../../const';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { changeCardPopup, changeStatusPopup } from '../../store/camera-data/camera-data';
-import { getCardsInBasket } from '../../store/camera-data/selectors';
+import { getCamerasInBasket } from '../../store/camera-data/selectors';
 import { Camera } from '../../types/camera';
 
 type CartType = {
@@ -15,7 +15,7 @@ function Card ({item, isActive = true}: CartType) {
   const dispatch = useAppDisptach();
   const {id, name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, rating, reviewCount, category} = item;
 
-  const cardsInBasket = useAppSelector(getCardsInBasket);
+  const camerasInBasket = useAppSelector(getCamerasInBasket);
 
   const handleButtonChangeStatusCardClick = (evt : React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -25,7 +25,7 @@ function Card ({item, isActive = true}: CartType) {
   };
 
   const isInBasket = () => {
-    if (cardsInBasket.length > 0 && cardsInBasket.find((card) => card.id === item.id) !== undefined) {
+    if (camerasInBasket[id] !== undefined) {
       return true;
     }
     return false;

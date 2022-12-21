@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera, CameraData, Cameras } from '../../types/camera';
+import { Camera, CameraData, Cameras, Count } from '../../types/camera';
 
 const initialState: CameraData = {
   catalogPage: 1,
@@ -23,7 +23,6 @@ const initialState: CameraData = {
   startSlice: 0,
   countSlice: 9,
   camerasCatalog: [],
-  cardsInBasket: [],
   isBasketSuccess: false,
   sliceStart: 0,
   isAddReview: false,
@@ -33,6 +32,9 @@ const initialState: CameraData = {
   isSort: false,
   sortCards: [],
   camerasForRender: [],
+  countCamerasInBasket: 0,
+  camerasInBasket: {},
+  isActivePopupDeleteCamera: false,
 };
 
 export const cameraData = createSlice({
@@ -66,13 +68,13 @@ export const cameraData = createSlice({
     setCamerasCatalog: (state, action) => {
       state.camerasCatalog = action.payload as Cameras;
     },
-    addCardInBasket: (state, action) => {
-      const camera = action.payload as Camera;
-      state.cardsInBasket.push(camera) as unknown as Cameras;
-    },
-    deleteCardInBasket: (state, action) => {
-      state.cardsInBasket = state.cardsInBasket.filter((card) => card.id !== action.payload as number);
-    },
+    // addCardInBasket: (state, action) => {
+    //   const camera = action.payload as Camera;
+    //   state.cardsInBasket.push(camera) as unknown as Cameras;
+    // },
+    // deleteCardInBasket: (state, action) => {
+    //   state.cardsInBasket = state.cardsInBasket.filter((card) => card.id !== action.payload as number);
+    // },
     changeIsBasketSuccess: (state, action) => {
       state.isBasketSuccess = action.payload as boolean;
     },
@@ -120,7 +122,41 @@ export const cameraData = createSlice({
           break;
       }
     },
+    setCamerasInBasket: (state, action) => {
+      const {id} = action.payload as Camera;
+      if (state.camerasInBasket[id] === undefined) {
+        state.camerasInBasket[`${id}`] = {
+          camera: action.payload as Camera,
+          count: 1,
+        };
+      } else {
+        state.camerasInBasket[`${id}`].count += 1;
+      }
+      state.countCamerasInBasket += 1;
+    },
+    setCountCamerasInBasket: (state, action) => {
+      const {id, count, doing} = action.payload as Count;
+      state.camerasInBasket[`${id}`].count = count;
+      switch (doing) {
+        case 'plus':
+          state.countCamerasInBasket += 1;
+          break;
+        case 'minus':
+          state.countCamerasInBasket -= 1;
+          break;
+        case '':
+          break;
+      }
+    },
+    setIsActivePopupDeleteCamera: (state, action) => {
+      state.isActivePopupDeleteCamera = action.payload as boolean;
+    },
+    deleteCameraInBasket: (state, action) => {
+      const {id} = action.payload as Camera;
+      state.countCamerasInBasket -= state.camerasInBasket[`${id}`].count;
+      delete state.camerasInBasket[`${id}`];
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, addCardInBasket, deleteCardInBasket, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket} = cameraData.actions;
