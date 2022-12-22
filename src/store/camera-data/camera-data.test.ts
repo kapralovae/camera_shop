@@ -40,6 +40,8 @@ describe('Reducer: cameraData', () => {
     camerasInBasket: {},
     isActivePopupDeleteCamera: false,
     summaryPrice: 0,
+    isDiscount: false,
+    discount: 1,
   };
 
   beforeAll(() => {

@@ -15,7 +15,6 @@ function Basket() {
     summaryPrice += camerasInBasket[key].camera.price * camerasInBasket[key].count;
     camerasRender.push(camerasInBasket[key]);
   }
-  // console.log(camerasRender);
 
   useEffect(() => {
     dispatch(setSummaryPrice(summaryPrice));

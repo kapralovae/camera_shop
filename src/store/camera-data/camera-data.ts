@@ -36,6 +36,8 @@ const initialState: CameraData = {
   camerasInBasket: {},
   isActivePopupDeleteCamera: false,
   summaryPrice: 0,
+  isDiscount: false,
+  discount: 1,
 };
 
 export const cameraData = createSlice({
@@ -156,7 +158,27 @@ export const cameraData = createSlice({
     setSummaryPrice: (state, action) => {
       state.summaryPrice = action.payload as number;
     },
+    setDiscount: (state, action) => {
+      if (action.payload !== 'camera-333' || action.payload !== 'camera-444' || action.payload !== 'camera-555') {
+        state.discount = 1;
+        state.isDiscount = false;
+      }
+      switch(action.payload){
+        case 'camera-333':
+          state.discount = 0.7;
+          state.isDiscount = true;
+          break;
+        case 'camera-444':
+          state.discount = 0.6;
+          state.isDiscount = true;
+          break;
+        case 'camera-555':
+          state.discount = 0.5;
+          state.isDiscount = true;
+          break;
+      }
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice, setDiscount} = cameraData.actions;

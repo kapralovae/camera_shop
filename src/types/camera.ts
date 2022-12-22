@@ -46,6 +46,8 @@ export type CameraData = {
   camerasInBasket: Basket;
   isActivePopupDeleteCamera: boolean;
   summaryPrice: number;
+  isDiscount: boolean;
+  discount: number;
 };
 
 export type Count = {

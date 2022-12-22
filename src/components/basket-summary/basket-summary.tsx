@@ -1,9 +1,25 @@
-import { useAppSelector } from '../../hooks';
-import { getSummaryPrice } from '../../store/camera-data/selectors';
+import { ChangeEvent, useState } from 'react';
+import { useAppDisptach, useAppSelector } from '../../hooks';
+import { setDiscount } from '../../store/camera-data/camera-data';
+import { getDiscount, getIsDiscount, getSummaryPrice } from '../../store/camera-data/selectors';
 
 function BasketSummary () {
+  const dispatch = useAppDisptach();
   const summaryPrice = useAppSelector(getSummaryPrice);
-  // console.log(summaryPrice);
+  const discount = useAppSelector(getDiscount);
+  const IsDiscount = useAppSelector(getIsDiscount);
+  const [promo, setPromo] = useState('');
+
+  const handlerChangePromoInput = (evt: ChangeEvent<HTMLInputElement>) => {
+    evt.preventDefault();
+    setPromo(evt.currentTarget.value);
+  };
+
+  const handlerSubmitDiscountButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    dispatch(setDiscount(promo));
+  };
+
 
   return(
     <div className="basket__summary">
@@ -13,20 +29,20 @@ function BasketSummary () {
           <form action="#">
             <div className="custom-input">
               <label><span className="custom-input__label">Промокод</span>
-                <input type="text" name="promo" placeholder="Введите промокод"></input>
+                <input onChange={handlerChangePromoInput} type="text" name="promo" placeholder="Введите промокод"></input>
               </label>
               <p className="custom-input__error">Промокод неверный</p>
               <p className="custom-input__success">Промокод принят!</p>
             </div>
-            <button className="btn" type="submit">Применить
+            <button onClick={handlerSubmitDiscountButton} className="btn" type="submit">Применить
             </button>
           </form>
         </div>
       </div>
       <div className="basket__summary-order">
         <p className="basket__summary-item"><span className="basket__summary-text">Всего:</span><span className="basket__summary-value">{summaryPrice ? summaryPrice : '0'} ₽</span></p>
-        <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span><span className="basket__summary-value basket__summary-value--bonus">0 ₽</span></p>
-        <p className="basket__summary-item"><span className="basket__summary-text basket__summary-text--total">К оплате:</span><span className="basket__summary-value basket__summary-value--total">111 390 ₽</span></p>
+        <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span><span className={IsDiscount ? 'basket__summary-value basket__summary-value--bonus' : 'basket__summary-value'}>{IsDiscount ? Math.ceil(summaryPrice * (1 - discount)) : '0'} ₽</span></p>
+        <p className="basket__summary-item"><span className="basket__summary-text basket__summary-text--total">К оплате:</span><span className="basket__summary-value basket__summary-value--total">{summaryPrice ? summaryPrice * discount : '0'} ₽</span></p>
         <button className="btn btn--purple" type="submit">Оформить заказ
         </button>
       </div>
