@@ -39,6 +39,7 @@ describe('Reducer: cameraData', () => {
     countCamerasInBasket: 0,
     camerasInBasket: {},
     isActivePopupDeleteCamera: false,
+    summaryPrice: 0,
   };
 
   beforeAll(() => {

@@ -13,20 +13,23 @@ function ItemInBasket({item, count}: CartType) {
 
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, vendorCode, type, level, id} = item;
 
+
   const handlerDecreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     const countItem = count - 1;
     if (countItem <= 0) {
       dispatch(setCountCamerasInBasket({
         id: id,
-        count: 1,
+        countItem: 1,
         doing: '',
+        priceItem: price,
       }));
     } else {
       dispatch(setCountCamerasInBasket({
         id: id,
-        count: countItem,
+        countItem: countItem,
         doing: 'minus',
+        priceItem: price,
       }));
     }
   };
@@ -42,8 +45,9 @@ function ItemInBasket({item, count}: CartType) {
     } else {
       dispatch(setCountCamerasInBasket({
         id: id,
-        count: countItem,
+        countItem: countItem,
         doing: 'plus',
+        priceItem: price,
       }));
     }
   };

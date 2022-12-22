@@ -35,3 +35,5 @@ export const getCountCamerasInBasket = (state: State): number => state['dataRedu
 export const getCamerasInBasket = (state: State): Basket => state['dataReducer'].camerasInBasket;
 
 export const getIsActivePopupDeleteCamera = (state: State): boolean => state['dataReducer'].isActivePopupDeleteCamera;
+
+export const getSummaryPrice = (state: State): number => state['dataReducer'].summaryPrice;

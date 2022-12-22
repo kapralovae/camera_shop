@@ -35,6 +35,7 @@ const initialState: CameraData = {
   countCamerasInBasket: 0,
   camerasInBasket: {},
   isActivePopupDeleteCamera: false,
+  summaryPrice: 0,
 };
 
 export const cameraData = createSlice({
@@ -128,18 +129,17 @@ export const cameraData = createSlice({
       state.countCamerasInBasket += 1;
     },
     setCountCamerasInBasket: (state, action) => {
-      const {id, countItem, doing} = action.payload as Count;
-      state.camerasInBasket[`${id}`] = {
-        ...state.camerasInBasket[`${id}`],
-        count: countItem,
-      };
+      const {id, countItem, doing, priceItem} = action.payload as Count;
+      state.camerasInBasket[id].count = countItem;
 
       switch (doing) {
         case 'plus':
           state.countCamerasInBasket += 1;
+          state.summaryPrice += priceItem;
           break;
         case 'minus':
           state.countCamerasInBasket -= 1;
+          state.summaryPrice -= priceItem;
           break;
         case '':
           break;
@@ -153,7 +153,10 @@ export const cameraData = createSlice({
       state.countCamerasInBasket -= state.camerasInBasket[`${id}`].count;
       delete state.camerasInBasket[`${id}`];
     },
+    setSummaryPrice: (state, action) => {
+      state.summaryPrice = action.payload as number;
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice} = cameraData.actions;

@@ -45,12 +45,14 @@ export type CameraData = {
   countCamerasInBasket: number;
   camerasInBasket: Basket;
   isActivePopupDeleteCamera: boolean;
+  summaryPrice: number;
 };
 
 export type Count = {
   id: number;
   countItem: number;
   doing: string;
+  priceItem: number;
 };
 
 export type CamerasProsecc = {
