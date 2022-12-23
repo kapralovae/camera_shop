@@ -33,6 +33,9 @@ describe('Reducer: cameraProcess', () => {
     isDataLoad: false,
     similarCameras: [],
     comments: [],
+    couponPost: {
+      coupon: null,
+    },
   };
 
   const fakeCamera: Camera = createFakeCamera();

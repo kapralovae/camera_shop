@@ -30,7 +30,7 @@ function App(): JSX.Element {
 
         <Route
           path='/basket'
-          element={<BasketPage />}
+          element={ <BasketPage />}
         />
 
         <Route

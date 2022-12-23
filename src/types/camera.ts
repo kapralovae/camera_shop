@@ -48,6 +48,15 @@ export type CameraData = {
   summaryPrice: number;
   isDiscount: boolean;
   discount: number;
+  borderInput: {
+    border: string;
+  };
+  opacityError: {
+    opacity: number;
+  };
+  opacityAccept: {
+    opacity: number;
+  };
 };
 
 export type Count = {
@@ -57,6 +66,7 @@ export type Count = {
   priceItem: number;
 };
 
+
 export type CamerasProsecc = {
   cameras: Cameras;
   camera: Camera;
@@ -64,6 +74,7 @@ export type CamerasProsecc = {
   isDataLoad: boolean;
   similarCameras: Cameras;
   comments: Comment[];
+  couponPost: Coupon;
 };
 
 export type Promo = {
@@ -102,4 +113,8 @@ export type Review = {
   disadvantage: string;
   review: string;
   rating: number;
+};
+
+export type Coupon = {
+  coupon: string | null;
 };

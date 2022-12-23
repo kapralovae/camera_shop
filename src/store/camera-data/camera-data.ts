@@ -38,6 +38,15 @@ const initialState: CameraData = {
   summaryPrice: 0,
   isDiscount: false,
   discount: 1,
+  borderInput: {
+    border: '2px solid #b4b4d7',
+  },
+  opacityError: {
+    opacity: 0,
+  },
+  opacityAccept: {
+    opacity: 0,
+  },
 };
 
 export const cameraData = createSlice({
@@ -159,26 +168,24 @@ export const cameraData = createSlice({
       state.summaryPrice = action.payload as number;
     },
     setDiscount: (state, action) => {
-      if (action.payload !== 'camera-333' || action.payload !== 'camera-444' || action.payload !== 'camera-555') {
+      if (action.payload === null) {
         state.discount = 1;
         state.isDiscount = false;
+      } else {
+        state.discount = 1 - (action.payload / 100);
+        state.isDiscount = true;
       }
-      switch(action.payload){
-        case 'camera-333':
-          state.discount = 0.7;
-          state.isDiscount = true;
-          break;
-        case 'camera-444':
-          state.discount = 0.6;
-          state.isDiscount = true;
-          break;
-        case 'camera-555':
-          state.discount = 0.5;
-          state.isDiscount = true;
-          break;
-      }
+    },
+    setBorderInput: (state, action) => {
+      state.borderInput.border = action.payload as string;
+    },
+    setOpacityError: (state, action) => {
+      state.opacityError.opacity = action.payload as number;
+    },
+    setOpacityAccept: (state, action) => {
+      state.opacityAccept.opacity = action.payload as number;
     },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice, setDiscount} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice, setDiscount, setBorderInput, setOpacityError, setOpacityAccept} = cameraData.actions;

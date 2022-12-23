@@ -1,41 +1,28 @@
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
-import { setDiscount } from '../../store/camera-data/camera-data';
-import { getDiscount, getIsDiscount, getSummaryPrice } from '../../store/camera-data/selectors';
+import { postCoupon } from '../../store/api-actions';
+import { setBorderInput, setDiscount, setOpacityAccept, setOpacityError } from '../../store/camera-data/camera-data';
+import { getBorderInput, getDiscount, getIsDiscount, getOpacityAccept, getOpacityError, getSummaryPrice } from '../../store/camera-data/selectors';
+import { getIsDataLoad } from '../../store/camera-process/selecrots';
+import SpinerLoading from '../spinner-loading/spinner-loading';
 
 function BasketSummary () {
   const dispatch = useAppDisptach();
   const summaryPrice = useAppSelector(getSummaryPrice);
   const discount = useAppSelector(getDiscount);
-  const IsDiscount = useAppSelector(getIsDiscount);
+  const isDiscount = useAppSelector(getIsDiscount);
   const [promo, setPromo] = useState('');
-  const [styleError, setStyleError] = useState({
-    opacity: 0,
-  });
-  const [click, setClick] = useState(false);
-  const [borderPromo, setBorderPromo] = useState({
-    border: '2px solid #b4b4d7',
-  });
+  const isDataLoaded = useAppSelector(getIsDataLoad);
+  const borderPromo = useAppSelector(getBorderInput);
+  const styleError = useAppSelector(getOpacityError);
+  const styleAccept = useAppSelector(getOpacityAccept);
 
   useEffect(() => {
-    if (discount !== 1 && click) {
-      setStyleError({
-        opacity: 0,
-      });
-      setBorderPromo({
-        border: '2px solid #65cd54',
-      });
-    } else if (discount === 1 && click) {
-      setStyleError({
-        opacity: 1,
-      });
-      setBorderPromo({
-        border: '2px solid #ed6041',
-      });
-    }
-    setClick(false);
-  }, [click]);
-
+    dispatch(setBorderInput('2px solid #b4b4d7'));
+    dispatch(setOpacityAccept(0));
+    dispatch(setOpacityError(0));
+    dispatch(setDiscount(null));
+  }, []);
 
   const handlerChangePromoInput = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
@@ -44,12 +31,16 @@ function BasketSummary () {
 
   const handlerSubmitDiscountButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    dispatch(setDiscount(promo));
-    setClick(true);
+    dispatch(postCoupon({
+      coupon: promo,
+    }));
   };
 
+
   return(
+
     <div className="basket__summary">
+      {isDataLoaded ? <SpinerLoading /> : null}
       <div className="basket__promo">
         <p className="title title--h4">Если у вас есть промокод на скидку, примените его в этом поле</p>
         <div className="basket-form">
@@ -59,7 +50,7 @@ function BasketSummary () {
                 <input style={borderPromo} onChange={handlerChangePromoInput} type="text" name="promo" placeholder="Введите промокод"></input>
               </label>
               <p style={styleError} className="custom-input__error">Промокод неверный</p>
-              <p style={{opacity: IsDiscount ? 1 : 0}} className="custom-input__success">Промокод принят!</p>
+              <p style={styleAccept} className="custom-input__success">Промокод принят!</p>
             </div>
             <button onClick={handlerSubmitDiscountButton} className="btn" type="submit">Применить
             </button>
@@ -68,12 +59,13 @@ function BasketSummary () {
       </div>
       <div className="basket__summary-order">
         <p className="basket__summary-item"><span className="basket__summary-text">Всего:</span><span className="basket__summary-value">{summaryPrice ? summaryPrice : '0'} ₽</span></p>
-        <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span><span className={IsDiscount ? 'basket__summary-value basket__summary-value--bonus' : 'basket__summary-value'}>{IsDiscount ? Math.ceil(summaryPrice * (1 - discount)) : '0'} ₽</span></p>
-        <p className="basket__summary-item"><span className="basket__summary-text basket__summary-text--total">К оплате:</span><span className="basket__summary-value basket__summary-value--total">{summaryPrice ? summaryPrice * discount : '0'} ₽</span></p>
+        <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span><span className={isDiscount ? 'basket__summary-value basket__summary-value--bonus' : 'basket__summary-value'}>{isDiscount ? Math.ceil(summaryPrice * (1 - discount)) : '0'} ₽</span></p>
+        <p className="basket__summary-item"><span className="basket__summary-text basket__summary-text--total">К оплате:</span><span className="basket__summary-value basket__summary-value--total">{summaryPrice && isDiscount ? summaryPrice - Math.ceil(summaryPrice * (1 - discount)) : summaryPrice} ₽</span></p>
         <button className="btn btn--purple" type="submit">Оформить заказ
         </button>
       </div>
     </div>
+
   );
 }
 

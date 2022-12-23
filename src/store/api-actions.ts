@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Api, AppDispatch, Camera, Cameras, Comment, Promo, Review, State } from '../types/camera';
-import { setCamerasCatalog } from './camera-data/camera-data';
+import { Api, AppDispatch, Camera, Cameras, Comment, Coupon, Promo, Review, State } from '../types/camera';
+import { setBorderInput, setCamerasCatalog, setDiscount, setOpacityAccept, setOpacityError } from './camera-data/camera-data';
 
 export const fetchCamerasAction = createAsyncThunk<Cameras, undefined, {
   dispatch: AppDispatch;
@@ -78,5 +78,36 @@ export const addComment = createAsyncThunk<void, Review, {
       body: JSON.stringify(data),
     });
     dispatch(fetchCommentsCameraAction(String(data.cameraId)));
+  },
+);
+
+export const postCoupon = createAsyncThunk<void, Coupon, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Api;
+}>(
+  'postCoupon',
+  async (data, {dispatch, extra: api}) => {
+    const promise = fetch('https://camera-shop.accelerator.pages.academy/coupons', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(data),
+    });
+    const response = await promise;
+
+    if (response.ok) {
+      const json = await response.json() as Coupon;
+      dispatch(setDiscount(json));
+      dispatch(setBorderInput('2px solid #65cd54'));
+      dispatch(setOpacityAccept(1));
+      dispatch(setOpacityError(0));
+    } else {
+      dispatch(setDiscount(null));
+      dispatch(setBorderInput('2px solid #ed6041'));
+      dispatch(setOpacityAccept(0));
+      dispatch(setOpacityError(1));
+    }
   },
 );

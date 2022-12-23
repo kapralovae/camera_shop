@@ -42,6 +42,15 @@ describe('Reducer: cameraData', () => {
     summaryPrice: 0,
     isDiscount: false,
     discount: 1,
+    borderInput: {
+      border: '2px solid #b4b4d7',
+    },
+    opacityError: {
+      opacity: 0,
+    },
+    opacityAccept: {
+      opacity: 0,
+    },
   };
 
   beforeAll(() => {

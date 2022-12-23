@@ -42,3 +42,9 @@ export const getDiscount = (state: State): number => state['dataReducer'].discou
 
 export const getIsDiscount = (state: State): boolean => state['dataReducer'].isDiscount;
 
+export const getBorderInput = (state: State): {border: string} => state['dataReducer'].borderInput;
+
+export const getOpacityError = (state: State): {opacity: number} => state['dataReducer'].opacityError;
+
+export const getOpacityAccept = (state: State): {opacity: number} => state['dataReducer'].opacityAccept;
+
