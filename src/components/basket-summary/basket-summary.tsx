@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import { useAppDisptach, useAppSelector } from '../../hooks';
 import { setDiscount } from '../../store/camera-data/camera-data';
 import { getDiscount, getIsDiscount, getSummaryPrice } from '../../store/camera-data/selectors';
@@ -9,6 +9,33 @@ function BasketSummary () {
   const discount = useAppSelector(getDiscount);
   const IsDiscount = useAppSelector(getIsDiscount);
   const [promo, setPromo] = useState('');
+  const [styleError, setStyleError] = useState({
+    opacity: 0,
+  });
+  const [click, setClick] = useState(false);
+  const [borderPromo, setBorderPromo] = useState({
+    border: '2px solid #b4b4d7',
+  });
+
+  useEffect(() => {
+    if (discount !== 1 && click) {
+      setStyleError({
+        opacity: 0,
+      });
+      setBorderPromo({
+        border: '2px solid #65cd54',
+      });
+    } else if (discount === 1 && click) {
+      setStyleError({
+        opacity: 1,
+      });
+      setBorderPromo({
+        border: '2px solid #ed6041',
+      });
+    }
+    setClick(false);
+  }, [click]);
+
 
   const handlerChangePromoInput = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
@@ -18,8 +45,8 @@ function BasketSummary () {
   const handlerSubmitDiscountButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     dispatch(setDiscount(promo));
+    setClick(true);
   };
-
 
   return(
     <div className="basket__summary">
@@ -29,10 +56,10 @@ function BasketSummary () {
           <form action="#">
             <div className="custom-input">
               <label><span className="custom-input__label">Промокод</span>
-                <input onChange={handlerChangePromoInput} type="text" name="promo" placeholder="Введите промокод"></input>
+                <input style={borderPromo} onChange={handlerChangePromoInput} type="text" name="promo" placeholder="Введите промокод"></input>
               </label>
-              <p className="custom-input__error">Промокод неверный</p>
-              <p className="custom-input__success">Промокод принят!</p>
+              <p style={styleError} className="custom-input__error">Промокод неверный</p>
+              <p style={{opacity: IsDiscount ? 1 : 0}} className="custom-input__success">Промокод принят!</p>
             </div>
             <button onClick={handlerSubmitDiscountButton} className="btn" type="submit">Применить
             </button>
@@ -51,3 +78,4 @@ function BasketSummary () {
 }
 
 export default BasketSummary;
+
