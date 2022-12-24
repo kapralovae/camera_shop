@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Camera, CameraData, Cameras, Count } from '../../types/camera';
+import { Camera, CameraData, Cameras, Count, OrderPost } from '../../types/camera';
 
 const initialState: CameraData = {
   catalogPage: 1,
@@ -47,6 +47,11 @@ const initialState: CameraData = {
   opacityAccept: {
     opacity: 0,
   },
+  orderPost: {
+    camerasIds: [],
+    coupon: null,
+  },
+  isActivePopupSuccessBasket: false,
 };
 
 export const cameraData = createSlice({
@@ -134,6 +139,7 @@ export const cameraData = createSlice({
           camera: action.payload as Camera,
           count: 1,
         };
+        state.orderPost.camerasIds.push(id);
       } else {
         state.camerasInBasket[`${id}`].count += 1;
       }
@@ -168,11 +174,14 @@ export const cameraData = createSlice({
       state.summaryPrice = action.payload as number;
     },
     setDiscount: (state, action) => {
-      if (action.payload === null) {
-        state.discount = 1;
+      const {discound, promocode} = action.payload as {discound: number; promocode: string | null};
+      if (promocode === null) {
+        state.discount = discound;
         state.isDiscount = false;
+        state.orderPost.coupon = null;
       } else {
-        state.discount = 1 - (action.payload / 100);
+        state.orderPost.coupon = promocode;
+        state.discount = 1 - (discound / 100);
         state.isDiscount = true;
       }
     },
@@ -185,7 +194,13 @@ export const cameraData = createSlice({
     setOpacityAccept: (state, action) => {
       state.opacityAccept.opacity = action.payload as number;
     },
+    setIsActivePopupSuccessBasket: (state, action) => {
+      state.isActivePopupSuccessBasket = action.payload as boolean;
+    },
+    setOrderPost: (state, action) => {
+      state.orderPost = action.payload as OrderPost;
+    },
   },
 });
 
-export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice, setDiscount, setBorderInput, setOpacityError, setOpacityAccept} = cameraData.actions;
+export const {increaseCatalogPage, decreaseCatalogPage, setCatalogPage, changeStatusPopup, changeCardPopup, setStartSlice, setCountSlice, setCamerasCatalog, changeIsBasketSuccess, setIsAddReview, setIsActivePopupReview, setSortType, setSortDirection, setIsSort, setSortCards, setCamerasForRender, setCountCamerasInBasket, setCamerasInBasket, setIsActivePopupDeleteCamera, deleteCameraInBasket, setSummaryPrice, setDiscount, setBorderInput, setOpacityError, setOpacityAccept, setIsActivePopupSuccessBasket, setOrderPost} = cameraData.actions;

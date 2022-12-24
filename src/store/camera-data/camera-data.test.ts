@@ -51,6 +51,11 @@ describe('Reducer: cameraData', () => {
     opacityAccept: {
       opacity: 0,
     },
+    orderPost: {
+      camerasIds: [],
+      coupon: null,
+    },
+    isActivePopupSuccessBasket: false,
   };
 
   beforeAll(() => {

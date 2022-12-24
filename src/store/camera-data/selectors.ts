@@ -1,4 +1,4 @@
-import { Basket, Camera, Cameras, State } from '../../types/camera';
+import { Basket, Camera, Cameras, OrderPost, State } from '../../types/camera';
 
 export const getCatalogPage = (state: State): number => state['dataReducer'].catalogPage;
 
@@ -48,3 +48,6 @@ export const getOpacityError = (state: State): {opacity: number} => state['dataR
 
 export const getOpacityAccept = (state: State): {opacity: number} => state['dataReducer'].opacityAccept;
 
+export const getIsActivePopupSuccessBasket = (state: State): boolean => state['dataReducer'].isActivePopupSuccessBasket;
+
+export const getOrderPost = (state: State): OrderPost => state['dataReducer'].orderPost;

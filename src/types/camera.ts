@@ -57,6 +57,8 @@ export type CameraData = {
   opacityAccept: {
     opacity: number;
   };
+  orderPost: OrderPost;
+  isActivePopupSuccessBasket: boolean;
 };
 
 export type Count = {
@@ -116,5 +118,10 @@ export type Review = {
 };
 
 export type Coupon = {
+  coupon: string | null;
+};
+
+export type OrderPost = {
+  camerasIds: number[];
   coupon: string | null;
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { MAX_COUNT_PRODUCT, MIN_COUNT_PRODUCT } from '../../const';
 import { useAppDisptach } from '../../hooks';
 import { changeCardPopup, setCountCamerasInBasket, setIsActivePopupDeleteCamera } from '../../store/camera-data/camera-data';
 import { Camera } from '../../types/camera';
@@ -20,7 +21,7 @@ function ItemInBasket({item, count}: CartType) {
     if (countItem <= 0) {
       dispatch(setCountCamerasInBasket({
         id: id,
-        countItem: 1,
+        countItem: MIN_COUNT_PRODUCT,
         doing: '',
         priceItem: price,
       }));
@@ -37,10 +38,10 @@ function ItemInBasket({item, count}: CartType) {
   const handlerIncreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
     const countItem = count + 1;
-    if (countItem > 99) {
+    if (countItem > MAX_COUNT_PRODUCT) {
       dispatch(setCountCamerasInBasket({
         id: id,
-        count: 99,
+        count: MAX_COUNT_PRODUCT,
       }));
     } else {
       dispatch(setCountCamerasInBasket({
