@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { MAX_COUNT_PRODUCT, MIN_COUNT_PRODUCT } from '../../const';
 import { useAppDisptach } from '../../hooks';
 import { changeCardPopup, setCountCamerasInBasket, setIsActivePopupDeleteCamera } from '../../store/camera-data/camera-data';
@@ -11,46 +11,44 @@ type CartType = {
 
 function ItemInBasket({item, count}: CartType) {
   const dispatch = useAppDisptach();
+  const [countItem, setCountItem] = useState(count);
 
   const {name, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x, price, vendorCode, type, level, id} = item;
 
-
-  const handlerDecreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    const countItem = count - 1;
-    if (countItem <= 0) {
+  useEffect(() => {
+    if (countItem < MIN_COUNT_PRODUCT) {
       dispatch(setCountCamerasInBasket({
         id: id,
         countItem: MIN_COUNT_PRODUCT,
-        doing: '',
         priceItem: price,
       }));
+      setCountItem(MIN_COUNT_PRODUCT);
+    } else if (countItem > MAX_COUNT_PRODUCT) {
+      dispatch(setCountCamerasInBasket({
+        id: id,
+        countItem: MAX_COUNT_PRODUCT,
+        priceItem: price,
+      }));
+
+      setCountItem(MAX_COUNT_PRODUCT);
     } else {
       dispatch(setCountCamerasInBasket({
         id: id,
         countItem: countItem,
-        doing: 'minus',
         priceItem: price,
       }));
     }
+
+  }, [countItem]);
+
+  const handlerDecreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setCountItem(countItem - 1);
   };
 
   const handlerIncreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    const countItem = count + 1;
-    if (countItem > MAX_COUNT_PRODUCT) {
-      dispatch(setCountCamerasInBasket({
-        id: id,
-        count: MAX_COUNT_PRODUCT,
-      }));
-    } else {
-      dispatch(setCountCamerasInBasket({
-        id: id,
-        countItem: countItem,
-        doing: 'plus',
-        priceItem: price,
-      }));
-    }
+    setCountItem(countItem + 1);
   };
 
   const handlerDeleteItemButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -58,6 +56,10 @@ function ItemInBasket({item, count}: CartType) {
     dispatch(changeCardPopup(item));
     dispatch(setIsActivePopupDeleteCamera(true));
     document.body.style.overflow = 'hidden';
+  };
+
+  const handlerChangeCountInput = (evt: ChangeEvent<HTMLInputElement>) => {
+    setCountItem(Number(evt.currentTarget.value));
   };
 
   return (
@@ -84,7 +86,7 @@ function ItemInBasket({item, count}: CartType) {
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1"></label>
-        <input type="number" id="counter1" value={count ? count : 1} min="1" max="99" aria-label="количество товара"></input>
+        <input onChange={handlerChangeCountInput} type="number" id="counter1" value={count ? count : 1} min="1" max="99" aria-label="количество товара"></input>
         <button onClick={handlerIncreaseQuantityButton} className="btn-icon btn-icon--next" aria-label="увеличить количество товара">
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>

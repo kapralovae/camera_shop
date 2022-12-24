@@ -146,21 +146,18 @@ export const cameraData = createSlice({
       state.countCamerasInBasket += 1;
     },
     setCountCamerasInBasket: (state, action) => {
-      const {id, countItem, doing, priceItem} = action.payload as Count;
+      const {id, countItem, priceItem} = action.payload as Count;
+
+      state.summaryPrice -= priceItem * state.camerasInBasket[id].count;
+
+      state.countCamerasInBasket -= state.camerasInBasket[id].count;
+
       state.camerasInBasket[id].count = countItem;
 
-      switch (doing) {
-        case 'plus':
-          state.countCamerasInBasket += 1;
-          state.summaryPrice += priceItem;
-          break;
-        case 'minus':
-          state.countCamerasInBasket -= 1;
-          state.summaryPrice -= priceItem;
-          break;
-        case '':
-          break;
-      }
+      state.countCamerasInBasket += countItem;
+
+      state.summaryPrice += priceItem * countItem;
+
     },
     setIsActivePopupDeleteCamera: (state, action) => {
       state.isActivePopupDeleteCamera = action.payload as boolean;
