@@ -9,6 +9,41 @@ function Breadcrump () {
   const cards = useAppSelector(getCameras);
   const card = cards.find((item) => item.id === Number(id));
 
+  const createWay = () => {
+    if (card !== undefined || (id && location.pathname === `/catalog/camera/${id}`)) {
+      return(
+        <>
+          <li className="breadcrumbs__item">
+            <Link className="breadcrumbs__link" to="/">Каталог
+              <svg width="5" height="8" aria-hidden="true">
+                <use xlinkHref="#icon-arrow-mini"></use>
+              </svg>
+            </Link>
+
+          </li>
+          <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">{card?.name}</span></li>
+        </>
+      );
+    } else if (location.pathname === '/basket') {
+      return(
+        <>
+          <li className="breadcrumbs__item">
+            <Link className="breadcrumbs__link" to="/">Каталог
+              <svg width="5" height="8" aria-hidden="true">
+                <use xlinkHref="#icon-arrow-mini"></use>
+              </svg>
+            </Link>
+          </li>
+          <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Корзина</span></li>
+        </>
+      );
+    } else {
+      return(
+        <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span></li>
+      );
+    }
+  };
+
   return (
     <div className="breadcrumbs">
       <div className="container">
@@ -20,23 +55,7 @@ function Breadcrump () {
               </svg>
             </Link>
           </li>
-
-          {
-            card !== undefined || (id && location.pathname === `/catalog/camera/${id}`) ?
-              <>
-                <li className="breadcrumbs__item">
-                  <Link className="breadcrumbs__link" to="/">Каталог
-                    <svg width="5" height="8" aria-hidden="true">
-                      <use xlinkHref="#icon-arrow-mini"></use>
-                    </svg>
-                  </Link>
-
-                </li>
-                <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">{card?.name}</span></li>
-              </>
-              :
-              <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span></li>
-          }
+          {createWay()}
         </ul>
       </div>
     </div>

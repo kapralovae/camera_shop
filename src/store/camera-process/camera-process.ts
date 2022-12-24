@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CamerasProsecc} from '../../types/camera';
-import { addComment, fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction } from '../api-actions';
+import { addComment, fetchCameraAction, fetchCamerasAction, fetchCommentsCameraAction, fetchPromoAction, fetchSimilarCamerasAction, postCoupon } from '../api-actions';
 
 
 const initialState : CamerasProsecc = {
@@ -32,6 +32,9 @@ const initialState : CamerasProsecc = {
   isDataLoad: false,
   similarCameras: [],
   comments: [],
+  couponPost: {
+    coupon: null,
+  },
 };
 
 export const cameraProcess = createSlice({
@@ -79,6 +82,12 @@ export const cameraProcess = createSlice({
         state.isDataLoad = false;
       })
       .addCase(addComment.pending, (state, action) => {
+        state.isDataLoad = true;
+      })
+      .addCase(postCoupon.fulfilled, (state, action) => {
+        state.isDataLoad = false;
+      })
+      .addCase(postCoupon.pending, (state, action) => {
         state.isDataLoad = true;
       });
   },

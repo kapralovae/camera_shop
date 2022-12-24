@@ -3,12 +3,14 @@ import Breadcrump from '../../components/breadcrump/breadcrump';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import PopupDeleteCamera from '../../components/popup-delete-camera/popup-delete-camera';
+import PopupProductBasketSuccess from '../../components/popup-product-basket-success/popup-product-basket-success';
 import { useAppSelector } from '../../hooks';
-import { getIsActivePopupDeleteCamera } from '../../store/camera-data/selectors';
+import { getIsActivePopupDeleteCamera, getIsActivePopupSuccessBasket } from '../../store/camera-data/selectors';
 
 
 function BasketPage () {
   const isActivePopupDeleteCamera = useAppSelector(getIsActivePopupDeleteCamera);
+  const isActivePopupSuccessBasket = useAppSelector(getIsActivePopupSuccessBasket);
   return (
     <>
       <Header />
@@ -18,6 +20,7 @@ function BasketPage () {
           <Basket />
         </div>
         {isActivePopupDeleteCamera ? <PopupDeleteCamera /> : null}
+        {isActivePopupSuccessBasket ? <PopupProductBasketSuccess /> : null}
       </main>
       <Footer />
     </>

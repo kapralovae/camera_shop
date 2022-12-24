@@ -1,4 +1,4 @@
-import { Basket, Camera, Cameras, State } from '../../types/camera';
+import { Basket, Camera, Cameras, OrderPost, State } from '../../types/camera';
 
 export const getCatalogPage = (state: State): number => state['dataReducer'].catalogPage;
 
@@ -35,3 +35,19 @@ export const getCountCamerasInBasket = (state: State): number => state['dataRedu
 export const getCamerasInBasket = (state: State): Basket => state['dataReducer'].camerasInBasket;
 
 export const getIsActivePopupDeleteCamera = (state: State): boolean => state['dataReducer'].isActivePopupDeleteCamera;
+
+export const getSummaryPrice = (state: State): number => state['dataReducer'].summaryPrice;
+
+export const getDiscount = (state: State): number => state['dataReducer'].discount;
+
+export const getIsDiscount = (state: State): boolean => state['dataReducer'].isDiscount;
+
+export const getBorderInput = (state: State): {border: string} => state['dataReducer'].borderInput;
+
+export const getOpacityError = (state: State): {opacity: number} => state['dataReducer'].opacityError;
+
+export const getOpacityAccept = (state: State): {opacity: number} => state['dataReducer'].opacityAccept;
+
+export const getIsActivePopupSuccessBasket = (state: State): boolean => state['dataReducer'].isActivePopupSuccessBasket;
+
+export const getOrderPost = (state: State): OrderPost => state['dataReducer'].orderPost;

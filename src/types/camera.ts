@@ -45,13 +45,29 @@ export type CameraData = {
   countCamerasInBasket: number;
   camerasInBasket: Basket;
   isActivePopupDeleteCamera: boolean;
+  summaryPrice: number;
+  isDiscount: boolean;
+  discount: number;
+  borderInput: {
+    border: string;
+  };
+  opacityError: {
+    opacity: number;
+  };
+  opacityAccept: {
+    opacity: number;
+  };
+  orderPost: OrderPost;
+  isActivePopupSuccessBasket: boolean;
 };
 
 export type Count = {
   id: number;
   countItem: number;
   doing: string;
+  priceItem: number;
 };
+
 
 export type CamerasProsecc = {
   cameras: Cameras;
@@ -60,6 +76,7 @@ export type CamerasProsecc = {
   isDataLoad: boolean;
   similarCameras: Cameras;
   comments: Comment[];
+  couponPost: Coupon;
 };
 
 export type Promo = {
@@ -98,4 +115,13 @@ export type Review = {
   disadvantage: string;
   review: string;
   rating: number;
+};
+
+export type Coupon = {
+  coupon: string | null;
+};
+
+export type OrderPost = {
+  camerasIds: number[];
+  coupon: string | null;
 };
