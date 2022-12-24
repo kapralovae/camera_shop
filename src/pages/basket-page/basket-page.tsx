@@ -2,8 +2,8 @@ import Basket from '../../components/basket/basket';
 import Breadcrump from '../../components/breadcrump/breadcrump';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import PopupProductBasketSuccess from '../../components/popup-add-in-basket/popup-product-basket-success/popup-product-basket-success';
 import PopupDeleteCamera from '../../components/popup-delete-camera/popup-delete-camera';
+import PopupProductBasketSuccess from '../../components/popup-product-basket-success/popup-product-basket-success';
 import { useAppSelector } from '../../hooks';
 import { getIsActivePopupDeleteCamera, getIsActivePopupSuccessBasket } from '../../store/camera-data/selectors';
 

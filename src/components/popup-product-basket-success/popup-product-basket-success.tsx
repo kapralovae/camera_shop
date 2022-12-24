@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDisptach, useAppSelector } from '../../../hooks';
-import { setIsActivePopupSuccessBasket } from '../../../store/camera-data/camera-data';
-import { getIsActivePopupSuccessBasket } from '../../../store/camera-data/selectors';
+import { useAppDisptach, useAppSelector } from '../../hooks';
+import { setIsActivePopupSuccessBasket } from '../../store/camera-data/camera-data';
+import { getIsActivePopupSuccessBasket } from '../../store/camera-data/selectors';
 
 function PopupProductBasketSuccess () {
   const dispatch = useAppDisptach();

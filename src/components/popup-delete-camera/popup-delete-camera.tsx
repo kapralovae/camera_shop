@@ -1,4 +1,3 @@
-import FocusTrap from 'focus-trap-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDisptach, useAppSelector } from '../../hooks';
@@ -67,43 +66,41 @@ function PopupDeleteCamera () {
   }
 
   return(
-    <FocusTrap>
-      <div className={isActivePopupDeleteCamera ? 'modal is-active scroll-lock no-scrollbar' : 'modal'}>
-        <div className="modal__wrapper">
-          <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
-          <div className="modal__content">
-            <p className="title title--h4">Удалить этот товар?</p>
-            <div className="basket-item basket-item--short">
-              <div className="basket-item__img">
-                <picture>
-                  <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`}></source><img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width="140" height="120" alt={name}></img>
-                </picture>
-              </div>
-              <div className="basket-item__description">
-                <p className="basket-item__title">{name}</p>
-                <ul className="basket-item__list">
-                  <li className="basket-item__list-item"><span className="basket-item__article">Артикул:</span> <span className="basket-item__number">{vendorCode}</span>
-                  </li>
-                  <li className="basket-item__list-item">{device}</li>
-                  <li className="basket-item__list-item">{`${level}`} уровень</li>
-                </ul>
-              </div>
+    <div className={isActivePopupDeleteCamera ? 'modal is-active scroll-lock no-scrollbar' : 'modal'}>
+      <div className="modal__wrapper">
+        <div onClick={handleOverlayClosePopupClick} className="modal__overlay"></div>
+        <div className="modal__content">
+          <p className="title title--h4">Удалить этот товар?</p>
+          <div className="basket-item basket-item--short">
+            <div className="basket-item__img">
+              <picture>
+                <source type="image/webp" srcSet={`/${previewImgWebp}, /${previewImgWebp2x}`}></source><img src={`/${previewImg}`} srcSet={`/${previewImg2x}`} width="140" height="120" alt={name}></img>
+              </picture>
             </div>
-            <div className="modal__buttons">
-              <button onClick={handleDeleteItemButton} className="btn btn--purple modal__btn modal__btn--half-width" type="button">Удалить
-              </button>
-              <Link onClick={handleLinkChangeStatusPopupClick} className="btn btn--transparent modal__btn modal__btn--half-width" to="/">Продолжить покупки
-              </Link>
+            <div className="basket-item__description">
+              <p className="basket-item__title">{name}</p>
+              <ul className="basket-item__list">
+                <li className="basket-item__list-item"><span className="basket-item__article">Артикул:</span> <span className="basket-item__number">{vendorCode}</span>
+                </li>
+                <li className="basket-item__list-item">{device}</li>
+                <li className="basket-item__list-item">{`${level}`} уровень</li>
+              </ul>
             </div>
-            <button onClick={handleButtonClosePopupClick} className="cross-btn" type="button" aria-label="Закрыть попап">
-              <svg width="10" height="10" aria-hidden="true">
-                <use xlinkHref="#icon-close"></use>
-              </svg>
-            </button>
           </div>
+          <div className="modal__buttons">
+            <button onClick={handleDeleteItemButton} className="btn btn--purple modal__btn modal__btn--half-width" type="button">Удалить
+            </button>
+            <Link onClick={handleLinkChangeStatusPopupClick} className="btn btn--transparent modal__btn modal__btn--half-width" to="/">Продолжить покупки
+            </Link>
+          </div>
+          <button onClick={handleButtonClosePopupClick} className="cross-btn" type="button" aria-label="Закрыть попап">
+            <svg width="10" height="10" aria-hidden="true">
+              <use xlinkHref="#icon-close"></use>
+            </svg>
+          </button>
         </div>
       </div>
-    </FocusTrap>
+    </div>
   );
 }
 
