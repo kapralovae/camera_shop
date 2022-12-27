@@ -19,10 +19,10 @@ function ItemInBasket({item, count}: CartType) {
     if (countItem < MIN_COUNT_PRODUCT) {
       dispatch(setCountCamerasInBasket({
         id: id,
-        countItem: MIN_COUNT_PRODUCT,
+        countItem: 0,
         priceItem: price,
       }));
-      setCountItem(MIN_COUNT_PRODUCT);
+      setCountItem(0);
     } else if (countItem > MAX_COUNT_PRODUCT) {
       dispatch(setCountCamerasInBasket({
         id: id,
@@ -40,6 +40,7 @@ function ItemInBasket({item, count}: CartType) {
     }
 
   }, [countItem]);
+
 
   const handlerDecreaseQuantityButton = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -80,14 +81,14 @@ function ItemInBasket({item, count}: CartType) {
       </div>
       <p className="basket-item__price"><span className="visually-hidden">Цена:</span>{price} ₽</p>
       <div className="quantity">
-        <button onClick={handlerDecreaseQuantityButton} className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара">
+        <button onClick={handlerDecreaseQuantityButton} className="btn-icon btn-icon--prev" disabled={countItem === 1} aria-label="уменьшить количество товара">
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1"></label>
-        <input onChange={handlerChangeCountInput} type="number" id="counter1" value={count ? count : 1} min="1" max="99" aria-label="количество товара"></input>
-        <button onClick={handlerIncreaseQuantityButton} className="btn-icon btn-icon--next" aria-label="увеличить количество товара">
+        <input onChange={handlerChangeCountInput} type="number" id="counter1" value={countItem ? countItem : ''} min="1" max="99" aria-label="количество товара"></input>
+        <button onClick={handlerIncreaseQuantityButton} className="btn-icon btn-icon--next" disabled={countItem === 99} aria-label="увеличить количество товара">
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
           </svg>
