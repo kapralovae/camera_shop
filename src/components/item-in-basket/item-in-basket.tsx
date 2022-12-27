@@ -62,6 +62,11 @@ function ItemInBasket({item, count}: CartType) {
   const handlerChangeCountInput = (evt: ChangeEvent<HTMLInputElement>) => {
     setCountItem(Number(evt.currentTarget.value));
   };
+  const handlerBlurCountInput = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (evt.currentTarget.value === '') {
+      setCountItem(1);
+    }
+  };
 
   return (
     <>
@@ -87,7 +92,7 @@ function ItemInBasket({item, count}: CartType) {
           </svg>
         </button>
         <label className="visually-hidden" htmlFor="counter1"></label>
-        <input onChange={handlerChangeCountInput} type="number" id="counter1" value={countItem ? countItem : ''} min="1" max="99" aria-label="количество товара"></input>
+        <input onChange={handlerChangeCountInput} onBlur={handlerBlurCountInput} type="number" id="counter1" value={countItem ? countItem : ''} min="1" max="99" aria-label="количество товара"></input>
         <button onClick={handlerIncreaseQuantityButton} className="btn-icon btn-icon--next" disabled={countItem === 99} aria-label="увеличить количество товара">
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
